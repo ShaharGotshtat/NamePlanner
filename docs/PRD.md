@@ -27,6 +27,7 @@ Name Planner is a mobile-first web app that takes Israeli parents from "no idea"
 **Goals for v3** (optional account)
 
 - A user who chooses to can keep an account with the history of their sessions and lists. Without an account the app works as before and stores nothing.
+- The open service is protected against bots by a bot check on new sessions.
 
 **Non-goals for v1**
 
@@ -47,11 +48,11 @@ V1 is the single-parent flow, tested with 10 to 20 parents. V2 and V3 stay speci
 **In v1**
 
 - **Name database:** the CBS list (5,000 most common names per sex), with meanings, Latin spellings and tags generated in advance for every name. Shahar checks the meanings of a 50-name sample before the full run.
-- **Welcome:** Just me only, baby's sex, optional full due date, terms checkbox.
+- **Welcome:** Just me only, baby's sex, optional full due date, terms line.
 - **Family names, Preferences** (chips, free text, Names we like), and **suggestion rounds** with Why this name? and Taken in our family.
 - **Summary:** the three outcomes, Our pick, Go again, and text export.
 - **No stored user data:** everything the parent enters stays on their device (see Access and privacy). With nothing on the server there is nothing to delete, so there is no delete function; a Start over button clears the device.
-- **Safety and operations:** daily cost limit, per-session limits with a bot check, input check and respect rules, QA reviewer agent, Send feedback, anonymous analytics.
+- **Safety and operations:** daily cost limit and per-session limits (no bot check until v3), input check and respect rules, QA reviewer agent, Send feedback with a daily email to the owners, anonymous analytics.
 - **Look and feel:** light copy and simple visuals. No illustrated characters or sounds yet.
 
 **V2 (after the test)**
@@ -63,6 +64,7 @@ V1 is the single-parent flow, tested with 10 to 20 parents. V2 and V3 stay speci
 **V3**
 
 - **Optional account with history:** a parent who chooses to sign up can save sessions and lists and come back to them from any device. It is strictly opt-in: without an account the app stores nothing, as in v1. This is the first time the server holds user data by choice, so v3 also brings a delete-my-data function, a sign-in method and a privacy review. Details are written when v3 is planned.
+- **Bot check:** a bot check on new sessions (for example Cloudflare Turnstile, which needs a free Cloudflare account) arrives in v3, for the public launch. Until then v1 and v2 rely on an unlisted link, the per-session cap and the daily budget. The bot check provider sees the visitor's connection details, so the privacy note must say so when it is added.
 
 ## User flows
 
@@ -94,7 +96,7 @@ There are six screens: Welcome, Family, Preferences, Suggestion rounds, Summary,
 - One-line value proposition and a Start button. No sign-up.
 - Choice of **Just me** or **With my partner (v2)**. In v1 only Just me is shown. With my partner creates a shared session and an invite link (WhatsApp share button first, copy link second).
 - Baby's sex: Boy, Girl, Not known yet. Next to it, an optional due date: the full date (day, month and year) in the Gregorian calendar. The app works out the Hebrew month, a nearby holiday and the zodiac sign on the device and sends only those to the server, never the date itself. If it is left empty, the holiday, season, or zodiac chip is not offered. "Not known yet" suggests one boy, one girl, and one unisex name per round unless the parent asks otherwise.
-- Terms and disclaimer: At the bottom of the page put a link to the terms of usage and mention that the usage is on their own responsibility and the content is AI generated so take it with a grain of salt (rephrase formally and in Hebrew) should be something like: "I have read the terms and understand the suggestions are AI-generated" with a link to the full text. See Disclaimer and terms of use in Technical.
+- Terms line: under the Start button, one line of text in Hebrew with a link to the terms of use, for example: "By continuing you accept the terms of use and understand that the suggestions are AI-generated and may be wrong." The words "terms of use" are the link. There is no checkbox: tapping Start counts as acceptance. The final Hebrew wording, and whether a line without a checkbox is enough, are confirmed in the lawyer review. See Disclaimer and terms of use in Technical.
 
 ### 2. Family names
 
@@ -189,9 +191,9 @@ A Send feedback link sits in the footer of every screen, next to the terms link.
 - **From a card:** the Report this suggestion link on a suggestion card opens the same form with the type set to Report an error and the name attached.
 - **After sending:** a short thank-you message and a return to the same screen.
 - **Works when the LLM is off:** the form uses no LLM, so it keeps working when the daily cost limit is reached.
-- **Spam limits:** at most 5 reports per session per hour; a hidden honeypot field and a minimum time on the form to turn away bots; messages that contain links are held for the owner to review.
+- **Spam limits:** at most 5 reports per session per hour; a hidden honeypot field and a minimum time on the form to turn away bots; messages that contain links are marked as such in the daily email.
 - **Privacy:** the form says the message is stored and asks the parent not to include sensitive personal details. The form collects no email address or name, so a report cannot be answered directly.
-- **Owner side:** each report is stored with its type, message, automatic details and a status (new, seen, resolved). The owner gets a daily email summary of new reports, and each report opens a GitHub Issue titled "\[User feedback\] ..." (see PRD and issue agents).
+- **Owner side (v1):** reports go by email only. Each report is held on the server until the daily batch, which sends all new reports in one email to the two project owners (recipients set in configuration, not in this document) and then deletes them from the server. The email lists each report's type, message, screen, app version, device and, for a card, the name. No email is sent on a day with no reports. The batch runs at 08:00 Israel time (proposed). There are no GitHub Issues from reports in v1 (see PRD and issue agents, v2).
 
 ## Suggestion logic and outcomes
 
@@ -253,6 +255,7 @@ The core decision: names and their facts come from a curated database, and the L
 | Couple sync (v2) | Supabase Realtime | Only the Match screen needs it |
 | LLM | Claude API: Sonnet 5.5 for picking and explaining, Haiku 5.5 for parsing free text | Strong Hebrew, structured JSON output |
 | Analytics | PostHog | Funnel per screen, no PII |
+| Email and schedule | A transactional email service and a scheduled job (for example Vercel Cron) | The daily feedback email and the owner alerts |
 
 ### Name data
 
@@ -269,7 +272,7 @@ The core decision: names and their facts come from a curated database, and the L
 | `names` | id, name\_he, niqqud, translit\[\] (Latin spellings), sex\_ratio, meaning\_he, origin, biblical\_ref, tags (json: meaning category, origin, Hebrew word or not, traditional or modern, holiday or season link), features (json), yearly counts and ranks (CBS) |
 | `daily_spend` | date, usd\_spent (the cost counter; no user data) |
 | `qa_checks` | id, name\_id, verdict, issue types, created\_at (results for sampled rounds; no preferences and no text) |
-| `reports` | id, type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), status (new/seen/resolved), issue\_url, created\_at |
+| `reports` | id, type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), created\_at. Held until the daily feedback email is sent, then deleted |
 
 **On the parent's device (v1).** The browser's local storage on the phone holds: baby's sex, the values derived from the due date, surname, family names, chips, free text and the parsed profile, the rounds and names already shown, verdicts and notes, and the accepted terms version. Start over clears it.
 
@@ -301,11 +304,11 @@ V1 is stateless: each request carries what the server needs (profile, family nam
 
 | Endpoint | Purpose |
 | --- | --- |
-| `POST /api/session` | Check the bot challenge and return a signed session token that holds the limit counters (no server record) |
+| `POST /api/session` | Return a signed session token that holds the limit counters (no server record). No bot check in v1 and v2 |
 | `POST /api/preferences` | Check and parse chips and free text, return the parsed summary line and the updated profile |
 | `POST /api/rounds` | Generate the next round from the profile, family names, shown names and feedback sent with the request |
 | `POST /api/our-pick` | Write the reason for Our pick from the data sent with the request |
-| `POST /api/reports` | Save a report, suggestion or other feedback sent from the Send feedback form |
+| `POST /api/reports` | Hold a report, suggestion or other feedback from the Send feedback form until the daily email |
 
 **V2 adds** these for couple mode. They read and write the temporary shared session.
 
@@ -327,10 +330,10 @@ V1 is stateless: each request carries what the server needs (profile, family nam
 The principle: the server stores nothing about the parent.
 
 - **No accounts and no server-side sessions in v1.** Everything the parent enters stays in the browser on their phone. Each request carries what the server needs, and the server discards it after answering.
-- **Session token.** A signed token, issued after the bot check, holds the limit counters (LLM calls, flagged inputs, reports). It carries no names or preferences.
+- **Session token.** A signed token, issued when the session starts, holds the limit counters (LLM calls, flagged inputs, reports). It carries no names or preferences.
 - **Due date.** The full date is entered on the device. The app works out the Hebrew month, a nearby holiday and the zodiac sign there and sends only those values. The date itself is never sent or stored.
-- **What the server does keep:** the name database; the daily spend counter; feedback reports, which are the only text a parent writes that is stored, because the parent chose to send it, and the form says so; QA results for sampled rounds (name id, verdict and issue types only); flagged-input counts (category and time only, no text); and aggregate analytics.
-- **Third parties.** Free text, family names and preferences are sent to the LLM provider to produce suggestions. The bot check provider sees the visitor's connection details. The privacy note says both.
+- **What the server does keep:** the name database; the daily spend counter; feedback reports, which are the only text a parent writes that is stored, because the parent chose to send it (held only until the daily email goes out, then deleted from the server; the form says so); QA results for sampled rounds (name id, verdict and issue types only); flagged-input counts (category and time only, no text); and aggregate analytics.
+- **Third parties.** Free text, family names and preferences are sent to the LLM provider to produce suggestions. The privacy note says so.
 - **Analytics** are aggregate only: time in session and sessions by hour. Events carry a random visit id made on the device and dropped when the visit ends, with no persistent cookie and no person profiles. IP addresses are not stored or hashed, and the analytics tool is set to discard them. All limits are counted per session token. The privacy note lists this.
 - **Deleting data.** Nothing about the parent is on the server, so there is nothing to delete there and no delete function in v1. Start over clears the device. Feedback reports carry no contact details, so they cannot be traced to a parent.
 - **Lost progress.** With no server copy, a parent who clears the browser data or switches phones starts again. Export my list is the way to keep a result, and the privacy note says so. Continuing on another device comes with the optional account in v3.
@@ -342,12 +345,12 @@ The principle: the server stores nothing about the parent.
 
 The link may be shared publicly, so the number of users cannot be capped. Spend is capped instead: the LLM is the only cost that grows with each user, and it has a hard daily ceiling.
 
-- **Budget:** one daily LLM budget in USD, set in configuration and changed without a deploy. The amount is an open question below. The day resets at midnight Israel time.
+- **Budget:** one daily LLM budget in USD, set in configuration and changed without a deploy. The default is $3 per day for all users together (the global cap). The day resets at midnight Israel time.
 - **Counting:** every live LLM call adds its estimated cost (input and output tokens times the model's price) to one daily counter in the database. The server checks the counter before making a call.
 - **Warning:** at 80% of the budget the owner gets an alert (email or message).
 - **At 100%:** LLM calls stop for the rest of the day. New visitors see a short Hebrew message on the Welcome screen: the app is full for today, come back tomorrow. Sessions already in progress continue without the LLM: suggestions come from the CBS popularity ranking filtered by the saved preferences, with no personal explanations.
 - **Per-session cap:** at most 20 LLM calls per session (a normal session uses about 12), so one session or script cannot drain the budget. The count is kept in the signed session token.
-- **Rate limit:** no IP addresses are used. Starting a session requires passing an invisible bot check (for example Cloudflare Turnstile), and every limit is counted per session token. The daily budget stays the overall ceiling.
+- **Rate limit:** no IP addresses are used. In v1 and v2 there is no bot check: every limit is counted per session token, and a visitor can start a new session freely, so the daily budget is the real ceiling and the link stays unlisted during the test. A bot check on new sessions arrives in v3.
 - **Backstop:** a monthly spend limit set on the Claude API account itself, in case the app's own counter fails.
 - **Scope:** the limit covers LLM spend only. Hosting and database costs are not capped here.
 
@@ -355,8 +358,8 @@ The link may be shared publicly, so the number of users cannot be capped. Spend 
 
 The app shows LLM-written names, meanings and explanations, so it carries a standard waiver: use is at the user's own risk, and the operator is not responsible for the output. This is a product requirement, not legal advice; a lawyer licensed in Israel reviews the final wording before launch. A waiver cannot remove liability that the law does not allow to be removed, so the lawyer confirms what it can cover.
 
-- **Where it appears:** a "Terms and disclaimer" page in Hebrew, linked from the footer of every screen. The Welcome screen has a required checkbox before Start (see Welcome). Every suggestion round also shows one short line: "Suggestions are AI-generated. Check a name before you register it."
-- **Acceptance record:** the app keeps on the device that the terms were accepted and which version. Nothing is sent to or stored on the server.
+- **Where it appears:** a "Terms and disclaimer" page in Hebrew, linked from the footer of every screen. The Welcome screen shows the terms line under Start (see Welcome); in v2 a partner who joins by link sees the same line on the Family screen, since they skip Welcome. Every suggestion round also shows one short line: "Suggestions are AI-generated. Check a name before you register it."
+- **Acceptance record:** the app keeps on the device which version of the terms was shown when the parent tapped Start, and when. Nothing is sent to or stored on the server.
 - **What the text says:**
   - Names, meanings, origins, biblical sources and explanations are produced by an LLM and public statistics. They may be wrong, incomplete or offensive in some communities or languages.
   - Nothing in the app is legal, religious, medical or professional advice.
@@ -365,7 +368,7 @@ The app shows LLM-written names, meanings and explanations, so it carries a stan
   - Use is at the user's own risk. To the extent the law allows, the operator is not liable for any loss or damage that follows from using the output.
   - Statistics come from the Central Bureau of Statistics; the operator is not responsible for that data.
   - Free text goes to the LLM provider, and users should not enter sensitive personal details.
-- **Changes:** when the text changes, the version number rises and visitors accept it again at their next session.
+- **Changes:** when the text changes, the version number rises and visitors see the new version at their next session, and tapping Start counts as accepting it.
 
 ### Abuse and content guardrails
 
@@ -376,7 +379,7 @@ The app may be used with names from any community, in any sector. Some visitors 
 - **Respect rules in the prompt.** Every LLM prompt says: treat all names, religions, languages and communities with equal respect; no mockery, stereotypes, or comparisons that rank groups; if the input asks for any of this, refuse and return to the flow.
 - **Input check before use.** Free text and typed family names go first through a cheap Haiku check for hate, harassment, sexual content, and mockery of a person, name or community. Flagged input is never sent to the main model. The visitor sees a neutral message and the flow continues.
 - **Shared cache is protected.** Pre-generated meanings are written from the name alone, never from visitors' free text, and are checked by the same filter before they are saved. One visitor cannot plant text that others later see.
-- **Strikes.** After 2 flagged inputs in a session, the free-text box is turned off for that session. A flagged session cannot start Go again. Repeated abuse across sessions is held back by the bot check on new sessions and by the daily budget.
+- **Strikes.** After 2 flagged inputs in a session, the free-text box is turned off for that session. A flagged session cannot start Go again. Repeated abuse across sessions is held back only by the daily budget until the bot check arrives in v3.
 - **Logging.** A flagged input stores only its category and time, not the text, and no session or device identifier.
 - **Report link.** Every card has a "Report this suggestion" link. Reports go to the owner and name entries can be hidden.
 - **Terms.** The terms page adds an acceptable-use line: do not use the app to insult or mock any person or community.
@@ -422,7 +425,7 @@ Two stand-alone agents keep the PRD and the GitHub repository in step. Neither t
 - **Limits:** one Issue per changed section per run, a cap on new Issues per day, and no automatic closing. A person closes Issues.
 - **Access:** the agent's GitHub token is limited to Issues on this repository, and it reads the PRD with read-only access.
 
-**3. Feedback issues: every user report opens a GitHub Issue.** This is done by the server, not by an agent, but it follows the same rules as the issue agent.
+**3. Feedback issues (v2; in v1 reports go by email only): every user report opens a GitHub Issue.** This is done by the server, not by an agent, but it follows the same rules as the issue agent.
 
 - **Trigger:** each report saved from the Send feedback form. The server creates the Issue right after saving the report and stores its link on the report. If GitHub is unavailable, it retries at the issue agent's next run.
 - **Title:** it always starts with "\[User feedback\]" followed by the type and the first words of the message, for example "\[User feedback\] Error: the Summary screen does not load". This makes it clear the Issue comes from a user, not from the team.
@@ -473,7 +476,7 @@ Targets to set after the first 100 real sessions; I have no baseline to propose 
 - [x] Should joint rounds count toward the 5-round limit or be extra? Decided: they count.
 - [x] Who reviews generated name meanings, and at what view count does a name enter the review queue?
 - [x] Do cards also show a Latin spelling, for parents who care how the name reads abroad? Decided: yes, on every card.
-- [ ] What is the daily LLM budget in USD, and what share of it triggers the warning?
+- [ ] The daily LLM budget starts at $3 (global cap). Update it after the first test, once the real cost per session is known, and confirm the 80% warning level.
 - [ ] Who is the legal operator named in the terms, and which country's law and courts govern them?
 - [ ] Which GitHub repository do the PRD and issue agents use, and how often do they run?
 - [ ] What is the one-time budget for the name batch and its QA review?
@@ -482,7 +485,7 @@ Targets to set after the first 100 real sessions; I have no baseline to propose 
 ### Milestones
 
 1. **Name database.** Import CBS data for the 5,000 most common names per sex (ranked by total count in 2000 to 2024; a unisex name is one entry; if a sex has fewer than 5,000 names, all are taken). Compute features, then run the offline batch for meanings, Latin spellings and tags: 50-name check by Shahar first, then the full run on its own budget, QA review and the human queue.
-2. **Single-parent flow.** Welcome (just me, sex, due date, terms), Family names, Preferences, rounds, Summary with Our pick, Go again and text export. Includes anonymous analytics, the cost limit, per-session limits and bot check, input check, Send feedback and Start over.
+2. **Single-parent flow.** Welcome (just me, sex, due date, terms), Family names, Preferences, rounds, Summary with Our pick, Go again and text export. Includes anonymous analytics, the cost limit, per-session limits, input check, Send feedback with the daily email, and Start over.
 3. **Test with 10 to 20 parents.** Set metric targets from the results.
 4. **Couple mode.** Invite link, shared family list, Match screen and match score, joint rounds.
 5. **Extras and launch prep.** Image export, I feel adventurous, Full data chart, characters and sounds, privacy note review, performance on low-end phones.
