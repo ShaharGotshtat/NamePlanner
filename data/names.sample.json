@@ -1,0 +1,2259 @@
+[
+  {
+    "id": 1,
+    "nameHe": "דוד",
+    "niqqud": "דָּוִד",
+    "translit": [
+      "David"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אהוב, ידיד",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל א׳ ט״ז, י״ג",
+    "tags": {
+      "meaningCategories": [
+        "love"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1900,
+        "rank": 1
+      },
+      {
+        "year": 2023,
+        "count": 1850,
+        "rank": 1
+      },
+      {
+        "year": 2024,
+        "count": 1800,
+        "rank": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "nameHe": "אריאל",
+    "niqqud": "אֲרִיאֵל",
+    "translit": [
+      "Ariel"
+    ],
+    "sexRatio": 0.85,
+    "meaningHe": "אריה של האל",
+    "origin": "hebrew",
+    "biblicalRef": "עזרא ח׳, ט״ז",
+    "tags": {
+      "meaningCategories": [
+        "strength"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1700,
+        "rank": 2
+      },
+      {
+        "year": 2023,
+        "count": 1650,
+        "rank": 2
+      },
+      {
+        "year": 2024,
+        "count": 1600,
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "nameHe": "יוסף",
+    "niqqud": "יוֹסֵף",
+    "translit": [
+      "Yosef",
+      "Joseph"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "יוסיף, ירבה",
+    "origin": "hebrew",
+    "biblicalRef": "בראשית ל׳, כ״ד",
+    "tags": {
+      "meaningCategories": [
+        "gift"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1600,
+        "rank": 3
+      },
+      {
+        "year": 2023,
+        "count": 1580,
+        "rank": 3
+      },
+      {
+        "year": 2024,
+        "count": 1550,
+        "rank": 3
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "nameHe": "איתי",
+    "niqqud": "אִיתַי",
+    "translit": [
+      "Itay",
+      "Itai"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "האל איתי",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל ב׳ ט״ו, י״ט",
+    "tags": {
+      "meaningCategories": [
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1500,
+        "rank": 4
+      },
+      {
+        "year": 2023,
+        "count": 1450,
+        "rank": 4
+      },
+      {
+        "year": 2024,
+        "count": 1400,
+        "rank": 4
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "nameHe": "נועם",
+    "niqqud": "נֹעַם",
+    "translit": [
+      "Noam"
+    ],
+    "sexRatio": 0.9,
+    "meaningHe": "נעימות, עדינות",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "joy",
+        "beauty"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1450,
+        "rank": 5
+      },
+      {
+        "year": 2023,
+        "count": 1420,
+        "rank": 5
+      },
+      {
+        "year": 2024,
+        "count": 1380,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "nameHe": "אורי",
+    "niqqud": "אוּרִי",
+    "translit": [
+      "Uri",
+      "Ori"
+    ],
+    "sexRatio": 0.95,
+    "meaningHe": "האור שלי",
+    "origin": "hebrew",
+    "biblicalRef": "שמות ל״א, ב׳",
+    "tags": {
+      "meaningCategories": [
+        "light"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "חנוכה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1300,
+        "rank": 7
+      },
+      {
+        "year": 2023,
+        "count": 1250,
+        "rank": 8
+      },
+      {
+        "year": 2024,
+        "count": 1200,
+        "rank": 8
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "nameHe": "אדם",
+    "niqqud": "אָדָם",
+    "translit": [
+      "Adam"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אדם, מן האדמה",
+    "origin": "hebrew",
+    "biblicalRef": "בראשית ב׳, ז׳",
+    "tags": {
+      "meaningCategories": [
+        "nature",
+        "life"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1350,
+        "rank": 6
+      },
+      {
+        "year": 2023,
+        "count": 1300,
+        "rank": 6
+      },
+      {
+        "year": 2024,
+        "count": 1280,
+        "rank": 6
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "nameHe": "יהונתן",
+    "niqqud": "יְהוֹנָתָן",
+    "translit": [
+      "Yehonatan",
+      "Jonathan"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "ה׳ נתן",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל א׳ י״ד, ו׳",
+    "tags": {
+      "meaningCategories": [
+        "gift",
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1200,
+        "rank": 9
+      },
+      {
+        "year": 2023,
+        "count": 1150,
+        "rank": 9
+      },
+      {
+        "year": 2024,
+        "count": 1100,
+        "rank": 9
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "nameHe": "אריה",
+    "niqqud": "אַרְיֵה",
+    "translit": [
+      "Arye",
+      "Aryeh"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אריה, מלך החיות",
+    "origin": "hebrew",
+    "biblicalRef": "מלכים ב׳ ט״ו, כ״ה",
+    "tags": {
+      "meaningCategories": [
+        "strength",
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "אריה",
+        "אב",
+        "קיץ"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 900,
+        "rank": 12
+      },
+      {
+        "year": 2023,
+        "count": 880,
+        "rank": 12
+      },
+      {
+        "year": 2024,
+        "count": 850,
+        "rank": 14
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "nameHe": "לביא",
+    "niqqud": "לָבִיא",
+    "translit": [
+      "Lavi"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אריה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "strength",
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "אריה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 700,
+        "rank": 16
+      },
+      {
+        "year": 2023,
+        "count": 760,
+        "rank": 16
+      },
+      {
+        "year": 2024,
+        "count": 820,
+        "rank": 15
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "nameHe": "עידו",
+    "niqqud": "עִדּוֹ",
+    "translit": [
+      "Ido"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "שם של נביא מימי המקרא",
+    "origin": "hebrew",
+    "biblicalRef": "דברי הימים ב׳ י״ג, כ״ב",
+    "tags": {
+      "meaningCategories": [
+        "wisdom"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1100,
+        "rank": 10
+      },
+      {
+        "year": 2023,
+        "count": 1050,
+        "rank": 10
+      },
+      {
+        "year": 2024,
+        "count": 1000,
+        "rank": 11
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "nameHe": "עומר",
+    "niqqud": "עֹמֶר",
+    "translit": [
+      "Omer"
+    ],
+    "sexRatio": 0.95,
+    "meaningHe": "אלומת שיבולים",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": false,
+      "links": [
+        "פסח",
+        "ל״ג בעומר",
+        "אביב"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 900,
+        "rank": 13
+      },
+      {
+        "year": 2023,
+        "count": 850,
+        "rank": 14
+      },
+      {
+        "year": 2024,
+        "count": 800,
+        "rank": 16
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "nameHe": "רפאל",
+    "niqqud": "רְפָאֵל",
+    "translit": [
+      "Refael",
+      "Raphael"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "האל ירפא",
+    "origin": "hebrew",
+    "biblicalRef": "דברי הימים א׳ כ״ו, ז׳",
+    "tags": {
+      "meaningCategories": [
+        "faith",
+        "life"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1000,
+        "rank": 11
+      },
+      {
+        "year": 2023,
+        "count": 1020,
+        "rank": 11
+      },
+      {
+        "year": 2024,
+        "count": 1050,
+        "rank": 10
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "nameHe": "אלון",
+    "niqqud": "אַלּוֹן",
+    "translit": [
+      "Alon"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "עץ האלון",
+    "origin": "hebrew",
+    "biblicalRef": "דברי הימים א׳ ד׳, ל״ז",
+    "tags": {
+      "meaningCategories": [
+        "nature",
+        "strength"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 19
+      },
+      {
+        "year": 2023,
+        "count": 580,
+        "rank": 19
+      },
+      {
+        "year": 2024,
+        "count": 560,
+        "rank": 20
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "nameHe": "גיא",
+    "niqqud": "גַּיְא",
+    "translit": [
+      "Guy",
+      "Gai"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "עמק",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 700,
+        "rank": 17
+      },
+      {
+        "year": 2023,
+        "count": 650,
+        "rank": 18
+      },
+      {
+        "year": 2024,
+        "count": 600,
+        "rank": 19
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "nameHe": "אליה",
+    "niqqud": "אֵלִיָּה",
+    "translit": [
+      "Eliya",
+      "Elia"
+    ],
+    "sexRatio": 0.75,
+    "meaningHe": "ה׳ הוא אלי",
+    "origin": "hebrew",
+    "biblicalRef": "מלכים ב׳ א׳, ג׳",
+    "tags": {
+      "meaningCategories": [
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 800,
+        "rank": 15
+      },
+      {
+        "year": 2023,
+        "count": 850,
+        "rank": 15
+      },
+      {
+        "year": 2024,
+        "count": 900,
+        "rank": 12
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "nameHe": "ארי",
+    "niqqud": "אֲרִי",
+    "translit": [
+      "Ari"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אריה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "strength"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "אריה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 500,
+        "rank": 21
+      },
+      {
+        "year": 2023,
+        "count": 560,
+        "rank": 21
+      },
+      {
+        "year": 2024,
+        "count": 620,
+        "rank": 18
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "nameHe": "משה",
+    "niqqud": "מֹשֶׁה",
+    "translit": [
+      "Moshe"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "נמשה מן המים",
+    "origin": "hebrew",
+    "biblicalRef": "שמות ב׳, י׳",
+    "tags": {
+      "meaningCategories": [
+        "life"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1300,
+        "rank": 8
+      },
+      {
+        "year": 2023,
+        "count": 1280,
+        "rank": 7
+      },
+      {
+        "year": 2024,
+        "count": 1250,
+        "rank": 7
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "nameHe": "בן",
+    "niqqud": "בֵּן",
+    "translit": [
+      "Ben"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "בן",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 400,
+        "rank": 25
+      },
+      {
+        "year": 2023,
+        "count": 420,
+        "rank": 25
+      },
+      {
+        "year": 2024,
+        "count": 450,
+        "rank": 24
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "nameHe": "יואב",
+    "niqqud": "יוֹאָב",
+    "translit": [
+      "Yoav"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "ה׳ הוא אב",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל ב׳ ב׳, י״ג",
+    "tags": {
+      "meaningCategories": [
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 700,
+        "rank": 18
+      },
+      {
+        "year": 2023,
+        "count": 720,
+        "rank": 17
+      },
+      {
+        "year": 2024,
+        "count": 740,
+        "rank": 17
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "nameHe": "נדב",
+    "niqqud": "נָדָב",
+    "translit": [
+      "Nadav"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "נדיב, נותן מרצון",
+    "origin": "hebrew",
+    "biblicalRef": "שמות ו׳, כ״ג",
+    "tags": {
+      "meaningCategories": [
+        "gift"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 450,
+        "rank": 23
+      },
+      {
+        "year": 2023,
+        "count": 430,
+        "rank": 24
+      },
+      {
+        "year": 2024,
+        "count": 410,
+        "rank": 25
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "nameHe": "אסף",
+    "niqqud": "אָסָף",
+    "translit": [
+      "Asaf"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "אסף, קיבץ",
+    "origin": "hebrew",
+    "biblicalRef": "תהלים נ׳, א׳",
+    "tags": {
+      "meaningCategories": [],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 30
+      },
+      {
+        "year": 2023,
+        "count": 280,
+        "rank": 32
+      },
+      {
+        "year": 2024,
+        "count": 260,
+        "rank": 32
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "nameHe": "דניאל",
+    "niqqud": "דָּנִיֵּאל",
+    "translit": [
+      "Daniel"
+    ],
+    "sexRatio": 0.97,
+    "meaningHe": "האל דן אותי",
+    "origin": "hebrew",
+    "biblicalRef": "דניאל א׳, ו׳",
+    "tags": {
+      "meaningCategories": [
+        "faith",
+        "wisdom"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 900,
+        "rank": 14
+      },
+      {
+        "year": 2023,
+        "count": 880,
+        "rank": 13
+      },
+      {
+        "year": 2024,
+        "count": 870,
+        "rank": 13
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "nameHe": "מתן",
+    "niqqud": "מַתָּן",
+    "translit": [
+      "Matan"
+    ],
+    "sexRatio": 1,
+    "meaningHe": "מתנה",
+    "origin": "hebrew",
+    "biblicalRef": "ירמיהו ל״ח, א׳",
+    "tags": {
+      "meaningCategories": [
+        "gift"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 20
+      },
+      {
+        "year": 2023,
+        "count": 580,
+        "rank": 20
+      },
+      {
+        "year": 2024,
+        "count": 560,
+        "rank": 21
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "nameHe": "זיו",
+    "niqqud": "זִיו",
+    "translit": [
+      "Ziv"
+    ],
+    "sexRatio": 0.85,
+    "meaningHe": "זוהר, אור",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "light"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "אייר",
+        "אביב"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 31
+      },
+      {
+        "year": 2023,
+        "count": 320,
+        "rank": 31
+      },
+      {
+        "year": 2024,
+        "count": 340,
+        "rank": 28
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "nameHe": "הלל",
+    "niqqud": "הִלֵּל",
+    "translit": [
+      "Hillel",
+      "Halel"
+    ],
+    "sexRatio": 0.9,
+    "meaningHe": "שבח, תהילה",
+    "origin": "hebrew",
+    "biblicalRef": "שופטים י״ב, י״ג",
+    "tags": {
+      "meaningCategories": [
+        "faith",
+        "joy"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 450,
+        "rank": 24
+      },
+      {
+        "year": 2023,
+        "count": 480,
+        "rank": 23
+      },
+      {
+        "year": 2024,
+        "count": 510,
+        "rank": 23
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "nameHe": "תמר",
+    "niqqud": "תָּמָר",
+    "translit": [
+      "Tamar"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "עץ התמר",
+    "origin": "hebrew",
+    "biblicalRef": "בראשית ל״ח, ו׳",
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "סוכות"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1600,
+        "rank": 2
+      },
+      {
+        "year": 2023,
+        "count": 1550,
+        "rank": 2
+      },
+      {
+        "year": 2024,
+        "count": 1500,
+        "rank": 2
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "nameHe": "נועה",
+    "niqqud": "נֹעָה",
+    "translit": [
+      "Noa"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "תנועה",
+    "origin": "hebrew",
+    "biblicalRef": "במדבר כ״ו, ל״ג",
+    "tags": {
+      "meaningCategories": [],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1900,
+        "rank": 1
+      },
+      {
+        "year": 2023,
+        "count": 1850,
+        "rank": 1
+      },
+      {
+        "year": 2024,
+        "count": 1800,
+        "rank": 1
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "nameHe": "שירה",
+    "niqqud": "שִׁירָה",
+    "translit": [
+      "Shira"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "שיר, זמרה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "joy"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 900,
+        "rank": 5
+      },
+      {
+        "year": 2023,
+        "count": 880,
+        "rank": 6
+      },
+      {
+        "year": 2024,
+        "count": 860,
+        "rank": 6
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "nameHe": "יעל",
+    "niqqud": "יָעֵל",
+    "translit": [
+      "Yael"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "יעלת הסלע",
+    "origin": "hebrew",
+    "biblicalRef": "שופטים ד׳, י״ז",
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1100,
+        "rank": 4
+      },
+      {
+        "year": 2023,
+        "count": 1080,
+        "rank": 4
+      },
+      {
+        "year": 2024,
+        "count": 1050,
+        "rank": 4
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "nameHe": "אביגיל",
+    "niqqud": "אֲבִיגַיִל",
+    "translit": [
+      "Avigail",
+      "Abigail"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "שמחת האב",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל א׳ כ״ה, ג׳",
+    "tags": {
+      "meaningCategories": [
+        "joy"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 1200,
+        "rank": 3
+      },
+      {
+        "year": 2023,
+        "count": 1250,
+        "rank": 3
+      },
+      {
+        "year": 2024,
+        "count": 1300,
+        "rank": 3
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "nameHe": "טליה",
+    "niqqud": "טַלְיָה",
+    "translit": [
+      "Talya",
+      "Talia"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "טל מן השמיים",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature",
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": [
+        "פסח",
+        "אביב"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 900,
+        "rank": 6
+      },
+      {
+        "year": 2023,
+        "count": 950,
+        "rank": 5
+      },
+      {
+        "year": 2024,
+        "count": 1000,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "nameHe": "אילה",
+    "niqqud": "אַיָּלָה",
+    "translit": [
+      "Ayala"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "אילה, צבייה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature",
+        "beauty"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 500,
+        "rank": 13
+      },
+      {
+        "year": 2023,
+        "count": 520,
+        "rank": 13
+      },
+      {
+        "year": 2024,
+        "count": 540,
+        "rank": 12
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "nameHe": "הדס",
+    "niqqud": "הֲדַס",
+    "translit": [
+      "Hadas"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "צמח ההדס",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "סוכות",
+        "תשרי"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 9
+      },
+      {
+        "year": 2023,
+        "count": 580,
+        "rank": 11
+      },
+      {
+        "year": 2024,
+        "count": 560,
+        "rank": 11
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "nameHe": "מיכל",
+    "niqqud": "מִיכַל",
+    "translit": [
+      "Michal"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "מי כאל",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל א׳ י״ד, מ״ט",
+    "tags": {
+      "meaningCategories": [
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "classic",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 10
+      },
+      {
+        "year": 2023,
+        "count": 560,
+        "rank": 12
+      },
+      {
+        "year": 2024,
+        "count": 520,
+        "rank": 14
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "nameHe": "אסתר",
+    "niqqud": "אֶסְתֵּר",
+    "translit": [
+      "Esther"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "כוכב",
+    "origin": "persian",
+    "biblicalRef": "אסתר ב׳, ז׳",
+    "tags": {
+      "meaningCategories": [
+        "light"
+      ],
+      "hebrewWord": false,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "פורים",
+        "אדר"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 500,
+        "rank": 14
+      },
+      {
+        "year": 2023,
+        "count": 520,
+        "rank": 14
+      },
+      {
+        "year": 2024,
+        "count": 540,
+        "rank": 13
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "nameHe": "רות",
+    "niqqud": "רוּת",
+    "translit": [
+      "Rut",
+      "Ruth"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "רעות, חברות",
+    "origin": "hebrew",
+    "biblicalRef": "רות א׳, ד׳",
+    "tags": {
+      "meaningCategories": [
+        "love"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "שבועות",
+        "סיוון"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 21
+      },
+      {
+        "year": 2023,
+        "count": 320,
+        "rank": 22
+      },
+      {
+        "year": 2024,
+        "count": 340,
+        "rank": 22
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "nameHe": "נגה",
+    "niqqud": "נֹגַהּ",
+    "translit": [
+      "Noga"
+    ],
+    "sexRatio": 0.05,
+    "meaningHe": "אור, זוהר",
+    "origin": "hebrew",
+    "biblicalRef": "דברי הימים א׳ ג׳, ז׳",
+    "tags": {
+      "meaningCategories": [
+        "light"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": [
+        "חנוכה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 400,
+        "rank": 18
+      },
+      {
+        "year": 2023,
+        "count": 420,
+        "rank": 18
+      },
+      {
+        "year": 2024,
+        "count": 440,
+        "rank": 17
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "nameHe": "אלה",
+    "niqqud": "אֵלָה",
+    "translit": [
+      "Ela",
+      "Ella"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "עץ האלה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 700,
+        "rank": 8
+      },
+      {
+        "year": 2023,
+        "count": 750,
+        "rank": 8
+      },
+      {
+        "year": 2024,
+        "count": 800,
+        "rank": 8
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "nameHe": "עלמה",
+    "niqqud": "עַלְמָה",
+    "translit": [
+      "Alma"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "נערה צעירה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "life"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 11
+      },
+      {
+        "year": 2023,
+        "count": 700,
+        "rank": 9
+      },
+      {
+        "year": 2024,
+        "count": 800,
+        "rank": 9
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "nameHe": "ליה",
+    "niqqud": "לִיָּה",
+    "translit": [
+      "Liya",
+      "Lia"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "לי יה, שייכת לאל",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 800,
+        "rank": 7
+      },
+      {
+        "year": 2023,
+        "count": 830,
+        "rank": 7
+      },
+      {
+        "year": 2024,
+        "count": 860,
+        "rank": 7
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "nameHe": "שקד",
+    "niqqud": "שָׁקֵד",
+    "translit": [
+      "Shaked"
+    ],
+    "sexRatio": 0.15,
+    "meaningHe": "עץ השקד",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "ט״ו בשבט",
+        "שבט",
+        "חורף"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 22
+      },
+      {
+        "year": 2023,
+        "count": 310,
+        "rank": 23
+      },
+      {
+        "year": 2024,
+        "count": 320,
+        "rank": 23
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "nameHe": "חנה",
+    "niqqud": "חַנָּה",
+    "translit": [
+      "Hana",
+      "Hannah"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "חן, חסד",
+    "origin": "hebrew",
+    "biblicalRef": "שמואל א׳ א׳, ב׳",
+    "tags": {
+      "meaningCategories": [
+        "beauty",
+        "faith"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 450,
+        "rank": 16
+      },
+      {
+        "year": 2023,
+        "count": 460,
+        "rank": 16
+      },
+      {
+        "year": 2024,
+        "count": 470,
+        "rank": 15
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "nameHe": "שרה",
+    "niqqud": "שָׂרָה",
+    "translit": [
+      "Sara",
+      "Sarah"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "שרה, נסיכה",
+    "origin": "hebrew",
+    "biblicalRef": "בראשית י״ז, ט״ו",
+    "tags": {
+      "meaningCategories": [
+        "royalty"
+      ],
+      "hebrewWord": true,
+      "style": "traditional",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 600,
+        "rank": 12
+      },
+      {
+        "year": 2023,
+        "count": 620,
+        "rank": 10
+      },
+      {
+        "year": 2024,
+        "count": 640,
+        "rank": 10
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "nameHe": "לביאה",
+    "niqqud": "לְבִיאָה",
+    "translit": [
+      "Levia"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "אריה נקבה",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "strength",
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "אריה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 150,
+        "rank": 24
+      },
+      {
+        "year": 2023,
+        "count": 170,
+        "rank": 24
+      },
+      {
+        "year": 2024,
+        "count": 190,
+        "rank": 24
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "nameHe": "אמה",
+    "niqqud": "אֶמָּה",
+    "translit": [
+      "Emma"
+    ],
+    "sexRatio": 0,
+    "meaningHe": "שלמה, כוללת",
+    "origin": "other",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [],
+      "hebrewWord": false,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 23
+      },
+      {
+        "year": 2023,
+        "count": 350,
+        "rank": 21
+      },
+      {
+        "year": 2024,
+        "count": 400,
+        "rank": 20
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "nameHe": "אביב",
+    "niqqud": "אָבִיב",
+    "translit": [
+      "Aviv"
+    ],
+    "sexRatio": 0.6,
+    "meaningHe": "עונת האביב",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "אביב",
+        "ניסן",
+        "פסח"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 500,
+        "rank": 22
+      },
+      {
+        "year": 2023,
+        "count": 520,
+        "rank": 22
+      },
+      {
+        "year": 2024,
+        "count": 540,
+        "rank": 22
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "nameHe": "הדר",
+    "niqqud": "הֲדָר",
+    "translit": [
+      "Hadar"
+    ],
+    "sexRatio": 0.35,
+    "meaningHe": "יופי, פאר",
+    "origin": "hebrew",
+    "biblicalRef": "בראשית ל״ו, ל״ט",
+    "tags": {
+      "meaningCategories": [
+        "beauty"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 400,
+        "rank": 19
+      },
+      {
+        "year": 2023,
+        "count": 390,
+        "rank": 19
+      },
+      {
+        "year": 2024,
+        "count": 380,
+        "rank": 21
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "nameHe": "אגם",
+    "niqqud": "אֲגַם",
+    "translit": [
+      "Agam"
+    ],
+    "sexRatio": 0.4,
+    "meaningHe": "אגם",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 350,
+        "rank": 20
+      },
+      {
+        "year": 2023,
+        "count": 380,
+        "rank": 20
+      },
+      {
+        "year": 2024,
+        "count": 410,
+        "rank": 18
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "nameHe": "רוני",
+    "niqqud": "רוֹנִי",
+    "translit": [
+      "Roni"
+    ],
+    "sexRatio": 0.3,
+    "meaningHe": "שמחה, רון",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "joy"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 500,
+        "rank": 15
+      },
+      {
+        "year": 2023,
+        "count": 480,
+        "rank": 15
+      },
+      {
+        "year": 2024,
+        "count": 460,
+        "rank": 16
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "nameHe": "אור",
+    "niqqud": "אוֹר",
+    "translit": [
+      "Or"
+    ],
+    "sexRatio": 0.6,
+    "meaningHe": "אור",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "light"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": [
+        "חנוכה"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 400,
+        "rank": 26
+      },
+      {
+        "year": 2023,
+        "count": 400,
+        "rank": 26
+      },
+      {
+        "year": 2024,
+        "count": 400,
+        "rank": 26
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "nameHe": "טל",
+    "niqqud": "טַל",
+    "translit": [
+      "Tal"
+    ],
+    "sexRatio": 0.5,
+    "meaningHe": "טל",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "פסח",
+        "אביב"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 350,
+        "rank": 27
+      },
+      {
+        "year": 2023,
+        "count": 340,
+        "rank": 27
+      },
+      {
+        "year": 2024,
+        "count": 330,
+        "rank": 29
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "nameHe": "ים",
+    "niqqud": "יָם",
+    "translit": [
+      "Yam"
+    ],
+    "sexRatio": 0.75,
+    "meaningHe": "ים",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": true,
+      "singleSpelling": true,
+      "links": [
+        "קיץ"
+      ]
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 300,
+        "rank": 32
+      },
+      {
+        "year": 2023,
+        "count": 330,
+        "rank": 28
+      },
+      {
+        "year": 2024,
+        "count": 360,
+        "rank": 27
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "nameHe": "שחר",
+    "niqqud": "שַׁחַר",
+    "translit": [
+      "Shahar"
+    ],
+    "sexRatio": 0.5,
+    "meaningHe": "עלות השחר",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "light",
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 350,
+        "rank": 28
+      },
+      {
+        "year": 2023,
+        "count": 330,
+        "rank": 29
+      },
+      {
+        "year": 2024,
+        "count": 310,
+        "rank": 30
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "nameHe": "מעיין",
+    "niqqud": "מַעְיָן",
+    "translit": [
+      "Maayan",
+      "Mayan"
+    ],
+    "sexRatio": 0.15,
+    "meaningHe": "מעיין מים",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "nature"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": false,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 450,
+        "rank": 17
+      },
+      {
+        "year": 2023,
+        "count": 430,
+        "rank": 17
+      },
+      {
+        "year": 2024,
+        "count": 410,
+        "rank": 19
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "nameHe": "עמית",
+    "niqqud": "עָמִית",
+    "translit": [
+      "Amit"
+    ],
+    "sexRatio": 0.6,
+    "meaningHe": "חבר, רע",
+    "origin": "hebrew",
+    "biblicalRef": null,
+    "tags": {
+      "meaningCategories": [
+        "love"
+      ],
+      "hebrewWord": true,
+      "style": "modern",
+      "englishFriendly": false,
+      "singleSpelling": true,
+      "links": []
+    },
+    "stats": [
+      {
+        "year": 2022,
+        "count": 350,
+        "rank": 29
+      },
+      {
+        "year": 2023,
+        "count": 330,
+        "rank": 30
+      },
+      {
+        "year": 2024,
+        "count": 310,
+        "rank": 31
+      }
+    ]
+  }
+]
