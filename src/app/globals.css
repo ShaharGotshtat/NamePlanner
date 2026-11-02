@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #23214f;
+  --color-ink-soft: #5b5a7d;
+  --color-coral: #e8553f;
+  --color-coral-dark: #d2452f;
+  --color-teal: #1e8c7e;
+  --color-teal-soft: #e3f3f0;
+  --color-blush: #fff4ef;
+  --color-line: #f1dcd3;
+  --font-display: "Fredoka", "Rubik", sans-serif;
+  --font-body: "Rubik", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-blush);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
