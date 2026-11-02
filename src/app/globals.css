@@ -18,3 +18,40 @@ body {
   color: var(--color-ink);
   font-family: var(--font-body);
 }
+
+/* Round names are revealed one by one; the card flips in. */
+@keyframes name-reveal {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-70deg) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(800px) rotateX(8deg) scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-name-reveal {
+  animation: name-reveal 520ms cubic-bezier(0.2, 0.8, 0.3, 1.1) both;
+  transform-origin: top center;
+}
+
+@keyframes sealed-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+.animate-sealed-pulse {
+  animation: sealed-pulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-name-reveal,
+  .animate-sealed-pulse {
+    animation: none;
+  }
+}

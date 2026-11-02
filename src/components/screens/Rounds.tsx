@@ -21,6 +21,13 @@ export function Rounds() {
   const [roundNote, setRoundNote] = useState("");
   const [misreads, setMisreads] = useState<string[]>([]);
   const requested = useRef(false);
+  // Names in a round are revealed one at a time. Already-rated names (e.g. after a reload) start revealed.
+  const [revealed, setRevealed] = useState(() => {
+    const r = currentRound(state);
+    return r ? r.suggestions.filter((x) => state.ratings[x.name.id]?.verdict).length : 0;
+  });
+  const [animateFrom, setAnimateFrom] = useState(Infinity);
+  const revealedRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const round = currentRound(state);
   const roundNumber = state.rounds.filter((r) => r.pass === state.pass).length;
@@ -85,6 +92,8 @@ export function Rounds() {
 
     setRoundNote("");
     setMisreads([]);
+    setRevealed(0);
+    setAnimateFrom(0);
     requested.current = false;
     update(patch);
   };
@@ -116,6 +125,19 @@ export function Rounds() {
   }
 
   const allRated = round.suggestions.every((x) => state.ratings[x.name.id]?.verdict);
+  const total = round.suggestions.length;
+  const allRevealed = revealed >= total;
+
+  const revealNext = () => {
+    const index = revealed;
+    setAnimateFrom(Math.min(animateFrom, index));
+    setRevealed(index + 1);
+    requestAnimationFrame(() => {
+      const el = revealedRefs.current[index];
+      el?.focus({ preventScroll: true });
+      el?.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+  };
 
   return (
     <div>
@@ -130,21 +152,52 @@ export function Rounds() {
       <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. בדקו שם לפני שאתם רושמים אותו.</p>
 
       <div className="space-y-4">
-        {round.suggestions.map((s) => (
-          <NameCard
-            key={s.name.id}
-            suggestion={s}
-            rating={state.ratings[s.name.id]}
-            showSex={state.babySex === "unknown"}
-            allowNotes={allowNotes}
-            onRate={(verdict) => rate(s.name.id, verdict)}
-            onNote={(note) => setNote(s.name.id, note)}
-            onMisread={(requirement) => setMisreads((m) => [...m, requirement])}
-          />
-        ))}
+        {round.suggestions.map((s, i) =>
+          i < revealed ? (
+            <div
+              key={s.name.id}
+              ref={(el) => {
+                revealedRefs.current[i] = el;
+              }}
+              tabIndex={-1}
+              aria-label={`שם ${i + 1} מתוך ${total}`}
+              className={`rounded-3xl focus:outline-none ${i >= animateFrom ? "animate-name-reveal" : ""}`}
+            >
+              <NameCard
+                suggestion={s}
+                rating={state.ratings[s.name.id]}
+                showSex={state.babySex === "unknown"}
+                allowNotes={allowNotes}
+                onRate={(verdict) => rate(s.name.id, verdict)}
+                onNote={(note) => setNote(s.name.id, note)}
+                onMisread={(requirement) => setMisreads((m) => [...m, requirement])}
+              />
+            </div>
+          ) : i === revealed ? (
+            <button
+              key={s.name.id}
+              onClick={revealNext}
+              className="animate-sealed-pulse flex min-h-32 w-full flex-col items-center justify-center gap-1 rounded-3xl border-2 border-dashed border-coral bg-white p-5 text-center shadow-sm"
+            >
+              <span aria-hidden className="font-display text-4xl font-semibold text-coral">?</span>
+              <span className="font-medium">{i === 0 ? "לחצו לחשיפת השם הראשון" : "לחצו לחשיפת השם הבא"}</span>
+              <span className="text-xs text-ink-soft">
+                שם {i + 1} מתוך {total}
+              </span>
+            </button>
+          ) : (
+            <div
+              key={s.name.id}
+              aria-hidden
+              className="flex min-h-20 items-center justify-center rounded-3xl border-2 border-dashed border-line text-2xl text-ink-soft/40"
+            >
+              ?
+            </div>
+          ),
+        )}
       </div>
 
-      {allowNotes && (
+      {allowNotes && allRevealed && (
         <input
           className={`${inputClass} mt-4 text-sm`}
           maxLength={200}
@@ -155,7 +208,7 @@ export function Rounds() {
         />
       )}
 
-      <Button className="mt-6 w-full" disabled={!allRated} onClick={next}>
+      <Button className="mt-6 w-full" disabled={!allRevealed || !allRated} onClick={next}>
         {roundNumber >= ROUNDS_PER_PASS ? "לסיכום" : "לסבב הבא"}
       </Button>
     </div>
