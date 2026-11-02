@@ -10,18 +10,27 @@ Name Planner is a mobile-first web app that takes Israeli parents from "no idea"
 
 **Users.** Primary: expecting Israeli parents, Hebrew first, secular to traditional. Most will use it on a phone, often after a partner shares a link on WhatsApp. Secondary: young couples who are not planning a child soon, and friends, who play it as a game to see how well they match. Some users care about zodiac signs, for the baby (see the holiday, season, or zodiac chip).
 
-**Goals for v1**
+**Goals for v1** (single parent)
 
 - A user finishes the flow and leaves with at least one name they marked Interesting.
-- Two users can each do the flow and see names they both accept.
-- Every suggestion comes with an accurate meaning, how common the name is (Central Bureau of Statistics data), and a reason it fits.
-- The flow feels like a light game (see Look and feel under Screens).
-- Any user can invite another person to play, not only a partner, and see how well they match.
+- Every suggestion comes with an accurate meaning, a Latin spelling, how common the name is (Central Bureau of Statistics data), and a reason it fits.
+- The flow feels light and friendly, with simple copy and visuals.
+- Nothing about the parent is stored on the server: names, preferences and the due date stay on their device.
 - Any user can send feedback, report an error, or make a suggestion from any screen without leaving the flow.
+
+**Goals for v2** (play together)
+
+- Two users can each do the flow and see names they both accept.
+- Any user can invite another person to play, not only a partner, and see how well they match.
+- The flow feels like a light game (see Look and feel under Screens): illustrated characters, the match score, a countdown and soft sounds.
+
+**Goals for v3** (optional account)
+
+- A user who chooses to can keep an account with the history of their sessions and lists. Without an account the app works as before and stores nothing.
 
 **Non-goals for v1**
 
-- Native apps, user accounts.
+- Native apps, user accounts, and any server-side storage of user data.
 - Name registration with the Population Authority.
 - Religious rulings on names. The app can filter for traditional names but does not advise on halacha.
 
@@ -31,24 +40,29 @@ Name Planner is a mobile-first web app that takes Israeli parents from "no idea"
 - The whole app is in Hebrew and RTL, including names, meanings, and every model-written line. No English UI in v1.
 - Family surname is an optional input, used for the "flows with the surname" preference.
 
-## V1 scope and next steps
+## Versions and scope
 
-V1 is the single-parent flow, tested with 10 to 20 parents. Everything else in this PRD stays specified but is built after that test, in the order below.
+V1 is the single-parent flow, tested with 10 to 20 parents. V2 and V3 stay specified in this PRD but are built after that test, in the order below. Parts of the screens and technical sections that belong to a later version are marked (v2) or (v3).
 
 **In v1**
 
-- **Name database:** the CBS list (5,000 most common names per sex), with meanings and tags generated in advance for every name. Shahar checks the meanings of a 50-name sample before the full run.
-- **Welcome:** Just me only, baby's sex, optional due date, terms checkbox.
+- **Name database:** the CBS list (5,000 most common names per sex), with meanings, Latin spellings and tags generated in advance for every name. Shahar checks the meanings of a 50-name sample before the full run.
+- **Welcome:** Just me only, baby's sex, optional full due date, terms checkbox.
 - **Family names, Preferences** (chips, free text, Names we like), and **suggestion rounds** with Why this name? and Taken in our family.
 - **Summary:** the three outcomes, Our pick, Go again, and text export.
-- **Safety and operations:** daily cost limit, session-based limits with a bot check, input check and respect rules, QA reviewer agent, Send feedback, delete my data, analytics.
+- **No stored user data:** everything the parent enters stays on their device (see Access and privacy). With nothing on the server there is nothing to delete, so there is no delete function; a Start over button clears the device.
+- **Safety and operations:** daily cost limit, per-session limits with a bot check, input check and respect rules, QA reviewer agent, Send feedback, anonymous analytics.
 - **Look and feel:** light copy and simple visuals. No illustrated characters or sounds yet.
 
-**Next steps**
+**V2 (after the test)**
 
-1. **Couple mode:** invite link, shared family list, Match screen with the match score and countdown, joint rounds. This also opens play with a friend.
+1. **Couple mode:** invite link, shared family list, Match screen with the match score and countdown, joint rounds. This also opens play with a friend. It is the one place where the server holds user data, and only for a short time (see Access and privacy).
 2. **Extras:** image export, I feel adventurous, the Full data chart, illustrated characters and sounds.
 3. **Dev workflow:** the PRD update agent, the issue agent, and feedback Issues on GitHub, moved to a separate document.
+
+**V3**
+
+- **Optional account with history:** a parent who chooses to sign up can save sessions and lists and come back to them from any device. It is strictly opt-in: without an account the app stores nothing, as in v1. This is the first time the server holds user data by choice, so v3 also brings a delete-my-data function, a sign-in method and a privacy review. Details are written when v3 is planned.
 
 ## User flows
 
@@ -67,19 +81,19 @@ flowchart TD
     JR --> CS["Couple summary<br/>Same outcomes, mutual list"]
 ```
 
-The partner enters at the shared Family screen, so family names are entered once. Joint rounds only start after both parents finish their own rounds.
+The partner enters at the shared Family screen, so family names are entered once. Joint rounds only start after both parents finish their own rounds. In v1 only the single-parent path (Welcome to Summary) is built; the partner join, Match, Joint rounds and Couple summary steps are v2.
 
 ## Screens and requirements
 
 There are six screens: Welcome, Family, Preferences, Suggestion rounds, Summary, and (couple mode only) Match.
 
-**Look and feel.** The flow is light and game-like: friendly illustrated characters, the match score, a short countdown before the couple summary is revealed, and soft sounds at key moments that never get annoying. A mute button is always visible.
+**Look and feel.** V1 is light and friendly: simple copy and visuals, no characters or sounds. From v2 the flow is game-like: friendly illustrated characters, the match score, a short countdown before the couple summary is revealed, and soft sounds at key moments that never get annoying. A mute button is always visible once sounds exist.
 
 ### 1. Welcome
 
 - One-line value proposition and a Start button. No sign-up.
-- Choice of **Just me** or **With my partner**. With my partner creates a shared session and an invite link (WhatsApp share button first, copy link second).
-- Baby's sex: Boy, Girl, Not known yet. Next to it, an optional due date (month and year are enough). If it is left empty, the holiday, season, or zodiac chip is not offered. "Not known yet" suggests one boy, one girl, and one unisex name per round unless the parent asks otherwise.
+- Choice of **Just me** or **With my partner (v2)**. In v1 only Just me is shown. With my partner creates a shared session and an invite link (WhatsApp share button first, copy link second).
+- Baby's sex: Boy, Girl, Not known yet. Next to it, an optional due date: the full date (day, month and year) in the Gregorian calendar. The app works out the Hebrew month, a nearby holiday and the zodiac sign on the device and sends only those to the server, never the date itself. If it is left empty, the holiday, season, or zodiac chip is not offered. "Not known yet" suggests one boy, one girl, and one unisex name per round unless the parent asks otherwise.
 - Terms and disclaimer: At the bottom of the page put a link to the terms of usage and mention that the usage is on their own responsibility and the content is AI generated so take it with a grain of salt (rephrase formally and in Hebrew) should be something like: "I have read the terms and understand the suggestions are AI-generated" with a link to the full text. See Disclaimer and terms of use in Technical.
 
 ### 2. Family names
@@ -134,12 +148,12 @@ Every suggestion explains itself against the parent's own requirements, so the p
 
 ### 5. Summary
 
-See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (below), Go again (another 5 rounds with the same or edited preferences, never repeating a name already shown), and (single mode) invite my partner to do the same.
+See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (v2, below), Go again (another 5 rounds with the same or edited preferences, never repeating a name already shown), and, from v2 in single mode, invite my partner to do the same.
 
-**Export my list** opens a sheet with two formats:
+**Export my list** opens a sheet with two formats (v1 has text only):
 
 - **Text:** a ready Hebrew message with the first choice or top names, each with its meaning, plus a link to the app. Shared through the phone's share sheet, or copied.
-- **Image:** a designed card (square, sized for WhatsApp and Instagram stories) with the names, meanings, and in couple mode the match score. Shared as a file through the share sheet, or saved to the gallery.
+- **Image (v2):** a designed card (square, sized for WhatsApp and Instagram stories) with the names, meanings, and in couple mode the match score. Shared as a file through the share sheet, or saved to the gallery.
 
 On phones both use the Web Share API, so the parent picks WhatsApp or any other app. Where it is missing (most desktop browsers), text falls back to a WhatsApp link and copy, and the image to a download.
 
@@ -155,7 +169,7 @@ The image is rendered in the browser from an HTML card (for example with html-to
 - Made-up names stay in that session only. They are not added to the shared name database or shown to anyone else.
 - A made-up string can still sound like a rude word, so the same input and respect checks run on the output before it is shown.
 
-### 6. Match (couple mode)
+### 6. Match (couple mode, v2)
 
 Shown when both parents have finished their rounds. Described under Couple mode in the next section.
 
@@ -171,7 +185,7 @@ A Send feedback link sits in the footer of every screen, next to the terms link.
 
 - **Type:** one of three choices: Report an error, Suggestion, Other feedback.
 - **Message:** free text, required, up to 1,000 characters.
-- **Sent automatically:** the screen name, the app version, the browser type and screen size, and the session id. The parent's saved preferences and family names are not attached.
+- **Sent automatically:** the screen name, the app version, and the browser type and screen size. The parent's preferences and family names are not attached, and there is no session id because the server keeps no sessions.
 - **From a card:** the Report this suggestion link on a suggestion card opens the same form with the type set to Report an error and the name attached.
 - **After sending:** a short thank-you message and a return to the same screen.
 - **Works when the LLM is off:** the form uses no LLM, so it keeps working when the daily cost limit is reached.
@@ -211,7 +225,7 @@ The flow ends after round 5, or earlier when the parent taps "I found it".
 
 With more than three Interesting names, the top three are those the parent ranks highest; the rest stay visible below.
 
-### Couple mode
+### Couple mode (v2)
 
 Both parents go through Preferences and rounds on their own phones, against the shared Family screen. Each parent has at most 3 own rounds. Then:
 
@@ -235,62 +249,94 @@ The core decision: names and their facts come from a curated database, and the L
 | Frontend | Next.js (React, TypeScript), Tailwind, installable PWA | One codebase, good RTL support, fast on mobile |
 | i18n | Hebrew only, `dir="rtl"` at the root | All UI, names, meanings, and model output in Hebrew |
 | Backend | Next.js route handlers on Vercel | No separate server to run for v1 |
-| Database | Postgres (Supabase) | Relational data, simple to host, Realtime built in for couple mode |
-| Couple sync | Supabase Realtime | Only the Match screen needs it |
+| Database | Postgres (Supabase) | In v1 only the name database, the daily spend counter, QA results and feedback reports; no user data. Realtime built in for couple mode (v2) |
+| Couple sync (v2) | Supabase Realtime | Only the Match screen needs it |
 | LLM | Claude API: Sonnet 5.5 for picking and explaining, Haiku 5.5 for parsing free text | Strong Hebrew, structured JSON output |
 | Analytics | PostHog | Funnel per screen, no PII |
 
 ### Name data
 
 - **Popularity:** Israel's Central Bureau of Statistics publishes annual counts of names given to newborns by sector and sex. The [babynamesIL](https://cran.r-project.org/web/packages/babynamesIL/refman/babynamesIL.html) package packages this data for 1949 to 2024 (from CBS Release 391/2025), including only names given to at least 5 babies in a year. In v1 the app uses only the 5,000 most common names for each sex (see Milestones). That gives the name list, sex split, and how common each name is: yearly count, rank, and trend, shown on every card and usable by the "Not in the top 20 of the last 2 years" chip.
-- **Meaning and origin:** not in the CBS data. Generated in advance for every name in the v1 list, in a one-time offline batch before launch. For each name the batch writes the meaning, origin, biblical source, niqqud, and a fixed set of tags: meaning category (nature, light, strength and so on), origin, Hebrew word or not, traditional or modern, and any holiday or season link. A unisex name is one entry, tagged once, with its sex split taken from CBS, so it is never tagged twice. Before the full run, a 50-name sample goes to Shahar to check the meanings, and the prompt is corrected until the sample passes. Entries then go through the QA reviewer agent and the human queue. Because nothing is generated at request time, cards show meanings at once and the daily cost limit covers only live calls.
+- **Meaning and origin:** not in the CBS data. Generated in advance for every name in the v1 list, in a one-time offline batch before launch. For each name the batch writes the meaning, origin, biblical source, niqqud, the Latin spelling shown on every card, and a fixed set of tags: meaning category (nature, light, strength and so on), origin, Hebrew word or not, traditional or modern, and any holiday or season link. A unisex name is one entry, tagged once, with its sex split taken from CBS, so it is never tagged twice. Before the full run, a 50-name sample goes to Shahar to check the meanings, and the prompt is corrected until the sample passes. Entries then go through the QA reviewer agent and the human queue. The batch and its QA review run offline on their own one-time budget, outside the daily cost limit; the cost is estimated from the 50-name sample and approved before the full run. Because nothing is generated at request time, cards show meanings at once and the daily cost limit covers only live calls.
 - **Derived features:** computed once per name: syllables, Hebrew letters, guttural sounds, spelling variants, unisex ratio, recent rank.
 
 ### Data model
 
+**V1: the server keeps no user data.** Only these tables exist:
+
 | Table | Key fields |
 | --- | --- |
-| `names` | id, name\_he, niqqud, translit\[\], sex\_ratio, meaning\_he, origin, biblical\_ref, features (json), yearly counts and ranks (CBS) |
-| `sessions` | id, mode (single/couple), baby\_sex, due\_date (optional), surname, created\_at |
+| `names` | id, name\_he, niqqud, translit\[\] (Latin spellings), sex\_ratio, meaning\_he, origin, biblical\_ref, tags (json: meaning category, origin, Hebrew word or not, traditional or modern, holiday or season link), features (json), yearly counts and ranks (CBS) |
+| `daily_spend` | date, usd\_spent (the cost counter; no user data) |
+| `qa_checks` | id, name\_id, verdict, issue types, created\_at (results for sampled rounds; no preferences and no text) |
+| `reports` | id, type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), status (new/seen/resolved), issue\_url, created\_at |
+
+**On the parent's device (v1).** The browser's local storage on the phone holds: baby's sex, the values derived from the due date, surname, family names, chips, free text and the parsed profile, the rounds and names already shown, verdicts and notes, and the accepted terms version. Start over clears it.
+
+**Shared session (v2 only).** Couple mode needs both phones to see the same data, so v2 adds temporary server tables. Everything in them is deleted automatically 24 hours after the last activity (proposed), and nothing is kept as history.
+
+| Table | Key fields |
+| --- | --- |
+| `sessions` | id, mode (single/couple), baby\_sex, due\_derived (json, optional: Hebrew month, holiday, zodiac sign; never the date), surname, created\_at, expires\_at |
 | `participants` | id, session\_id, role (A/B), access\_token, status |
 | `family_names` | session\_id, name, relation |
 | `preferences` | participant\_id, chips (json: chip to want/must), free\_text, parsed\_profile (json) |
 | `rounds` | id, session\_id, participant\_id (null for joint rounds), index |
 | `suggestions` | round\_id, name\_id, reason\_he, explanation (json: one entry per requirement) |
 | `feedback` | suggestion\_id, participant\_id, verdict (no/unsure/interesting), note |
-| `reports` | id, session\_id (may be empty), type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), status (new/seen/resolved), issue\_url, created\_at |
+
 
 ### Round generation
 
-1. SQL filters `names` by the hard rules (sex, family-name duplicates, already shown, Must chips that map to features).
+1. SQL filters `names` by the hard rules (sex, family-name duplicates, already shown, Must chips that map to features). The app sends the family names, the names already shown and the chips with each request.
 2. A heuristic score orders the remainder; the top 50 to 100 go to the model. It is plain code, no model call: points for each Want chip the name's features meet, plus similarity to names marked Interesting, sibling names and reference names, minus similarity to names marked No. Similarity compares stored features: length, syllables, ending sound, origin, meaning category, popularity band.
 3. The model receives the profile, family list, and feedback history, and returns JSON: three name ids, a one-line reason for each, and a per-requirement explanation (requirement id, met / partly / not met, one sentence). The server rejects any id not in the candidate list.
-4. Free text (preferences, card notes, round notes) goes through a small parsing call that updates `parsed_profile`.
+4. Free text (preferences, card notes, round notes) goes through a small parsing call that returns an updated `parsed_profile`, which the app keeps on the device.
 
 That is about two model calls per round, so roughly 12 per single-parent session.
 
 ### API
 
+V1 is stateless: each request carries what the server needs (profile, family names, names already shown, feedback so far), and the server answers without saving it.
+
 | Endpoint | Purpose |
 | --- | --- |
-| `POST /api/sessions` | Create a session (mode, baby sex) and participant A |
+| `POST /api/session` | Check the bot challenge and return a signed session token that holds the limit counters (no server record) |
+| `POST /api/preferences` | Check and parse chips and free text, return the parsed summary line and the updated profile |
+| `POST /api/rounds` | Generate the next round from the profile, family names, shown names and feedback sent with the request |
+| `POST /api/our-pick` | Write the reason for Our pick from the data sent with the request |
+| `POST /api/reports` | Save a report, suggestion or other feedback sent from the Send feedback form |
+
+**V2 adds** these for couple mode. They read and write the temporary shared session.
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /api/sessions` | Create a shared session (mode, baby sex) and participant A |
 | `POST /api/sessions/:id/invite` | Create participant B and return the share link |
 | `PUT /api/sessions/:id/family` | Save the shared family list |
 | `PUT /api/participants/:id/preferences` | Save chips and free text, return the parsed summary line |
 | `POST /api/participants/:id/rounds` | Generate the next round |
 | `POST /api/suggestions/:id/feedback` | Save a verdict and note |
 | `GET /api/participants/:id/summary` | Outcome and ranked names |
-| `GET /api/sessions/:id/match` | Mutual and "worth discussing" names (couple mode) |
+| `GET /api/sessions/:id/match` | Mutual and "worth discussing" names |
 | `POST /api/sessions/:id/joint-rounds` | Generate a joint round |
-| `POST /api/reports` | Save a report, suggestion or other feedback sent from the Send feedback form |
+
 
 ### Access and privacy
 
-- No accounts. Each participant gets an unguessable token in their link and a cookie on their device.
-- A participant sees the other's verdicts, including No, only on the Match screen and only after both have finished their rounds.
-- Stored data is family first names, a surname, and preferences. Sessions are deleted after a fixed period (proposed 90 days) and on request.
-- Free text is sent to the LLM provider; the privacy note says so.
-- Usage analytics are aggregate only: time in session and sessions by hour. IP addresses are not stored or hashed. All limits are per session. The privacy note lists this.
+The principle: the server stores nothing about the parent.
+
+- **No accounts and no server-side sessions in v1.** Everything the parent enters stays in the browser on their phone. Each request carries what the server needs, and the server discards it after answering.
+- **Session token.** A signed token, issued after the bot check, holds the limit counters (LLM calls, flagged inputs, reports). It carries no names or preferences.
+- **Due date.** The full date is entered on the device. The app works out the Hebrew month, a nearby holiday and the zodiac sign there and sends only those values. The date itself is never sent or stored.
+- **What the server does keep:** the name database; the daily spend counter; feedback reports, which are the only text a parent writes that is stored, because the parent chose to send it, and the form says so; QA results for sampled rounds (name id, verdict and issue types only); flagged-input counts (category and time only, no text); and aggregate analytics.
+- **Third parties.** Free text, family names and preferences are sent to the LLM provider to produce suggestions. The bot check provider sees the visitor's connection details. The privacy note says both.
+- **Analytics** are aggregate only: time in session and sessions by hour. Events carry a random visit id made on the device and dropped when the visit ends, with no persistent cookie and no person profiles. IP addresses are not stored or hashed, and the analytics tool is set to discard them. All limits are counted per session token. The privacy note lists this.
+- **Deleting data.** Nothing about the parent is on the server, so there is nothing to delete there and no delete function in v1. Start over clears the device. Feedback reports carry no contact details, so they cannot be traced to a parent.
+- **Lost progress.** With no server copy, a parent who clears the browser data or switches phones starts again. Export my list is the way to keep a result, and the privacy note says so. Continuing on another device comes with the optional account in v3.
+- **V2 couple mode is the one exception.** Each participant gets an unguessable token in their link and a cookie on their device. The shared session (family names, preferences, verdicts) is held on the server only while the couple plays and is deleted automatically 24 hours after the last activity (proposed). A participant sees the other's verdicts, including No, only on the Match screen and only after both have finished their rounds.
+- **V3 account (opt-in).** Only a parent who creates an account has data kept on the server, with a delete-my-data function. Without an account nothing is stored, as in v1.
+
 
 ### Daily cost limit
 
@@ -300,7 +346,7 @@ The link may be shared publicly, so the number of users cannot be capped. Spend 
 - **Counting:** every live LLM call adds its estimated cost (input and output tokens times the model's price) to one daily counter in the database. The server checks the counter before making a call.
 - **Warning:** at 80% of the budget the owner gets an alert (email or message).
 - **At 100%:** LLM calls stop for the rest of the day. New visitors see a short Hebrew message on the Welcome screen: the app is full for today, come back tomorrow. Sessions already in progress continue without the LLM: suggestions come from the CBS popularity ranking filtered by the saved preferences, with no personal explanations.
-- **Per-session cap:** at most 20 LLM calls per session (a normal session uses about 12), so one session or script cannot drain the budget.
+- **Per-session cap:** at most 20 LLM calls per session (a normal session uses about 12), so one session or script cannot drain the budget. The count is kept in the signed session token.
 - **Rate limit:** no IP addresses are used. Starting a session requires passing an invisible bot check (for example Cloudflare Turnstile), and every limit is counted per session token. The daily budget stays the overall ceiling.
 - **Backstop:** a monthly spend limit set on the Claude API account itself, in case the app's own counter fails.
 - **Scope:** the limit covers LLM spend only. Hosting and database costs are not capped here.
@@ -310,7 +356,7 @@ The link may be shared publicly, so the number of users cannot be capped. Spend 
 The app shows LLM-written names, meanings and explanations, so it carries a standard waiver: use is at the user's own risk, and the operator is not responsible for the output. This is a product requirement, not legal advice; a lawyer licensed in Israel reviews the final wording before launch. A waiver cannot remove liability that the law does not allow to be removed, so the lawyer confirms what it can cover.
 
 - **Where it appears:** a "Terms and disclaimer" page in Hebrew, linked from the footer of every screen. The Welcome screen has a required checkbox before Start (see Welcome). Every suggestion round also shows one short line: "Suggestions are AI-generated. Check a name before you register it."
-- **Acceptance record:** the session stores that the terms were accepted and which version. No name, email or other personal data is added.
+- **Acceptance record:** the app keeps on the device that the terms were accepted and which version. Nothing is sent to or stored on the server.
 - **What the text says:**
   - Names, meanings, origins, biblical sources and explanations are produced by an LLM and public statistics. They may be wrong, incomplete or offensive in some communities or languages.
   - Nothing in the app is legal, religious, medical or professional advice.
@@ -331,7 +377,7 @@ The app may be used with names from any community, in any sector. Some visitors 
 - **Input check before use.** Free text and typed family names go first through a cheap Haiku check for hate, harassment, sexual content, and mockery of a person, name or community. Flagged input is never sent to the main model. The visitor sees a neutral message and the flow continues.
 - **Shared cache is protected.** Pre-generated meanings are written from the name alone, never from visitors' free text, and are checked by the same filter before they are saved. One visitor cannot plant text that others later see.
 - **Strikes.** After 2 flagged inputs in a session, the free-text box is turned off for that session. A flagged session cannot start Go again. Repeated abuse across sessions is held back by the bot check on new sessions and by the daily budget.
-- **Logging.** A flagged input stores only its category and time, not the text.
+- **Logging.** A flagged input stores only its category and time, not the text, and no session or device identifier.
 - **Report link.** Every card has a "Report this suggestion" link. Reports go to the owner and name entries can be hidden.
 - **Terms.** The terms page adds an acceptable-use line: do not use the app to insult or mock any person or community.
 - **Cost.** The input check counts toward the daily cost limit.
@@ -340,20 +386,20 @@ The app may be used with names from any community, in any sector. Some visitors 
 
 A stand-alone QA agent reviews what the LLM produced. It is a separate scheduled job with its own prompt, run apart from the app's suggestion flow, and it never talks to visitors. It checks and flags; it does not edit or publish anything.
 
-- **What it reviews:** (1) every newly generated name entry (meaning, origin, biblical source, niqqud), once a day; (2) a random 5% sample of live suggestion rounds, using the stored explanation text.
+- **What it reviews:** (1) every entry of the offline name batch (meaning, origin, biblical source, niqqud, Latin spelling), once before launch, and any entry regenerated later; (2) a random 5% sample of live suggestion rounds. The server sends a sampled round to the reviewer as it is generated, together with the preferences it was built from, and keeps only the result (name id, verdict, issue types), never the text or the preferences.
 - **What it checks:**
   - The name exists in the CBS list and the sex given fits the data. Made-up names from "I feel adventurous" are checked only for respect and offensive sound-alikes.
-  - The Hebrew spelling and niqqud are correct, and the meaning and origin are plausible.
+  - The Hebrew spelling and niqqud are correct, the Latin spelling is the natural one, and the meaning and origin are plausible.
   - A biblical source, if given, is a real verse that contains the name.
   - The text follows the respect rules: no mockery, stereotypes, insults, or group comparisons.
   - The explanation matches the parent's saved preferences and does not claim more than the data shows.
   - The output fits the fixed fields and length.
 - **Verdict per item:** pass, fix needed (with the reason and a suggested correction), or block (unsafe or clearly wrong), each with a confidence level.
 - **Status on each name entry:** unreviewed, QA-passed, flagged, or human-approved. Flagged and blocked entries stop showing their meaning to visitors; the name itself still appears.
-- **Human review queue:** flagged items, then low-confidence items, then the most-viewed QA-passed names. A person reviews the queue; the agent's pass is not final approval.
+- **Human review queue:** flagged items, then low-confidence items, then the QA-passed names, highest CBS rank first (the app does not track views). A person reviews the queue; the agent's pass is not final approval.
 - **Report:** a daily summary to the owner with counts of pass, fix and block, and the top repeated problems. Repeated problems feed changes to the generator prompt.
 - **Model and independence:** it uses a different prompt from the generator and does not see the generator's reasoning, so it judges the output on its own.
-- **Cost:** it counts toward the daily cost limit, with its own share of the budget (proposed 10%). If that share runs out, the review waits until the next day and unreviewed entries stay marked as such.
+- **Cost:** the review of the offline batch uses the batch's own one-time budget (see Name data). Sampling of live rounds counts toward the daily cost limit, with its own share of the budget (proposed 10%). If that share runs out, the review waits until the next day and unreviewed entries stay marked as such.
 - **Limit:** an LLM reviewing LLM output can miss errors, so the human queue stays, especially for biblical sources and Hebrew grammar.
 
 ### PRD and issue agents
@@ -382,7 +428,7 @@ Two stand-alone agents keep the PRD and the GitHub repository in step. Neither t
 - **Title:** it always starts with "\[User feedback\]" followed by the type and the first words of the message, for example "\[User feedback\] Error: the Summary screen does not load". This makes it clear the Issue comes from a user, not from the team.
 - **Labels:** `user-feedback`, plus one of `bug`, `suggestion` or `other`.
 - **Body:** the full message, the type, the screen, the app version, the device details, the date, and the report id. For a report sent from a card, it also names the suggested name.
-- **Never in the Issue:** the session id, and the parent's saved preferences or family names.
+- **Never in the Issue:** the parent's preferences or family names (the app never sends them with a report).
 - **Held reports:** a report held for containing links opens its Issue only after the owner approves it.
 - **Limits:** at most 20 feedback Issues a day. Reports beyond that are collected in one summary Issue for the day.
 - **Closing:** a person closes the Issue and marks the report resolved.
@@ -398,11 +444,11 @@ Two stand-alone agents keep the PRD and the GitHub repository in step. Neither t
 | --- | --- |
 | Completion rate | Sessions that reach Summary / sessions that start Preferences |
 | Hit rate | Sessions with at least one Interesting name |
-| Partner invite rate | Single sessions that send an invite link |
-| Mutual match rate | Couple sessions with at least one name both parents marked Interesting |
+| Partner invite rate (v2) | Single sessions that send an invite link |
+| Mutual match rate (v2) | Couple sessions with at least one name both parents marked Interesting |
 | Share rate | Summaries shared to WhatsApp or copied |
 | Sessions started | Sessions that open Family names, per week; counted per session, since there are no accounts |
-| Couple mode share | Couple sessions / all sessions started |
+| Couple mode share (v2) | Couple sessions / all sessions started |
 | Rounds per session | Average suggestion rounds completed before the flow ends |
 | Names rated per session | Average number of names given a verdict in a session |
 | Free-text use rate | Sessions with at least one free-text message in the chat |
@@ -430,11 +476,13 @@ Targets to set after the first 100 real sessions; I have no baseline to propose 
 - [ ] What is the daily LLM budget in USD, and what share of it triggers the warning?
 - [ ] Who is the legal operator named in the terms, and which country's law and courts govern them?
 - [ ] Which GitHub repository do the PRD and issue agents use, and how often do they run?
+- [ ] What is the one-time budget for the name batch and its QA review?
+- [ ] In v2, how long should a couple session live on the server (proposed 24 hours after the last activity)?
 
 ### Milestones
 
-1. **Name database.** Import CBS data for the 5,000 most common names per sex (ranked by total count in 2000 to 2024; a unisex name is one entry; if a sex has fewer than 5,000 names, all are taken). Compute features, then run the offline batch for meanings and tags: 50-name check by Shahar first, then the full run, QA review and the human queue.
-2. **Single-parent flow.** Welcome (just me, sex, due date, terms), Family names, Preferences, rounds, Summary with Our pick, Go again and text export. Includes analytics, the cost limit, session limits and bot check, input check, Send feedback and delete my data.
+1. **Name database.** Import CBS data for the 5,000 most common names per sex (ranked by total count in 2000 to 2024; a unisex name is one entry; if a sex has fewer than 5,000 names, all are taken). Compute features, then run the offline batch for meanings, Latin spellings and tags: 50-name check by Shahar first, then the full run on its own budget, QA review and the human queue.
+2. **Single-parent flow.** Welcome (just me, sex, due date, terms), Family names, Preferences, rounds, Summary with Our pick, Go again and text export. Includes anonymous analytics, the cost limit, per-session limits and bot check, input check, Send feedback and Start over.
 3. **Test with 10 to 20 parents.** Set metric targets from the results.
 4. **Couple mode.** Invite link, shared family list, Match screen and match score, joint rounds.
 5. **Extras and launch prep.** Image export, I feel adventurous, Full data chart, characters and sounds, privacy note review, performance on low-end phones.
@@ -456,7 +504,7 @@ INPUT
 
 CHECKS
 1. Data match: the name exists in the CBS record and the sex given fits it. For a live round, the name is on the CBS list. Any name not in the record is a block.
-2. Hebrew: spelling, niqqud, grammar and natural phrasing are correct.
+2. Hebrew and Latin: the Hebrew spelling, niqqud, grammar and natural phrasing are correct, and the Latin spelling is the natural, common one.
 3. Meaning and origin: plausible and consistent with how the name is commonly understood. If you are not sure, say so; do not guess.
 4. Biblical source: if one is given, the verse exists and contains the name. A source you cannot confirm is a fix, not a pass.
 5. Respect: no mockery, stereotypes, insults, jokes, or comparisons that rank people, religions, languages or communities. Names from every sector and culture are treated with equal respect.
