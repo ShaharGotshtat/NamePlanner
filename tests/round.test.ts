@@ -16,6 +16,11 @@ describe("rankCandidates", () => {
     expect(ids).not.toContain("תמר");
   });
 
+  it("never suggests a name declined in an earlier search, even under a new id", () => {
+    const ids = rankCandidates(names, request({ babySex: "girl", declined: ["תמר"] })).map((c) => c.entry.nameHe);
+    expect(ids).not.toContain("תמר");
+  });
+
   it("drops every name that misses a Must chip", () => {
     const ranked = rankCandidates(names, request({ chips: { notTop20: "must", englishFriendly: "must" } }));
     expect(ranked.length).toBeGreaterThan(0);

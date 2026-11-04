@@ -75,10 +75,10 @@ function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate
 
 const byScore = (a: Candidate, b: Candidate) => b.score - a.score;
 
-/** Hard rules first (sex, family names, names already shown, Musts), then the heuristic score. */
+/** Hard rules first (sex, family names, names already shown or declined, Musts), then the heuristic score. */
 export function rankCandidates(names: NameEntry[], req: RoundRequest): Candidate[] {
   const blockedIds = new Set([...req.shownIds, ...req.ratings.map((r) => r.nameId)]);
-  const blockedNames = new Set([...req.family.map((f) => f.name), ...req.namesWeLike].map(normalizeHebrew));
+  const blockedNames = new Set([...req.family.map((f) => f.name), ...req.namesWeLike, ...req.declined].map(normalizeHebrew));
   const signals = signalsFor(names, req);
 
   const passing = names

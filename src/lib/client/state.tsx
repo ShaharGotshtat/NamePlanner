@@ -32,6 +32,8 @@ export interface AppState {
   freeText: string;
   notes: string[];
   namesWeLike: string[];
+  /** Names voted "no" in earlier searches. They survive a restart so they are not suggested again. */
+  declined: string[];
   profile: ParsedProfile | null;
   /** The free text, notes and names last sent for checking, so unchanged input is not sent twice. */
   checkedInput: string | null;
@@ -56,6 +58,7 @@ export const initialState: AppState = {
   freeText: "",
   notes: [],
   namesWeLike: [],
+  declined: [],
   profile: null,
   checkedInput: null,
   freeTextDisabled: false,
@@ -76,6 +79,7 @@ interface AppContextValue {
   state: AppState;
   update: (change: Update) => void;
   startOver: () => void;
+  deleteAll: () => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -107,7 +111,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((s) => (s ? { ...s, ...(typeof change === "function" ? change(s) : change) } : s));
   }, []);
 
-  const startOver = useCallback(() => {
+  const startOver = useCallback(() => update(restartPatch), [update]);
+
+  const deleteAll = useCallback(() => {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
@@ -115,7 +121,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   if (!state) return null;
-  return <AppContext.Provider value={{ state, update, startOver }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ state, update, startOver, deleteAll }}>{children}</AppContext.Provider>;
 }
 
 export function useApp(): AppContextValue {
@@ -128,6 +134,25 @@ export const shownIds = (s: AppState) => s.rounds.flatMap((r) => r.suggestions.m
 
 export const shownSuggestions = (s: AppState) => s.rounds.flatMap((r) => r.suggestions);
 
+/** Every name the parent turned down, in this search or an earlier one. */
+export function declinedNames(s: AppState): string[] {
+  const now = shownSuggestions(s).filter((x) => s.ratings[x.name.id]?.verdict === "no").map((x) => x.name.nameHe);
+  return [...new Set([...s.declined, ...now])];
+}
+
+/** A new search: the rounds and votes are cleared, everything the parent entered and the declined names are kept. */
+export function restartPatch(s: AppState): Partial<AppState> {
+  return {
+    step: initialState.step,
+    declined: declinedNames(s),
+    pass: initialState.pass,
+    rounds: initialState.rounds,
+    ratings: initialState.ratings,
+    favoriteId: initialState.favoriteId,
+    ourPick: initialState.ourPick,
+  };
+}
+
 export function roundRequest(s: AppState): RoundRequest {
   return {
     babySex: s.babySex ?? "unknown",
@@ -137,6 +162,7 @@ export function roundRequest(s: AppState): RoundRequest {
     chips: s.chips,
     profile: s.profile,
     namesWeLike: s.namesWeLike,
+    declined: declinedNames(s),
     ratings: Object.values(s.ratings).map(({ nameId, verdict }) => ({ nameId, verdict })),
     shownIds: shownIds(s),
   };

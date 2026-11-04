@@ -122,6 +122,7 @@ export interface RoundRequest {
   chips: ChipSelection;
   profile: ParsedProfile | null;
   namesWeLike: string[];
+  declined: string[];
   ratings: Rating[];
   shownIds: number[];
 }

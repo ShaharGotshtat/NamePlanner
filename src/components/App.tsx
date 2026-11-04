@@ -31,7 +31,7 @@ export function App() {
 }
 
 function Shell() {
-  const { state, update, startOver } = useApp();
+  const { state, update, startOver, deleteAll } = useApp();
   const openFeedback = useFeedback();
   const Screen = SCREENS[state.step];
   const canGoBack = backPatch(state) !== null;
@@ -83,7 +83,7 @@ function Shell() {
           </span>
           <button
             className="min-h-11 text-sm text-ink-soft hover:underline"
-            onClick={() => confirm("להתחיל מחדש? כל מה שהזנתם יימחק מהמכשיר.") && startOver()}
+            onClick={() => confirm("להתחיל חיפוש חדש? הפרטים שהזנתם נשמרים ואפשר לערוך אותם. ההצבעות יימחקו, ושמות שסימנתם \"לא\" לא יוצעו שוב.") && startOver()}
           >
             התחלה מחדש
           </button>
@@ -103,6 +103,12 @@ function Shell() {
         </Link>
         <button className="min-h-11 hover:underline" onClick={() => openFeedback()}>
           שליחת משוב
+        </button>
+        <button
+          className="min-h-11 hover:underline"
+          onClick={() => confirm("למחוק את כל הנתונים? כל מה שהזנתם יימחק מהמכשיר.") && deleteAll()}
+        >
+          מחיקת הנתונים
         </button>
       </footer>
     </div>
