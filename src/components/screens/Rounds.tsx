@@ -19,7 +19,7 @@ export function Rounds() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [roundNote, setRoundNote] = useState("");
-  const [misreads, setMisreads] = useState<string[]>([]);
+  const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
   const requested = useRef(false);
   // Names in a round are revealed one at a time. Already-rated names (e.g. after a reload) start revealed.
   const [revealed, setRevealed] = useState(() => {
@@ -60,6 +60,14 @@ export function Rounds() {
       return { ratings, family: [...s.family, { name, relation: "other" }] };
     });
 
+  /** Takes back a "Taken in our family" tap: the card returns unrated and the name leaves the family list. */
+  const undoTaken = (nameId: number, nameHe: string) =>
+    update((s) => {
+      const { [nameId]: _, ...ratings } = s.ratings;
+      const index = s.family.findLastIndex((f) => f.relation === "other" && f.name === nameHe);
+      return { ratings, family: index < 0 ? s.family : s.family.filter((_, i) => i !== index) };
+    });
+
   const setNote = (nameId: number, note: string) =>
     update((s) => ({ ratings: { ...s.ratings, [nameId]: { ...s.ratings[nameId], nameId, note } } }));
 
@@ -71,7 +79,7 @@ export function Rounds() {
       .map((x) => `על השם ${x.name}: ${x.note}`);
     const newNotes = [
       ...cardNotes,
-      ...misreads.map((r) => `לגבי "${r}": לא לזה התכוונתי`),
+      ...[...new Set(misreads.map((m) => m.requirement))].map((r) => `לגבי "${r}": לא לזה התכוונתי`),
       ...(roundNote.trim() ? [`על הסבב: ${roundNote.trim()}`] : []),
     ];
 
@@ -173,7 +181,12 @@ export function Rounds() {
                 allowNotes={allowNotes}
                 onRate={(verdict) => rate(s.name.id, verdict)}
                 onNote={(note) => setNote(s.name.id, note)}
-                onMisread={(requirement) => setMisreads((m) => [...m, requirement])}
+                onMisread={(requirement, on) =>
+                  setMisreads((m) =>
+                    on ? [...m, { nameId: s.name.id, requirement }] : m.filter((x) => !(x.nameId === s.name.id && x.requirement === requirement)),
+                  )
+                }
+                onUndoTaken={() => undoTaken(s.name.id, s.name.nameHe)}
               />
             </div>
           ) : i === revealed ? (
