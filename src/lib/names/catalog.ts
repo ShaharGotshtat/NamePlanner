@@ -49,3 +49,16 @@ export function findByName(names: NameEntry[], name: string): NameEntry | undefi
   const key = normalizeHebrew(name);
   return names.find((n) => normalizeHebrew(n.nameHe) === key);
 }
+
+/**
+ * The meaning to show, without parts that only repeat the name ("ים: ים").
+ * Returns null when nothing is left, so the card hides the meaning instead of echoing the name.
+ */
+export function displayMeaning(entry: Pick<NameEntry, "nameHe" | "meaningHe">): string | null {
+  const name = normalizeHebrew(entry.nameHe);
+  const parts = entry.meaningHe
+    .split(/[,،;]/)
+    .map((p) => p.trim())
+    .filter((p) => p && normalizeHebrew(p) !== name);
+  return parts.length ? parts.join(", ") : null;
+}

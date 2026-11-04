@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { popularity } from "@/lib/names/catalog";
+import { displayMeaning, popularity } from "@/lib/names/catalog";
 import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
 import { Card, inputClass } from "../ui";
 
 const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
   { id: "no", label: "לא", selected: "border-ink bg-ink text-white" },
-  { id: "unsure", label: "לא בטוח", selected: "border-teal bg-teal text-white" },
-  { id: "interesting", label: "מעניין", selected: "border-coral-dark bg-coral-dark text-white" },
+  { id: "unsure", label: "אולי", selected: "border-teal bg-teal text-white" },
+  { id: "interesting", label: "מעניין!", selected: "border-coral-dark bg-coral-dark text-white" },
 ];
 
 const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }> = {
@@ -55,8 +55,9 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
   const [misread, setMisread] = useState<string[]>([]);
-  const { name, sex, reason, explanation } = suggestion;
+  const { name, sex, explanation } = suggestion;
   const { latest, trend } = popularity(name);
+  const meaning = displayMeaning(name);
 
   if (rating?.verdict === "taken") {
     return (
@@ -83,18 +84,18 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         {showSex && <span className="rounded-full bg-blush px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
       </div>
 
-      <p className="mt-3 rounded-2xl bg-blush p-3 text-sm">{reason}</p>
-
       <button className="mt-2 min-h-11 text-sm font-medium text-teal" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
         {whyOpen ? "הסתרה" : "למה השם הזה?"}
       </button>
       {whyOpen && (
         <div className="space-y-4 text-sm">
           <dl className="space-y-1.5">
-            <div>
-              <dt className="inline font-medium">משמעות: </dt>
-              <dd className="inline">{name.meaningHe}</dd>
-            </div>
+            {meaning && (
+              <div>
+                <dt className="inline font-medium">משמעות: </dt>
+                <dd className="inline">{meaning}</dd>
+              </div>
+            )}
             <div>
               <dt className="inline font-medium">מקור: </dt>
               <dd className="inline">
