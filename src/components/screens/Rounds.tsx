@@ -89,7 +89,8 @@ export function Rounds() {
 
     if (newNotes.length && allowNotes) {
       setLoading(true);
-      const withNotes = { ...state, notes: [...state.notes, ...newNotes] };
+      // A round reopened with the back button sends its notes again, so drop repeats.
+      const withNotes = { ...state, notes: [...new Set([...state.notes, ...newNotes])] };
       try {
         patch = { ...patch, notes: withNotes.notes, ...(await runCheck(withNotes)).patch };
       } catch {
