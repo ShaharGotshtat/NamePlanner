@@ -1,74 +1,56 @@
 "use client";
 
 import { useState } from "react";
+import { parseNameList } from "@/lib/name-list";
 import { useApp } from "@/lib/client/state";
-import type { Relation } from "@/lib/types";
+import type { FamilyName } from "@/lib/types";
 import { Button, inputClass, ScreenTitle } from "../ui";
 
-export const RELATIONS: Record<Relation, string> = {
-  sibling: "אח או אחות של התינוק",
-  cousin: "בן או בת דודים",
-  parent: "הורה",
-  grandparent: "סבא או סבתא",
-  other: "אחר",
-};
+type ListRelation = "parent" | "sibling";
+
+const namesOf = (family: FamilyName[], relation: ListRelation) =>
+  family.filter((f) => f.relation === relation).map((f) => f.name).join(", ");
 
 export function Family() {
   const { state, update } = useApp();
-  const [name, setName] = useState("");
-  const [relation, setRelation] = useState<Relation>("sibling");
+  // Raw text per field, so separators the parent is still typing are not swallowed by the parser.
+  const [drafts, setDrafts] = useState<Record<ListRelation, string>>(() => ({
+    parent: namesOf(state.family, "parent"),
+    sibling: namesOf(state.family, "sibling"),
+  }));
 
-  const add = () => {
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    update((s) => ({ family: [...s.family, { name: trimmed, relation }] }));
-    setName("");
+  const setList = (relation: ListRelation, text: string) => {
+    setDrafts((d) => ({ ...d, [relation]: text }));
+    const names = parseNameList(text).map((name) => ({ name, relation }));
+    update((s) => ({ family: [...s.family.filter((f) => f.relation !== relation), ...names] }));
   };
+
+  const others = state.family.filter((f) => f.relation !== "parent" && f.relation !== "sibling");
 
   return (
     <div>
-      <ScreenTitle subtitle="לא נציע שמות שכבר תפוסים. שמות האחים גם יעזרו לנו להבין מה אתם אוהבים. הרשימה לא חייבת להיות מלאה.">
-        אילו שמות כבר תפוסים במשפחה הקרובה?
+      <ScreenTitle subtitle="לא נציע שמות שכבר תפוסים, ושמות האחים יעזרו לנו להבין את הטעם שלכם. אפשר להשאיר ריק.">
+        אילו שמות כבר תפוסים במשפחה?
       </ScreenTitle>
 
-      <form
-        className="space-y-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          add();
-        }}
-      >
-        <input aria-label="שם" className={inputClass} value={name} maxLength={60} placeholder="שם" onChange={(e) => setName(e.target.value)} />
-        <div className="flex gap-2">
-          <select aria-label="קרבה" className={inputClass} value={relation} onChange={(e) => setRelation(e.target.value as Relation)}>
-            {Object.entries(RELATIONS).map(([id, label]) => (
-              <option key={id} value={id}>
-                {label}
-              </option>
-            ))}
-          </select>
-          <Button type="submit" variant="secondary" disabled={!name.trim()}>
-            הוספה
-          </Button>
-        </div>
-      </form>
+      <NameListField
+        label="שמות ההורים"
+        placeholder="למשל: דנה ויואב"
+        value={drafts.parent}
+        names={parseNameList(drafts.parent)}
+        onChange={(text) => setList("parent", text)}
+      />
+      <NameListField
+        label="שמות האחים והאחיות"
+        placeholder="למשל: נועה, איתי"
+        value={drafts.sibling}
+        names={parseNameList(drafts.sibling)}
+        onChange={(text) => setList("sibling", text)}
+      />
+      <p className="mt-2 text-sm text-ink-soft">אפשר להפריד בפסיק, ברווח, ב״ו״ או בשורה חדשה. שמות נוספים מהמשפחה תוכלו לסמן כ״תפוס״ כשנציע אותם.</p>
 
-      {state.family.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {state.family.map((f, i) => (
-            <li key={`${f.name}-${i}`} className="flex items-center gap-1 rounded-full bg-white py-1 ps-3 pe-1 text-sm ring-1 ring-line">
-              <span className="font-medium">{f.name}</span>
-              <span className="text-ink-soft">· {RELATIONS[f.relation]}</span>
-              <button
-                aria-label={`הסרת ${f.name}`}
-                className="size-7 rounded-full hover:bg-blush"
-                onClick={() => update((s) => ({ family: s.family.filter((_, j) => j !== i) }))}
-              >
-                ×
-              </button>
-            </li>
-          ))}
-        </ul>
+      {others.length > 0 && (
+        <p className="mt-3 text-sm text-ink-soft">סימנתם כתפוסים בסבבים: {others.map((f) => f.name).join(", ")}</p>
       )}
 
       <label className="mt-8 block">
@@ -82,5 +64,42 @@ export function Family() {
         המשך
       </Button>
     </div>
+  );
+}
+
+function NameListField({
+  label,
+  placeholder,
+  value,
+  names,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  names: string[];
+  onChange: (text: string) => void;
+}) {
+  return (
+    <label className="mt-5 block first-of-type:mt-0">
+      <span className="mb-2 block font-medium">{label}</span>
+      <textarea
+        className={`${inputClass} min-h-14 py-2`}
+        rows={2}
+        maxLength={300}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {names.length > 0 && (
+        <span className="mt-2 flex flex-wrap gap-1.5" aria-label={`זיהינו: ${names.join(", ")}`}>
+          {names.map((n) => (
+            <span key={n} className="rounded-full bg-teal-soft px-3 py-0.5 text-sm">
+              {n}
+            </span>
+          ))}
+        </span>
+      )}
+    </label>
   );
 }
