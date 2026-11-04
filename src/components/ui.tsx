@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { Mascot, type MascotMood } from "./Mascot";
 
 type Variant = "primary" | "secondary" | "ghost";
 
@@ -37,11 +38,14 @@ export function Toggle({
   );
 }
 
-export function ScreenTitle({ children, subtitle }: { children: ReactNode; subtitle?: ReactNode }) {
+export function ScreenTitle({ children, subtitle, mood }: { children: ReactNode; subtitle?: ReactNode; mood?: MascotMood }) {
   return (
-    <header className="mb-6">
-      <h1 className="font-display text-2xl font-semibold leading-tight">{children}</h1>
-      {subtitle && <p className="mt-2 text-ink-soft">{subtitle}</p>}
+    <header className="mb-6 flex items-start gap-3">
+      <div className="flex-1">
+        <h1 className="font-display text-2xl font-semibold leading-tight">{children}</h1>
+        {subtitle && <p className="mt-2 text-ink-soft">{subtitle}</p>}
+      </div>
+      {mood && <Mascot key={mood} mood={mood} size={72} className="animate-mascot-pop" />}
     </header>
   );
 }

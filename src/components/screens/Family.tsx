@@ -29,7 +29,7 @@ export function Family() {
 
   return (
     <div>
-      <ScreenTitle subtitle="לא נציע שמות שכבר תפוסים, ושמות האחים יעזרו לנו להבין את הטעם שלכם. אפשר להשאיר ריק.">
+      <ScreenTitle mood="think" subtitle="לא נציע שמות שכבר תפוסים, ושמות האחים יעזרו לנו להבין את הטעם שלכם. אפשר להשאיר ריק.">
         אילו שמות כבר תפוסים במשפחה?
       </ScreenTitle>
 

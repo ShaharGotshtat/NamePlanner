@@ -4,6 +4,7 @@ import { useState } from "react";
 import { displayMeaning, popularity } from "@/lib/names/catalog";
 import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
+import { MascotSays, type MascotMood } from "../Mascot";
 import { Card, inputClass } from "../ui";
 
 const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
@@ -29,6 +30,19 @@ const ORIGIN_LABELS: Record<Origin, string> = {
   latin: "לטיני",
   persian: "פרסי",
   other: "אחר",
+};
+
+/** The mascot's reaction to each verdict; the line is picked by name id so it stays put on re-render. */
+const REACTIONS: Record<Verdict, { mood: MascotMood; lines: string[] }> = {
+  interesting: { mood: "cheer", lines: ["יש! שמרתי אותו בצד.", "איזה יופי, נשמע מבטיח!", "מעולה, יש לנו מועמד!"] },
+  unsure: { mood: "think", lines: ["בסדר, אפשר לחשוב על זה עוד.", "נחזור אליו בסיכום.", "גם \"אולי\" זו תשובה."] },
+  no: { mood: "sad", lines: ["אוף. לא נורא, יש עוד הרבה שמות.", "הבנתי, ממשיכים לחפש.", "אוקיי, הוא לא בשבילכם."] },
+  taken: { mood: "surprised", lines: ["אה, כבר תפוס! לא נציע אותו שוב."] },
+};
+
+const reactionFor = (verdict: Verdict, id: number) => {
+  const r = REACTIONS[verdict];
+  return { mood: r.mood, line: r.lines[id % r.lines.length] };
 };
 
 /** Plain-language band for the latest CBS rank. */
@@ -61,10 +75,10 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
 
   if (rating?.verdict === "taken") {
     return (
-      <Card className="text-center text-ink-soft">
-        <p>
+      <Card className="text-ink-soft">
+        <MascotSays mood="surprised" size={48}>
           <span className="font-medium text-ink">{name.nameHe}</span> נוסף לשמות התפוסים במשפחה.
-        </p>
+        </MascotSays>
         <button className="mt-1 min-h-11 text-sm font-medium text-teal underline" onClick={onUndoTaken}>
           ביטול
         </button>
@@ -168,6 +182,12 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
           </button>
         ))}
       </div>
+
+      {rating?.verdict && (
+        <MascotSays key={rating.verdict} mood={reactionFor(rating.verdict, name.id).mood} size={48} className="mt-3">
+          {reactionFor(rating.verdict, name.id).line}
+        </MascotSays>
+      )}
 
       {allowNotes && noteOpen && (
         <input
