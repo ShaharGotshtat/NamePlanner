@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
+import { displayMeaning } from "@/lib/names/catalog";
 import type { Suggestion } from "@/lib/types";
 import { Button } from "../ui";
 
 function buildMessage(names: Suggestion[], favorite: Suggestion | null): string {
-  const line = (s: Suggestion) => `${s.name.nameHe} (${s.name.meaningHe})`;
+  const line = (s: Suggestion) => {
+    const meaning = displayMeaning(s.name);
+    return meaning ? `${s.name.nameHe} (${meaning})` : s.name.nameHe;
+  };
   const others = names.filter((s) => s !== favorite);
   const heading = favorite
     ? [`הבחירה הראשונה שלנו: ${line(favorite)}`, ...(others.length ? ["עוד שמות שאהבנו:"] : [])]

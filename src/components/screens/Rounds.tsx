@@ -194,11 +194,11 @@ export function Rounds() {
             <button
               key={s.name.id}
               onClick={revealNext}
+              aria-label={`חשיפת שם ${i + 1} מתוך ${total}`}
               className="animate-sealed-pulse flex min-h-32 w-full flex-col items-center justify-center gap-1 rounded-3xl border-2 border-dashed border-coral bg-white p-5 text-center shadow-sm"
             >
               <span aria-hidden className="font-display text-4xl font-semibold text-coral">?</span>
-              <span className="font-medium">{i === 0 ? "לחצו לחשיפת השם הראשון" : "לחצו לחשיפת השם הבא"}</span>
-              <span className="text-xs text-ink-soft">
+              <span className="text-sm text-ink-soft">
                 שם {i + 1} מתוך {total}
               </span>
             </button>

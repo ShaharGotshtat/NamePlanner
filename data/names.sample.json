@@ -247,7 +247,7 @@
       "Adam"
     ],
     "sexRatio": 1,
-    "meaningHe": "אדם, מן האדמה",
+    "meaningHe": "מן האדמה",
     "origin": "hebrew",
     "biblicalRef": "בראשית ב׳, ז׳",
     "tags": {
@@ -329,7 +329,7 @@
       "Aryeh"
     ],
     "sexRatio": 1,
-    "meaningHe": "אריה, מלך החיות",
+    "meaningHe": "מלך החיות",
     "origin": "hebrew",
     "biblicalRef": "מלכים ב׳ ט״ו, כ״ה",
     "tags": {
@@ -738,7 +738,7 @@
       "Ben"
     ],
     "sexRatio": 1,
-    "meaningHe": "בן",
+    "meaningHe": "ילד זכר, צאצא",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -853,7 +853,7 @@
       "Asaf"
     ],
     "sexRatio": 1,
-    "meaningHe": "אסף, קיבץ",
+    "meaningHe": "מלשון איסוף וקיבוץ",
     "origin": "hebrew",
     "biblicalRef": "תהלים נ׳, א׳",
     "tags": {
@@ -1169,7 +1169,7 @@
       "Yael"
     ],
     "sexRatio": 0,
-    "meaningHe": "יעלת הסלע",
+    "meaningHe": "עז בר שחיה בהרים ובמדבר",
     "origin": "hebrew",
     "biblicalRef": "שופטים ד׳, י״ז",
     "tags": {
@@ -1292,7 +1292,7 @@
       "Ayala"
     ],
     "sexRatio": 0,
-    "meaningHe": "אילה, צבייה",
+    "meaningHe": "צבייה",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -1743,7 +1743,7 @@
       "Sarah"
     ],
     "sexRatio": 0,
-    "meaningHe": "שרה, נסיכה",
+    "meaningHe": "נסיכה",
     "origin": "hebrew",
     "biblicalRef": "בראשית י״ז, ט״ו",
     "tags": {
@@ -1943,7 +1943,7 @@
       "Agam"
     ],
     "sexRatio": 0.4,
-    "meaningHe": "אגם",
+    "meaningHe": "מקווה מים גדול שמוקף יבשה",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -2021,7 +2021,7 @@
       "Or"
     ],
     "sexRatio": 0.6,
-    "meaningHe": "אור",
+    "meaningHe": "ההפך מחושך, זוהר",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -2062,7 +2062,7 @@
       "Tal"
     ],
     "sexRatio": 0.5,
-    "meaningHe": "טל",
+    "meaningHe": "טיפות מים שנוצרות על הצמחים בבוקר",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -2104,7 +2104,7 @@
       "Yam"
     ],
     "sexRatio": 0.75,
-    "meaningHe": "ים",
+    "meaningHe": "גוף מים גדול",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {
@@ -2186,7 +2186,7 @@
       "Mayan"
     ],
     "sexRatio": 0.15,
-    "meaningHe": "מעיין מים",
+    "meaningHe": "מקור מים שנובע מהאדמה",
     "origin": "hebrew",
     "biblicalRef": null,
     "tags": {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { fetchOurPick } from "@/lib/client/api";
+import { displayMeaning } from "@/lib/names/catalog";
 import { roundRequest, shownSuggestions, useApp } from "@/lib/client/state";
 import type { Suggestion } from "@/lib/types";
 import { TagInput } from "../TagInput";
@@ -50,11 +51,13 @@ function FirstChoice({ favorite, others }: { favorite: Suggestion; others: Sugge
       <ScreenTitle subtitle="שתפו אותו עם בן או בת הזוג.">
         <span className="text-coral">{favorite.name.niqqud}</span> הוא הבחירה הראשונה שלכם!
       </ScreenTitle>
-      <Card>
-        <p>
-          <span className="font-medium">משמעות:</span> {favorite.name.meaningHe}
-        </p>
-      </Card>
+      {displayMeaning(favorite.name) && (
+        <Card>
+          <p>
+            <span className="font-medium">משמעות:</span> {displayMeaning(favorite.name)}
+          </p>
+        </Card>
+      )}
       {others.length > 0 && (
         <p className="mt-4 text-sm text-ink-soft">עוד שמות שאהבתם: {others.map((s) => s.name.nameHe).join(", ")}</p>
       )}
@@ -72,7 +75,7 @@ function PickFavorite({ names, onPick }: { names: Suggestion[]; onPick: (id: num
           <li key={s.name.id}>
             <button className="flex min-h-14 w-full items-center justify-between rounded-2xl bg-white px-4 ring-1 ring-line hover:ring-coral" onClick={() => onPick(s.name.id)}>
               <span className="font-display text-xl font-semibold">{s.name.niqqud}</span>
-              <span className="text-sm text-ink-soft">{s.name.meaningHe}</span>
+              <span className="text-sm text-ink-soft">{displayMeaning(s.name)}</span>
             </button>
           </li>
         ))}
@@ -103,7 +106,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
   return (
     <>
       <ScreenTitle>מצטערים, לא מצאנו התאמה מושלמת.</ScreenTitle>
-      {unsure.length > 0 && <p className="text-ink-soft">שמות שסימנתם כ״לא בטוח״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
+      {unsure.length > 0 && <p className="text-ink-soft">שמות שסימנתם כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
 
       <div className="mt-6">
         <p className="mb-2 font-medium">שמות שאתם אוהבים, גם אם הם תפוסים</p>
