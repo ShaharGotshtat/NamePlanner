@@ -6,19 +6,7 @@ import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
 import { TagInput } from "../TagInput";
-import { Button, inputClass, ScreenTitle } from "../ui";
-
-const NEXT_LEVEL: Record<"neutral" | ChipLevel, ChipLevel | undefined> = {
-  neutral: "want",
-  want: "must",
-  must: undefined,
-};
-
-const CHIP_STYLES: Record<"neutral" | ChipLevel, string> = {
-  neutral: "border-line bg-white",
-  want: "border-teal bg-teal-soft",
-  must: "border-coral-dark bg-coral-dark text-white",
-};
+import { Button, inputClass, ScreenTitle, Toggle } from "../ui";
 
 export function Preferences() {
   const { state, update } = useApp();
@@ -28,12 +16,15 @@ export function Preferences() {
   const chips = CHIPS.filter((c) => !c.needsDueDate || state.dueDerived);
   const pending = needsCheck(state);
 
-  const cycle = (id: ChipId) =>
+  const toggle = (id: ChipId) =>
     update((s) => {
-      const next = NEXT_LEVEL[s.chips[id] ?? "neutral"];
-      const { [id]: _, ...rest } = s.chips;
-      return { chips: next ? { ...rest, [id]: next } : rest };
+      const { [id]: current, ...rest } = s.chips;
+      return { chips: current ? rest : { ...rest, [id]: "want" } };
     });
+
+  const setLevel = (id: ChipId, level: ChipLevel) => update((s) => ({ chips: { ...s.chips, [id]: level } }));
+
+  const selected = chips.filter((c) => state.chips[c.id]);
 
   const goToRounds = () => update({ step: "rounds" });
 
@@ -55,23 +46,53 @@ export function Preferences() {
 
   return (
     <div>
-      <ScreenTitle subtitle="הקישו פעם אחת על מה שחשוב לכם, ופעמיים על מה שחובה.">מה חשוב לכם בשם?</ScreenTitle>
+      <ScreenTitle subtitle="בחרו כל מה שחשוב לכם. אפשר לבחור כמה שרוצים.">מה חשוב לכם בשם?</ScreenTitle>
 
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => {
-          const level = state.chips[chip.id] ?? "neutral";
+          const level = state.chips[chip.id];
           return (
-            <button
-              key={chip.id}
-              onClick={() => cycle(chip.id)}
-              className={`min-h-11 rounded-full border-2 px-4 text-sm font-medium transition-colors ${CHIP_STYLES[level]}`}
-            >
+            <Toggle key={chip.id} selected={!!level} onClick={() => toggle(chip.id)}>
+              {level && <span aria-hidden>✓ </span>}
               {chip.label}
-              {level === "must" && " · חובה"}
-            </button>
+              {level === "must" && <span className="ms-1 rounded-full bg-white/25 px-2 text-xs">חובה</span>}
+            </Toggle>
           );
         })}
       </div>
+
+      {selected.length > 0 && (
+        <section className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-line" aria-labelledby="must-title">
+          <h2 id="must-title" className="font-medium">
+            משהו מזה חובה?
+          </h2>
+          <p className="mt-1 text-sm text-ink-soft">שם שלא עומד בדרישת חובה לא יוצע בכלל. כל השאר רק יקבלו עדיפות.</p>
+          <ul className="mt-3 divide-y divide-line">
+            {selected.map((chip) => {
+              const must = state.chips[chip.id] === "must";
+              return (
+                <li key={chip.id} className="flex min-h-12 items-center justify-between gap-3 py-1">
+                  <span className="text-sm">{chip.label}</span>
+                  <button
+                    role="switch"
+                    aria-checked={must}
+                    aria-label={`${chip.label}: חובה`}
+                    onClick={() => setLevel(chip.id, must ? "want" : "must")}
+                    className="flex min-h-11 shrink-0 items-center gap-2 text-sm"
+                  >
+                    <span className={must ? "font-medium text-ink" : "text-ink-soft"}>{must ? "חובה" : "רצוי"}</span>
+                    <span className={`relative h-6 w-11 rounded-full transition-colors ${must ? "bg-teal" : "bg-ink/20"}`}>
+                      <span
+                        className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-[inset-inline-start] ${must ? "start-[1.375rem]" : "start-0.5"}`}
+                      />
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       <div className="mt-8">
         <p className="mb-2 font-medium">

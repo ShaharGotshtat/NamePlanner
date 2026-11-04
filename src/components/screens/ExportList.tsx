@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
 import type { Suggestion } from "@/lib/types";
 import { Button } from "../ui";
@@ -16,19 +16,15 @@ function buildMessage(names: Suggestion[], favorite: Suggestion | null): string 
 
 export function ExportList({ names, favorite }: { names: Suggestion[]; favorite: Suggestion | null }) {
   const [copied, setCopied] = useState(false);
-  const [fallback, setFallback] = useState(false);
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => setCanShare(typeof navigator.share === "function"), []);
 
   const share = async () => {
-    const text = buildMessage(names, favorite);
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-        return;
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-      }
+    try {
+      await navigator.share({ text: buildMessage(names, favorite) });
+    } catch {
+      // Cancelled or blocked: the other options are right there.
     }
-    setFallback(true);
   };
 
   const copy = async () => {
@@ -38,24 +34,25 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
 
   return (
     <div className="mt-6">
-      <Button className="w-full" onClick={share}>
-        ייצוא הרשימה
-      </Button>
-      {fallback && (
-        <div className="mt-3 flex gap-2">
-          <a
-            className="flex min-h-11 flex-1 items-center justify-center rounded-2xl bg-teal font-medium text-white"
-            href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite))}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            וואטסאפ
-          </a>
-          <Button variant="secondary" className="flex-1" onClick={copy}>
-            {copied ? "הועתק!" : "העתקה"}
+      <p className="mb-2 font-medium">ייצוא הרשימה</p>
+      <a
+        className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-whatsapp font-medium text-white hover:brightness-95"
+        href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite))}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        שליחה בוואטסאפ
+      </a>
+      <div className="mt-2 flex gap-2">
+        <Button variant="secondary" className="flex-1" onClick={copy}>
+          {copied ? "הועתק!" : "העתקת הטקסט"}
+        </Button>
+        {canShare && (
+          <Button variant="secondary" className="flex-1" onClick={share}>
+            שיתוף אחר
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

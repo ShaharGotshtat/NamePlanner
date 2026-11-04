@@ -124,6 +124,7 @@ export function Rounds() {
     );
   }
 
+  const anyInteresting = Object.values(state.ratings).some((r) => r.verdict === "interesting");
   const allRated = round.suggestions.every((x) => state.ratings[x.name.id]?.verdict);
   const total = round.suggestions.length;
   const allRevealed = revealed >= total;
@@ -141,13 +142,15 @@ export function Rounds() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex min-h-11 items-center justify-between">
         <p className="font-display text-lg font-semibold">
           סבב {roundNumber} מתוך {ROUNDS_PER_PASS}
         </p>
-        <Button variant="secondary" className="text-sm" onClick={() => update({ step: "summary" })}>
-          מצאתי!
-        </Button>
+        {anyInteresting && (
+          <Button variant="secondary" className="animate-name-reveal text-sm" onClick={() => update({ step: "summary" })}>
+            מצאתי!
+          </Button>
+        )}
       </div>
       <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. בדקו שם לפני שאתם רושמים אותו.</p>
 

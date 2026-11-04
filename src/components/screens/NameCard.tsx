@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { popularity } from "@/lib/names/catalog";
-import type { Fit, Rating, Suggestion, Verdict } from "@/lib/types";
+import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
 import { Card, inputClass } from "../ui";
 
@@ -20,6 +20,24 @@ const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }>
 
 const SEX_LABELS = { boy: "לבן", girl: "לבת", unisex: "יוניסקס" };
 const TREND_LABELS = { rising: "במגמת עלייה", falling: "במגמת ירידה", steady: "יציב" };
+
+const ORIGIN_LABELS: Record<Origin, string> = {
+  hebrew: "עברי",
+  aramaic: "ארמי",
+  arabic: "ערבי",
+  greek: "יווני",
+  latin: "לטיני",
+  persian: "פרסי",
+  other: "אחר",
+};
+
+/** Plain-language band for the latest CBS rank. */
+function commonness(rank: number): string {
+  if (rank <= 20) return "נפוץ מאוד";
+  if (rank <= 100) return "נפוץ";
+  if (rank <= 500) return "מוכר אבל לא נפוץ";
+  return "נדיר";
+}
 
 interface Props {
   suggestion: Suggestion;
@@ -61,59 +79,64 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         {showSex && <span className="rounded-full bg-blush px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
       </div>
 
-      <dl className="mt-4 space-y-1 text-sm">
-        <div>
-          <dt className="inline font-medium">משמעות: </dt>
-          <dd className="inline">{name.meaningHe}</dd>
-        </div>
-        {name.biblicalRef && (
-          <div>
-            <dt className="inline font-medium">מקור מקראי: </dt>
-            <dd className="inline">{name.biblicalRef}</dd>
-          </div>
-        )}
-        <div>
-          <dt className="inline font-medium">כמה נפוץ: </dt>
-          <dd className="inline">
-            {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year} · מקום {latest.rank} · {TREND_LABELS[trend]}
-          </dd>
-        </div>
-      </dl>
-
       <p className="mt-3 rounded-2xl bg-blush p-3 text-sm">{reason}</p>
 
-      {explanation.length > 0 && (
-        <button className="mt-2 min-h-11 text-sm font-medium text-teal" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
-          {whyOpen ? "הסתרה" : "למה השם הזה?"}
-        </button>
-      )}
+      <button className="mt-2 min-h-11 text-sm font-medium text-teal" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
+        {whyOpen ? "הסתרה" : "למה השם הזה?"}
+      </button>
       {whyOpen && (
-        <ul className="space-y-2 text-sm">
-          {explanation.map((line) => (
-            <li key={line.requirement} className="flex items-start gap-2">
-              <span aria-label={FIT_ICONS[line.fit].label} className={`grid size-6 shrink-0 place-items-center rounded-full text-xs ${FIT_ICONS[line.fit].className}`}>
-                {FIT_ICONS[line.fit].icon}
-              </span>
-              <span className="flex-1">
-                <span className="font-medium">{line.requirement}:</span> {line.detail}
-                {allowNotes &&
-                  (misread.includes(line.requirement) ? (
-                    <span className="block text-xs text-teal">תודה, נתקן בסבב הבא</span>
-                  ) : (
-                    <button
-                      className="block text-xs text-ink-soft underline"
-                      onClick={() => {
-                        setMisread([...misread, line.requirement]);
-                        onMisread(line.requirement);
-                      }}
-                    >
-                      לא לזה התכוונתי
-                    </button>
-                  ))}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-4 text-sm">
+          <dl className="space-y-1.5">
+            <div>
+              <dt className="inline font-medium">משמעות: </dt>
+              <dd className="inline">{name.meaningHe}</dd>
+            </div>
+            <div>
+              <dt className="inline font-medium">מקור: </dt>
+              <dd className="inline">
+                {ORIGIN_LABELS[name.origin]}
+                {name.biblicalRef && ` · מופיע בתנ״ך (${name.biblicalRef})`}
+              </dd>
+            </div>
+            <div>
+              <dt className="inline font-medium">כמה נפוץ: </dt>
+              <dd className="inline">
+                {commonness(latest.rank)}. {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
+              </dd>
+            </div>
+          </dl>
+          {explanation.length > 0 && (
+            <div>
+              <p className="mb-2 font-medium">מול מה שביקשתם</p>
+              <ul className="space-y-2">
+              {explanation.map((line) => (
+                <li key={line.requirement} className="flex items-start gap-2">
+                  <span aria-label={FIT_ICONS[line.fit].label} className={`grid size-6 shrink-0 place-items-center rounded-full text-xs ${FIT_ICONS[line.fit].className}`}>
+                    {FIT_ICONS[line.fit].icon}
+                  </span>
+                  <span className="flex-1">
+                    <span className="font-medium">{line.requirement}:</span> {line.detail}
+                    {allowNotes &&
+                      (misread.includes(line.requirement) ? (
+                        <span className="block text-xs text-teal">תודה, נתקן בסבב הבא</span>
+                      ) : (
+                        <button
+                          className="block text-xs text-ink-soft underline"
+                          onClick={() => {
+                            setMisread([...misread, line.requirement]);
+                            onMisread(line.requirement);
+                          }}
+                        >
+                          לא לזה התכוונתי
+                        </button>
+                      ))}
+                  </span>
+                </li>
+              ))}
+              </ul>
+            </div>
+          )}
+        </div>
       )}
 
       <div className="mt-4 grid grid-cols-3 gap-2" role="radiogroup" aria-label={`מה דעתכם על ${name.nameHe}?`}>
