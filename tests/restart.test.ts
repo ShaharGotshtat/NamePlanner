@@ -9,6 +9,7 @@ const afterTwoSearches = (): AppState => {
   let s: AppState = {
     ...initialState,
     step: "summary",
+    dueDate: "2027-03-15",
     surname: "כהן",
     family: [{ name: "דוד", relation: "grandparent" }],
     chips: { unisex: "want" },
@@ -32,6 +33,7 @@ describe("restartPatch", () => {
   it("keeps everything the parent entered and clears the rounds and votes", () => {
     const s = afterTwoSearches();
     expect(s.step).toBe("welcome");
+    expect(s.dueDate).toBe("2027-03-15");
     expect(s.surname).toBe("כהן");
     expect(s.family).toEqual([{ name: "דוד", relation: "grandparent" }]);
     expect(s.chips).toEqual({ unisex: "want" });

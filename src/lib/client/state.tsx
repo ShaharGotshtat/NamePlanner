@@ -25,6 +25,8 @@ export interface AppState {
   step: Step;
   terms: { version: string; acceptedAt: string } | null;
   babySex: BabySex | null;
+  /** The due date as YYYY-MM-DD. Only the values derived from it are sent to the server. */
+  dueDate: string;
   dueDerived: DueDerived | null;
   surname: string;
   family: FamilyName[];
@@ -51,6 +53,7 @@ export const initialState: AppState = {
   step: "welcome",
   terms: null,
   babySex: null,
+  dueDate: "",
   dueDerived: null,
   surname: "",
   family: [],

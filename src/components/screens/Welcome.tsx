@@ -18,7 +18,6 @@ const SEXES: { id: BabySex; label: string }[] = [
 export function Welcome() {
   const { state, update } = useApp();
   const [open, setOpen] = useState<boolean | null>(null);
-  const [dueDate, setDueDate] = useState("");
 
   useEffect(() => {
     startSession()
@@ -62,10 +61,9 @@ export function Welcome() {
         <input
           type="date"
           className={inputClass}
-          value={dueDate}
+          value={state.dueDate}
           onChange={(e) => {
-            setDueDate(e.target.value);
-            update({ dueDerived: e.target.value ? deriveFromDueDate(e.target.value) : null });
+            update({ dueDate: e.target.value, dueDerived: e.target.value ? deriveFromDueDate(e.target.value) : null });
           }}
         />
       </label>
