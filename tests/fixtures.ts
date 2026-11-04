@@ -15,6 +15,7 @@ export function request(overrides: Partial<RoundRequest> = {}): RoundRequest {
     profile: null,
     namesWeLike: [],
     ratings: [],
+    declined: [],
     shownIds: [],
     ...overrides,
   };

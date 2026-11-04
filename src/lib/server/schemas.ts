@@ -46,6 +46,7 @@ export const roundRequestSchema = z.object({
   chips,
   profile: profile.nullable(),
   namesWeLike: z.array(shortText).max(20),
+  declined: z.array(shortText).max(300).default([]),
   ratings: z
     .array(
       z.object({
