@@ -46,10 +46,11 @@ interface Props {
   allowNotes: boolean;
   onRate: (verdict: Verdict) => void;
   onNote: (note: string) => void;
-  onMisread: (requirement: string) => void;
+  onMisread: (requirement: string, misread: boolean) => void;
+  onUndoTaken: () => void;
 }
 
-export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread }: Props) {
+export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread, onUndoTaken }: Props) {
   const openFeedback = useFeedback();
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
@@ -63,6 +64,9 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         <p>
           <span className="font-medium text-ink">{name.nameHe}</span> נוסף לשמות התפוסים במשפחה.
         </p>
+        <button className="mt-1 min-h-11 text-sm font-medium text-teal underline" onClick={onUndoTaken}>
+          ביטול
+        </button>
       </Card>
     );
   }
@@ -118,13 +122,24 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
                     <span className="font-medium">{line.requirement}:</span> {line.detail}
                     {allowNotes &&
                       (misread.includes(line.requirement) ? (
-                        <span className="block text-xs text-teal">תודה, נתקן בסבב הבא</span>
+                        <span className="block text-xs text-teal">
+                          תודה, נתקן בסבב הבא.{" "}
+                          <button
+                            className="min-h-9 font-medium underline"
+                            onClick={() => {
+                              setMisread(misread.filter((r) => r !== line.requirement));
+                              onMisread(line.requirement, false);
+                            }}
+                          >
+                            ביטול
+                          </button>
+                        </span>
                       ) : (
                         <button
-                          className="block text-xs text-ink-soft underline"
+                          className="block min-h-9 text-xs text-ink-soft underline"
                           onClick={() => {
                             setMisread([...misread, line.requirement]);
-                            onMisread(line.requirement);
+                            onMisread(line.requirement, true);
                           }}
                         >
                           לא לזה התכוונתי
