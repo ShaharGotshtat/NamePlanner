@@ -1,0 +1,159 @@
+"use client";
+
+import { useState } from "react";
+import { popularity } from "@/lib/names/catalog";
+import type { Fit, Rating, Suggestion, Verdict } from "@/lib/types";
+import { useFeedback } from "../Feedback";
+import { Card, inputClass } from "../ui";
+
+const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
+  { id: "no", label: "לא", selected: "border-ink bg-ink text-white" },
+  { id: "unsure", label: "לא בטוח", selected: "border-teal bg-teal text-white" },
+  { id: "interesting", label: "מעניין", selected: "border-coral-dark bg-coral-dark text-white" },
+];
+
+const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }> = {
+  met: { icon: "✓", label: "מתקיים", className: "bg-teal text-white" },
+  partly: { icon: "~", label: "מתקיים חלקית", className: "bg-amber-400 text-ink" },
+  not_met: { icon: "✗", label: "לא מתקיים", className: "bg-ink/15 text-ink" },
+};
+
+const SEX_LABELS = { boy: "לבן", girl: "לבת", unisex: "יוניסקס" };
+const TREND_LABELS = { rising: "במגמת עלייה", falling: "במגמת ירידה", steady: "יציב" };
+
+interface Props {
+  suggestion: Suggestion;
+  rating: Rating | undefined;
+  showSex: boolean;
+  allowNotes: boolean;
+  onRate: (verdict: Verdict) => void;
+  onNote: (note: string) => void;
+  onMisread: (requirement: string) => void;
+}
+
+export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread }: Props) {
+  const openFeedback = useFeedback();
+  const [whyOpen, setWhyOpen] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(!!rating?.note);
+  const [misread, setMisread] = useState<string[]>([]);
+  const { name, sex, reason, explanation } = suggestion;
+  const { latest, trend } = popularity(name);
+
+  if (rating?.verdict === "taken") {
+    return (
+      <Card className="text-center text-ink-soft">
+        <p>
+          <span className="font-medium text-ink">{name.nameHe}</span> נוסף לשמות התפוסים במשפחה.
+        </p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h2 className="font-display text-3xl font-semibold">{name.niqqud}</h2>
+          <p className="text-sm text-ink-soft" dir="ltr">
+            {name.translit.join(" / ")}
+          </p>
+        </div>
+        {showSex && <span className="rounded-full bg-blush px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
+      </div>
+
+      <dl className="mt-4 space-y-1 text-sm">
+        <div>
+          <dt className="inline font-medium">משמעות: </dt>
+          <dd className="inline">{name.meaningHe}</dd>
+        </div>
+        {name.biblicalRef && (
+          <div>
+            <dt className="inline font-medium">מקור מקראי: </dt>
+            <dd className="inline">{name.biblicalRef}</dd>
+          </div>
+        )}
+        <div>
+          <dt className="inline font-medium">כמה נפוץ: </dt>
+          <dd className="inline">
+            {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year} · מקום {latest.rank} · {TREND_LABELS[trend]}
+          </dd>
+        </div>
+      </dl>
+
+      <p className="mt-3 rounded-2xl bg-blush p-3 text-sm">{reason}</p>
+
+      {explanation.length > 0 && (
+        <button className="mt-2 min-h-11 text-sm font-medium text-teal" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
+          {whyOpen ? "הסתרה" : "למה השם הזה?"}
+        </button>
+      )}
+      {whyOpen && (
+        <ul className="space-y-2 text-sm">
+          {explanation.map((line) => (
+            <li key={line.requirement} className="flex items-start gap-2">
+              <span aria-label={FIT_ICONS[line.fit].label} className={`grid size-6 shrink-0 place-items-center rounded-full text-xs ${FIT_ICONS[line.fit].className}`}>
+                {FIT_ICONS[line.fit].icon}
+              </span>
+              <span className="flex-1">
+                <span className="font-medium">{line.requirement}:</span> {line.detail}
+                {allowNotes &&
+                  (misread.includes(line.requirement) ? (
+                    <span className="block text-xs text-teal">תודה, נתקן בסבב הבא</span>
+                  ) : (
+                    <button
+                      className="block text-xs text-ink-soft underline"
+                      onClick={() => {
+                        setMisread([...misread, line.requirement]);
+                        onMisread(line.requirement);
+                      }}
+                    >
+                      לא לזה התכוונתי
+                    </button>
+                  ))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-4 grid grid-cols-3 gap-2" role="radiogroup" aria-label={`מה דעתכם על ${name.nameHe}?`}>
+        {VERDICTS.map((v) => (
+          <button
+            key={v.id}
+            role="radio"
+            aria-checked={rating?.verdict === v.id}
+            onClick={() => onRate(v.id)}
+            className={`min-h-11 rounded-2xl border-2 text-sm font-medium ${rating?.verdict === v.id ? v.selected : "border-line bg-white"}`}
+          >
+            {v.label}
+          </button>
+        ))}
+      </div>
+
+      {allowNotes && noteOpen && (
+        <input
+          className={`${inputClass} mt-2 text-sm`}
+          maxLength={200}
+          value={rating?.note ?? ""}
+          placeholder="למשל: דומה מדי לבת הדודה"
+          aria-label={`הערה על ${name.nameHe}`}
+          onChange={(e) => onNote(e.target.value)}
+        />
+      )}
+
+      <div className="mt-2 flex flex-wrap gap-x-4 text-xs text-ink-soft">
+        {allowNotes && !noteOpen && (
+          <button className="min-h-9 underline" onClick={() => setNoteOpen(true)}>
+            הוספת הערה
+          </button>
+        )}
+        <button className="min-h-9 underline" onClick={() => onRate("taken")}>
+          תפוס אצלנו במשפחה
+        </button>
+        <button className="min-h-9 underline" onClick={() => openFeedback({ type: "error", nameId: name.id, nameHe: name.nameHe })}>
+          דיווח על ההצעה
+        </button>
+      </div>
+    </Card>
+  );
+}
