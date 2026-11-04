@@ -23,7 +23,7 @@ export async function recordSpend(usd: number): Promise<void> {
   const [total, budget] = await Promise.all([store.addSpend(day, usd), dailyBudget()]);
   if (total >= budget * ALERT_SHARE && (await store.claimSpendAlert(day))) {
     await sendOwnerEmail(
-      "ניים פלאנר: 80% מתקציב ה-LLM היומי נוצל",
+      "Name Planner: 80% מתקציב ה-LLM היומי נוצל",
       `נוצלו ${total.toFixed(2)}$ מתוך ${budget}$ היום (${day}).`,
     ).catch((error) => console.error("Budget alert failed", error));
   }

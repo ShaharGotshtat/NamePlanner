@@ -11,7 +11,7 @@ function buildMessage(names: Suggestion[], favorite: Suggestion | null): string 
   const heading = favorite
     ? [`הבחירה הראשונה שלנו: ${line(favorite)}`, ...(others.length ? ["עוד שמות שאהבנו:"] : [])]
     : ["השמות שאהבנו:"];
-  return [...heading, ...others.map((s) => `• ${line(s)}`), "", `מצאנו אותם ב${APP_NAME}: ${location.origin}`].join("\n");
+  return [...heading, ...others.map((s) => `• ${line(s)}`), "", `מצאנו אותם ב-${APP_NAME}: ${location.origin}`].join("\n");
 }
 
 export function ExportList({ names, favorite }: { names: Suggestion[]; favorite: Suggestion | null }) {

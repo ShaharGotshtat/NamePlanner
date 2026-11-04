@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  description: "מאפס רעיונות לרשימה קצרה של שמות לתינוק, בעשר דקות.",
+  description: "בואו נמצא שמות לילדים העתידיים שלכם!",
   manifest: "/manifest.webmanifest",
 };
 
