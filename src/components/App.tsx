@@ -35,20 +35,21 @@ function Shell() {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col px-4">
-      <header className="flex items-center justify-between py-4">
-        <span className="font-display text-xl font-semibold">
-          {APP_NAME}
-          <span className="text-coral">.</span>
-        </span>
-        {state.step !== "welcome" && (
+      {/* The welcome screen shows the name as its own title, so it has no header. */}
+      {state.step !== "welcome" && (
+        <header className="flex items-center justify-between py-4">
+          <span dir="ltr" className="font-display text-xl font-semibold">
+            {APP_NAME}
+            <span className="text-coral">.</span>
+          </span>
           <button
             className="min-h-11 text-sm text-ink-soft hover:underline"
             onClick={() => confirm("להתחיל מחדש? כל מה שהזנתם יימחק מהמכשיר.") && startOver()}
           >
             התחלה מחדש
           </button>
-        )}
-      </header>
+        </header>
+      )}
       <main className="flex-1 pb-8">
         <Screen />
       </main>

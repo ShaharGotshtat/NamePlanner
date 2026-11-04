@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { startSession } from "@/lib/client/api";
 import { useApp } from "@/lib/client/state";
 import { TERMS_VERSION } from "@/lib/constants";
 import { deriveFromDueDate } from "@/lib/due-date";
 import type { BabySex } from "@/lib/types";
+import { Mascot } from "../Mascot";
 import { Button, inputClass, Toggle } from "../ui";
 
 const SEXES: { id: BabySex; label: string }[] = [
@@ -35,11 +35,14 @@ export function Welcome() {
     update({ step: "family", terms: { version: TERMS_VERSION, acceptedAt: new Date().toISOString() } });
 
   return (
-    <div className="pt-6">
-      <h1 className="font-display text-3xl font-semibold leading-tight">
-        מאפס רעיונות לרשימה קצרה של שמות, <span className="text-coral">בעשר דקות.</span>
-      </h1>
-      <p className="mt-3 text-ink-soft">בלי הרשמה. כל מה שתכתבו נשאר בטלפון שלכם.</p>
+    <div className="pt-8">
+      <div className="flex flex-col items-center text-center">
+        <Mascot className="animate-mascot-bob" />
+        <h1 dir="ltr" className="mt-3 font-display text-4xl font-semibold leading-tight">
+          Name Planner<span className="text-coral">.</span>
+        </h1>
+        <p className="mt-2 text-lg text-ink-soft">בואו נמצא שמות לילדים העתידיים שלכם!</p>
+      </div>
 
       <fieldset className="mt-8">
         <legend className="mb-3 font-medium">מי בדרך?</legend>
@@ -77,18 +80,9 @@ export function Welcome() {
           היום כבר מלא אצלנו. נשמח לראות אתכם מחר!
         </p>
       ) : (
-        <>
-          <Button className="mt-8 w-full text-lg" disabled={!state.babySex || open === null} onClick={start}>
-            בואו נתחיל
-          </Button>
-          <p className="mt-3 text-center text-xs leading-relaxed text-ink-soft">
-            בלחיצה על התחלה אתם מסכימים ל
-            <Link href="/terms" className="underline">
-              תנאי השימוש
-            </Link>{" "}
-            ומבינים שההצעות נוצרות בבינה מלאכותית ועשויות לטעות.
-          </p>
-        </>
+        <Button className="mt-8 w-full text-lg" disabled={!state.babySex || open === null} onClick={start}>
+          בואו נתחיל
+        </Button>
       )}
     </div>
   );
