@@ -68,6 +68,19 @@ body {
   transform-origin: bottom center;
 }
 
+/* The mascot pops in when its mood changes. */
+@keyframes mascot-pop {
+  from { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+  60% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+
+.animate-mascot-pop {
+  animation: mascot-pop 420ms cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+  transform-origin: bottom center;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-mascot-bob { animation: none; }
+  .animate-mascot-bob,
+  .animate-mascot-pop { animation: none; }
 }

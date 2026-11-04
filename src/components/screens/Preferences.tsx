@@ -46,7 +46,7 @@ export function Preferences() {
 
   return (
     <div>
-      <ScreenTitle subtitle="בחרו כל מה שחשוב לכם. אפשר לבחור כמה שרוצים.">מה חשוב לכם בשם?</ScreenTitle>
+      <ScreenTitle mood="happy" subtitle="בחרו כל מה שחשוב לכם. אפשר לבחור כמה שרוצים.">מה חשוב לכם בשם?</ScreenTitle>
 
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => {

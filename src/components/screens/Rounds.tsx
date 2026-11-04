@@ -6,8 +6,18 @@ import { runCheck } from "@/lib/client/preferences";
 import { roundRequest, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
+import { Mascot, type MascotMood } from "../Mascot";
 import { Button, inputClass } from "../ui";
 import { NameCard } from "./NameCard";
+
+/** The header mascot mirrors the latest vote in this round. */
+const HEADER_MOOD: Record<Verdict | "start", MascotMood> = {
+  start: "happy",
+  interesting: "cheer",
+  unsure: "think",
+  no: "sad",
+  taken: "surprised",
+};
 
 const currentRound = (s: AppState) => {
   const last = s.rounds.at(-1);
@@ -20,6 +30,7 @@ export function Rounds() {
   const [error, setError] = useState(false);
   const [roundNote, setRoundNote] = useState("");
   const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
+  const [lastVerdict, setLastVerdict] = useState<Verdict | null>(null);
   const requested = useRef(false);
   // Names in a round are revealed one at a time. Already-rated names (e.g. after a reload) start revealed.
   const [revealed, setRevealed] = useState(() => {
@@ -52,21 +63,25 @@ export function Rounds() {
     loadRound();
   }, [round, loadRound]);
 
-  const rate = (nameId: number, verdict: Verdict) =>
+  const rate = (nameId: number, verdict: Verdict) => {
+    setLastVerdict(verdict);
     update((s) => {
       const ratings = { ...s.ratings, [nameId]: { ...s.ratings[nameId], nameId, verdict } };
       if (verdict !== "taken") return { ratings };
       const name = s.rounds.flatMap((r) => r.suggestions).find((x) => x.name.id === nameId)!.name.nameHe;
       return { ratings, family: [...s.family, { name, relation: "other" }] };
     });
+  };
 
   /** Takes back a "Taken in our family" tap: the card returns unrated and the name leaves the family list. */
-  const undoTaken = (nameId: number, nameHe: string) =>
+  const undoTaken = (nameId: number, nameHe: string) => {
+    setLastVerdict(null);
     update((s) => {
       const { [nameId]: _, ...ratings } = s.ratings;
       const index = s.family.findLastIndex((f) => f.relation === "other" && f.name === nameHe);
       return { ratings, family: index < 0 ? s.family : s.family.filter((_, i) => i !== index) };
     });
+  };
 
   const setNote = (nameId: number, note: string) =>
     update((s) => ({ ratings: { ...s.ratings, [nameId]: { ...s.ratings[nameId], nameId, note } } }));
@@ -101,6 +116,7 @@ export function Rounds() {
 
     setRoundNote("");
     setMisreads([]);
+    setLastVerdict(null);
     setRevealed(0);
     setAnimateFrom(0);
     requested.current = false;
@@ -109,8 +125,9 @@ export function Rounds() {
 
   if (error) {
     return (
-      <div className="pt-10 text-center">
-        <p>לא הצלחנו להביא הצעות.</p>
+      <div className="flex flex-col items-center pt-10 text-center">
+        <Mascot mood="sad" size={96} />
+        <p className="mt-3">לא הצלחנו להביא הצעות.</p>
         <Button className="mt-4" onClick={loadRound}>
           לנסות שוב
         </Button>
@@ -119,13 +136,19 @@ export function Rounds() {
   }
 
   if (!round || loading) {
-    return <p className="pt-16 text-center text-ink-soft">מחפשים שמות בשבילכם...</p>;
+    return (
+      <div className="flex flex-col items-center pt-16 text-center text-ink-soft">
+        <Mascot mood="think" size={96} className="animate-mascot-bob" />
+        <p className="mt-3">מחפשים שמות בשבילכם...</p>
+      </div>
+    );
   }
 
   if (round.suggestions.length === 0) {
     return (
-      <div className="pt-10 text-center">
-        <p>נגמרו לנו השמות שמתאימים לכל הבחירות שלכם.</p>
+      <div className="flex flex-col items-center pt-10 text-center">
+        <Mascot mood="surprised" size={96} />
+        <p className="mt-3">נגמרו לנו השמות שמתאימים לכל הבחירות שלכם.</p>
         <Button className="mt-4" onClick={() => update({ step: "summary" })}>
           לסיכום
         </Button>
@@ -152,9 +175,12 @@ export function Rounds() {
   return (
     <div>
       <div className="mb-4 flex min-h-11 items-center justify-between">
-        <p className="font-display text-lg font-semibold">
-          סבב {roundNumber} מתוך {ROUNDS_PER_PASS}
-        </p>
+        <div className="flex items-center gap-2">
+          <Mascot key={lastVerdict ?? "start"} mood={HEADER_MOOD[lastVerdict ?? "start"]} size={44} className="animate-mascot-pop" />
+          <p className="font-display text-lg font-semibold">
+            סבב {roundNumber} מתוך {ROUNDS_PER_PASS}
+          </p>
+        </div>
         {anyInteresting && (
           <Button variant="secondary" className="animate-name-reveal text-sm" onClick={() => update({ step: "summary" })}>
             מצאתי!

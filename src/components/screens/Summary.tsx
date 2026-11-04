@@ -5,6 +5,7 @@ import { fetchOurPick } from "@/lib/client/api";
 import { displayMeaning } from "@/lib/names/catalog";
 import { roundRequest, shownSuggestions, useApp } from "@/lib/client/state";
 import type { Suggestion } from "@/lib/types";
+import { MascotSays } from "../Mascot";
 import { TagInput } from "../TagInput";
 import { Button, Card, ScreenTitle } from "../ui";
 import { ExportList } from "./ExportList";
@@ -48,7 +49,7 @@ export function Summary() {
 function FirstChoice({ favorite, others }: { favorite: Suggestion; others: Suggestion[] }) {
   return (
     <>
-      <ScreenTitle subtitle="שתפו אותו עם בן או בת הזוג.">
+      <ScreenTitle mood="cheer" subtitle="שתפו אותו עם בן או בת הזוג.">
         <span className="text-coral">{favorite.name.niqqud}</span> הוא הבחירה הראשונה שלכם!
       </ScreenTitle>
       {displayMeaning(favorite.name) && (
@@ -69,7 +70,7 @@ function PickFavorite({ names, onPick }: { names: Suggestion[]; onPick: (id: num
   const top = names.slice(0, TOP_COUNT).map((s) => s.name.nameHe);
   return (
     <>
-      <ScreenTitle subtitle="איזה מהם הכי אהבתם?">השמות המובילים שאהבתם הם {top.join(", ")}.</ScreenTitle>
+      <ScreenTitle mood="happy" subtitle="איזה מהם הכי אהבתם?">השמות המובילים שאהבתם הם {top.join(", ")}.</ScreenTitle>
       <ul className="space-y-2">
         {names.map((s) => (
           <li key={s.name.id}>
@@ -105,7 +106,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
 
   return (
     <>
-      <ScreenTitle>מצטערים, לא מצאנו התאמה מושלמת.</ScreenTitle>
+      <ScreenTitle mood="sad">מצטערים, לא מצאנו התאמה מושלמת.</ScreenTitle>
       {unsure.length > 0 && <p className="text-ink-soft">שמות שסימנתם כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
 
       <div className="mt-6">
@@ -119,7 +120,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
         <p className="mt-1 text-xs text-ink-soft">בסבב הבא נחפש שמות בסגנון שלהם.</p>
       </div>
 
-      {loading && <p className="mt-6 text-sm text-ink-soft">בוחרים בשבילכם שם...</p>}
+      {loading && <MascotSays mood="think" className="mt-6">בוחרים בשבילכם שם...</MascotSays>}
       {pick?.suggestion && !pick.dismissed && (
         <Card className="mt-6">
           <p className="text-xs font-medium text-teal">הבחירה שלנו, שלא סימנתם</p>
