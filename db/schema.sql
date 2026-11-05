@@ -47,3 +47,11 @@ create table if not exists reports (
   context     jsonb not null,
   created_at  timestamptz not null default now()
 );
+
+-- Supabase exposes the public schema through its REST API with a key that browsers can see.
+-- The app connects to Postgres directly as the table owner, so RLS with no policies blocks the API without affecting the app.
+alter table names enable row level security;
+alter table daily_spend enable row level security;
+alter table app_settings enable row level security;
+alter table qa_checks enable row level security;
+alter table reports enable row level security;

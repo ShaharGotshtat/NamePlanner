@@ -11,7 +11,7 @@ npm run dev                  # http://localhost:3000
 npm test
 ```
 
-With no environment variables the app runs on the full name list in `data/names.json`, keeps counters in memory, and writes every suggestion with the built-in ranking and standard explanations. Add `ANTHROPIC_API_KEY` to have Claude pick names and write the reasons.
+With no environment variables the app runs on a 56-name sample (`data/names.sample.json`), keeps counters in memory, and writes every suggestion with the built-in ranking and standard explanations. Add `ANTHROPIC_API_KEY` to have Claude pick names and write the reasons.
 
 ## How it works
 
@@ -27,7 +27,7 @@ With no environment variables the app runs on the full name list in `data/names.
 - `data/cbs/babynamesIL-jewish.csv` holds the CBS yearly counts for the Jewish sector (from the babynamesIL package).
 - `data/name-content.tsv` holds the reviewed content for each name: niqqud, Latin spellings, meaning, origins, biblical source, spelling variants and tags.
 - `npm run data:build` joins the two into `data/names.json`, keeping every name given to at least 50 babies since 2000.
-- `tests/names.sample.json` is a small fixed list the tests use.
+- `data/names.sample.json` is a small fixed list for local development and tests. The app never imports the full list: in production it reads names only from the database, and `data/names.json` is input for `npm run db:seed`.
 
 ## Database
 

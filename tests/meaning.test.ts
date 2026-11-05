@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import names from "./names.sample.json";
+import names from "../data/names.sample.json";
 import full from "../data/names.json";
 import { displayMeaning } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
