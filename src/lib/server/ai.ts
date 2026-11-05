@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
 import { chipLabel } from "@/lib/engine/chips";
+import { normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
 import { ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
@@ -60,6 +61,7 @@ ${input.family.map((f) => f.name).join(", ") || "(none)"}
   if (output.flagged) return { flagged: true };
 
   const requirements = output.requirements
+    .map(normalizeThemeRequirement)
     .map((r, i) => {
       const allowed = ALLOWED_VALUES[r.facet];
       const values = r.values.filter((v) => !allowed || allowed.includes(v)).slice(0, 12);
@@ -78,7 +80,7 @@ const roundOutput = z.object({
 function describeCandidate(c: Candidate): string {
   const { latest, trend } = popularity(c.entry);
   const fits = c.evaluation.lines.map((l) => `${l.requirement}: ${l.fit}`).join("; ");
-  return `id=${c.entry.id} | ${c.entry.nameHe} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
+  return `id=${c.entry.id} | ${c.entry.nameHe} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
 }
 
 const SEX_INSTRUCTION: Record<BabySex, string> = {

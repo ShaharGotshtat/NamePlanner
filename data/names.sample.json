@@ -12,7 +12,8 @@
     "biblicalRef": "שמואל א׳ ט״ז, י״ג",
     "tags": {
       "meaningCategories": [
-        "love"
+        "love",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -91,7 +92,8 @@
     "biblicalRef": "בראשית ל׳, כ״ד",
     "tags": {
       "meaningCategories": [
-        "gift"
+        "gift",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -253,7 +255,8 @@
     "tags": {
       "meaningCategories": [
         "nature",
-        "life"
+        "life",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -294,7 +297,8 @@
     "tags": {
       "meaningCategories": [
         "gift",
-        "faith"
+        "faith",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -624,7 +628,8 @@
     "biblicalRef": "מלכים ב׳ א׳, ג׳",
     "tags": {
       "meaningCategories": [
-        "faith"
+        "faith",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -704,7 +709,8 @@
     "biblicalRef": "שמות ב׳, י׳",
     "tags": {
       "meaningCategories": [
-        "life"
+        "life",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -780,7 +786,8 @@
     "biblicalRef": "שמואל ב׳ ב׳, י״ג",
     "tags": {
       "meaningCategories": [
-        "faith"
+        "faith",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -819,7 +826,8 @@
     "biblicalRef": "שמות ו׳, כ״ג",
     "tags": {
       "meaningCategories": [
-        "gift"
+        "gift",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -896,7 +904,8 @@
     "tags": {
       "meaningCategories": [
         "faith",
-        "wisdom"
+        "wisdom",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -1057,7 +1066,8 @@
     "biblicalRef": "בראשית ל״ח, ו׳",
     "tags": {
       "meaningCategories": [
-        "nature"
+        "nature",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -1097,7 +1107,9 @@
     "origin": "hebrew",
     "biblicalRef": "במדבר כ״ו, ל״ג",
     "tags": {
-      "meaningCategories": [],
+      "meaningCategories": [
+        "biblical"
+      ],
       "hebrewWord": true,
       "style": "modern",
       "englishFriendly": false,
@@ -1174,7 +1186,8 @@
     "biblicalRef": "שופטים ד׳, י״ז",
     "tags": {
       "meaningCategories": [
-        "nature"
+        "nature",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -1214,7 +1227,8 @@
     "biblicalRef": "שמואל א׳ כ״ה, ג׳",
     "tags": {
       "meaningCategories": [
-        "joy"
+        "joy",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -1379,7 +1393,8 @@
     "biblicalRef": "שמואל א׳ י״ד, מ״ט",
     "tags": {
       "meaningCategories": [
-        "faith"
+        "faith",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -1418,7 +1433,8 @@
     "biblicalRef": "אסתר ב׳, ז׳",
     "tags": {
       "meaningCategories": [
-        "light"
+        "light",
+        "biblical"
       ],
       "hebrewWord": false,
       "style": "traditional",
@@ -1461,7 +1477,8 @@
     "biblicalRef": "רות א׳, ד׳",
     "tags": {
       "meaningCategories": [
-        "love"
+        "love",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -1708,7 +1725,8 @@
     "tags": {
       "meaningCategories": [
         "beauty",
-        "faith"
+        "faith",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
@@ -1748,7 +1766,8 @@
     "biblicalRef": "בראשית י״ז, ט״ו",
     "tags": {
       "meaningCategories": [
-        "royalty"
+        "royalty",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",
