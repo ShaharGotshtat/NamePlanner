@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { startSession } from "@/lib/client/api";
 import { useApp } from "@/lib/client/state";
+import { canStart } from "@/lib/client/welcome";
 import { TERMS_VERSION } from "@/lib/constants";
 import { deriveFromDueDate } from "@/lib/due-date";
 import type { BabySex } from "@/lib/types";
@@ -78,7 +79,7 @@ export function Welcome() {
           היום כבר מלא אצלנו. נשמח לראות אתכם מחר!
         </p>
       ) : (
-        <Button className="mt-8 w-full text-lg" disabled={!state.babySex || open === null} onClick={start}>
+        <Button className="mt-8 w-full text-lg" disabled={!canStart(state.babySex, open)} onClick={start}>
           בואו נתחיל
         </Button>
       )}
