@@ -29,6 +29,8 @@ const ORIGIN_LABELS: Record<Origin, string> = {
   greek: "יווני",
   latin: "לטיני",
   persian: "פרסי",
+  yiddish: "יידי",
+  english: "אנגלי",
   other: "אחר",
 };
 
@@ -113,7 +115,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             <div>
               <dt className="inline font-medium">מקור: </dt>
               <dd className="inline">
-                {ORIGIN_LABELS[name.origin]}
+                {name.originHe ?? ORIGIN_LABELS[name.origin]}
                 {name.biblicalRef && ` · מופיע בתנ״ך (${name.biblicalRef})`}
               </dd>
             </div>

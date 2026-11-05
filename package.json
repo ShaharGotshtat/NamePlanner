@@ -9,7 +9,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "db:seed-sql": "tsx scripts/build-seed.ts"
+    "data:build": "tsx scripts/build-names.ts",
+    "db:seed": "tsx scripts/seed-db.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

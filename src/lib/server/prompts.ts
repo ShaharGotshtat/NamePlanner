@@ -13,8 +13,8 @@ Otherwise, turn each wish into requirements. Each requirement has:
 - label: the wish in short, natural Hebrew, as the parent would say it.
 - kind: "want" for something the parent wants, "avoid" for something they do not want.
 - facet and values, using only these:
-  - meaningCategory: nature, light, strength, joy, faith, love, beauty, peace, wisdom, gift, royalty, life
-  - origin: hebrew, aramaic, arabic, greek, latin, persian, other
+  - meaningCategory: nature, light, strength, joy, faith, love, beauty, peace, wisdom, gift, royalty, life, biblical
+  - origin: hebrew, aramaic, arabic, greek, latin, persian, yiddish, english, other
   - style: traditional, classic, modern
   - length: short, long
   - ending: Hebrew letters the name ends with, for example "אל"
