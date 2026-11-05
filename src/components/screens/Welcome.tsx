@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { startSession } from "@/lib/client/api";
 import { useApp } from "@/lib/client/state";
+import { canStart } from "@/lib/client/welcome";
 import { TERMS_VERSION } from "@/lib/constants";
 import { deriveFromDueDate } from "@/lib/due-date";
 import type { BabySex } from "@/lib/types";
@@ -18,7 +19,6 @@ const SEXES: { id: BabySex; label: string }[] = [
 export function Welcome() {
   const { state, update } = useApp();
   const [open, setOpen] = useState<boolean | null>(null);
-  const [dueDate, setDueDate] = useState("");
 
   useEffect(() => {
     startSession()
@@ -62,10 +62,9 @@ export function Welcome() {
         <input
           type="date"
           className={inputClass}
-          value={dueDate}
+          value={state.dueDate}
           onChange={(e) => {
-            setDueDate(e.target.value);
-            update({ dueDerived: e.target.value ? deriveFromDueDate(e.target.value) : null });
+            update({ dueDate: e.target.value, dueDerived: e.target.value ? deriveFromDueDate(e.target.value) : null });
           }}
         />
       </label>
@@ -80,7 +79,7 @@ export function Welcome() {
           היום כבר מלא אצלנו. נשמח לראות אתכם מחר!
         </p>
       ) : (
-        <Button className="mt-8 w-full text-lg" disabled={!state.babySex || open === null} onClick={start}>
+        <Button className="mt-8 w-full text-lg" disabled={!canStart(state.babySex, open)} onClick={start}>
           בואו נתחיל
         </Button>
       )}

@@ -9,11 +9,17 @@ create table if not exists names (
   sex_ratio     real not null check (sex_ratio between 0 and 1), -- share of boys
   meaning_he    text not null,
   origin        text not null,
+  origin_he     text,
   biblical_ref  text,
+  variants      text[] not null default '{}',
   tags          jsonb not null,
   features      jsonb not null default '{}'::jsonb,
   stats         jsonb not null -- [{year, count, rank}] from CBS
 );
+
+-- Columns added after the first release, for databases created before them.
+alter table names add column if not exists origin_he text;
+alter table names add column if not exists variants text[] not null default '{}';
 
 create table if not exists daily_spend (
   date        date primary key,

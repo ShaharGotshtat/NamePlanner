@@ -47,7 +47,7 @@ V1 is the single-parent flow, tested with 10 to 20 parents. V2 and V3 stay speci
 
 **In v1**
 
-- **Name database:** the CBS list (5,000 most common names per sex), with meanings, Latin spellings and tags generated in advance for every name. Shahar checks the meanings of a 50-name sample before the full run.
+- **Name database:** every name given to at least 50 Jewish babies in 2000 to 2024 in the CBS data (about 1,200 names), with meanings, Latin spellings and tags written in advance for every name and checked by people.
 - **Welcome:** Just me only, baby's sex, optional full due date, terms line.
 - **Family names, Preferences** (chips, free text, Names we like), and **suggestion rounds** with Why this name? and Taken in our family.
 - **Summary:** the three outcomes, Our pick, Go again, and text export.
@@ -259,8 +259,8 @@ The core decision: names and their facts come from a curated database, and the L
 
 ### Name data
 
-- **Popularity:** Israel's Central Bureau of Statistics publishes annual counts of names given to newborns by sector and sex. The [babynamesIL](https://cran.r-project.org/web/packages/babynamesIL/refman/babynamesIL.html) package packages this data for 1949 to 2024 (from CBS Release 391/2025), including only names given to at least 5 babies in a year. In v1 the app uses only the 5,000 most common names for each sex (see Milestones). That gives the name list, sex split, and how common each name is: yearly count, rank, and trend, shown on every card and usable by the "Not in the top 20 of the last 2 years" chip.
-- **Meaning and origin:** not in the CBS data. Generated in advance for every name in the v1 list, in a one-time offline batch before launch. For each name the batch writes the meaning, origin, biblical source, niqqud, the Latin spelling shown on every card, and a fixed set of tags: meaning category (nature, light, strength and so on), origin, Hebrew word or not, traditional or modern, and any holiday or season link. A unisex name is one entry, tagged once, with its sex split taken from CBS, so it is never tagged twice. Before the full run, a 50-name sample goes to Shahar to check the meanings, and the prompt is corrected until the sample passes. Entries then go through the QA reviewer agent and the human queue. The batch and its QA review run offline on their own one-time budget, outside the daily cost limit; the cost is estimated from the 50-name sample and approved before the full run. Because nothing is generated at request time, cards show meanings at once and the daily cost limit covers only live calls.
+- **Popularity:** Israel's Central Bureau of Statistics publishes annual counts of names given to newborns by sector and sex. The [babynamesIL](https://cran.r-project.org/web/packages/babynamesIL/refman/babynamesIL.html) package packages this data for 1949 to 2024 (from CBS Release 391/2025), including only names given to at least 5 babies in a year. In v1 the app uses the Jewish sector and every name given to at least 50 babies in 2000 to 2024, about 1,200 names (the sector has only about 1,900 names in those years). The counts are exported to `data/cbs/babynamesIL-jewish.csv` from the package's PyPI release. That gives the name list, sex split, and how common each name is: yearly count, rank, and trend, shown on every card and usable by the "Not in the top 20 of the last 2 years" chip.
+- **Meaning and origin:** not in the CBS data. Written in advance for every name in the v1 list, in Claude sessions on the owners' Claude plan, not through paid API calls or an app agent. For each name the content holds the meaning, origin, biblical source, niqqud, the Latin spelling shown on every card, and a fixed set of tags: meaning category (nature, light, strength, biblical and so on), origin, Hebrew word or not, traditional or modern, and any holiday or season link. A unisex name is one entry, tagged once, with its sex split taken from CBS, so it is never tagged twice. Theme wishes (biblical, nature, strength and so on) are matched against the meaning-category tags only, never against the origin or the biblical source: a name tagged biblical is known as the name of a biblical figure, and a name whose word only appears in the Tanakh (for example תכלת) is not tagged biblical. Names from the Tanakh that end in -el (אל), such as אריאל and רפאל, are tagged biblical. Two 50-name samples were checked by Shahar, and the writing rules were corrected from that review (no meaning that repeats the name, no guessed etymology, nature names marked as such, spelling variants only if CBS has them). A QA reviewer then checked every entry in the same sessions. The content lives in `data/name-content.tsv`, one row per name, and `npm run data:build` joins it with the CBS counts into `data/names.json`. Meanings that are not certain say so ("פירוש השם לא ודאי") instead of guessing. Because nothing is generated at request time, cards show meanings at once and the daily cost limit covers only live calls.
 - **Derived features:** computed once per name: syllables, Hebrew letters, guttural sounds, spelling variants, unisex ratio, recent rank.
 
 ### Data model
@@ -269,7 +269,7 @@ The core decision: names and their facts come from a curated database, and the L
 
 | Table | Key fields |
 | --- | --- |
-| `names` | id, name\_he, niqqud, translit\[\] (Latin spellings), sex\_ratio, meaning\_he, origin, biblical\_ref, tags (json: meaning category, origin, Hebrew word or not, traditional or modern, holiday or season link), features (json), yearly counts and ranks (CBS) |
+| `names` | id, name\_he, niqqud, translit\[\] (Latin spellings), sex\_ratio, meaning\_he, origin, origin\_he (all origins, in Hebrew), biblical\_ref, variants\[\] (other Hebrew spellings), tags (json: meaning category, origin, Hebrew word or not, traditional or modern, holiday or season link), features (json), yearly counts and ranks (CBS) |
 | `daily_spend` | date, usd\_spent (the cost counter; no user data) |
 | `qa_checks` | id, name\_id, verdict, issue types, created\_at (results for sampled rounds; no preferences and no text) |
 | `reports` | id, type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), created\_at. Held until the daily feedback email is sent, then deleted |
@@ -389,7 +389,7 @@ The app may be used with names from any community, in any sector. Some visitors 
 
 A stand-alone QA agent reviews what the LLM produced. It is a separate scheduled job with its own prompt, run apart from the app's suggestion flow, and it never talks to visitors. It checks and flags; it does not edit or publish anything.
 
-- **What it reviews:** (1) every entry of the offline name batch (meaning, origin, biblical source, niqqud, Latin spelling), once before launch, and any entry regenerated later; (2) a random 5% sample of live suggestion rounds. The server sends a sampled round to the reviewer as it is generated, together with the preferences it was built from, and keeps only the result (name id, verdict, issue types), never the text or the preferences.
+- **What it reviews:** a random 5% sample of live suggestion rounds. (The name content was reviewed once before launch, in the Claude sessions that wrote it; see Name data.) The server sends a sampled round to the reviewer as it is generated, together with the preferences it was built from, and keeps only the result (name id, verdict, issue types), never the text or the preferences.
 - **What it checks:**
   - The name exists in the CBS list and the sex given fits the data. Made-up names from "I feel adventurous" are checked only for respect and offensive sound-alikes.
   - The Hebrew spelling and niqqud are correct, the Latin spelling is the natural one, and the meaning and origin are plausible.
@@ -402,7 +402,7 @@ A stand-alone QA agent reviews what the LLM produced. It is a separate scheduled
 - **Human review queue:** flagged items, then low-confidence items, then the QA-passed names, highest CBS rank first (the app does not track views). A person reviews the queue; the agent's pass is not final approval.
 - **Report:** a daily summary to the owner with counts of pass, fix and block, and the top repeated problems. Repeated problems feed changes to the generator prompt.
 - **Model and independence:** it uses a different prompt from the generator and does not see the generator's reasoning, so it judges the output on its own.
-- **Cost:** the review of the offline batch uses the batch's own one-time budget (see Name data). Sampling of live rounds counts toward the daily cost limit, with its own share of the budget (proposed 10%). If that share runs out, the review waits until the next day and unreviewed entries stay marked as such.
+- **Cost:** sampling of live rounds counts toward the daily cost limit, with its own share of the budget (proposed 10%). If that share runs out, the review waits until the next day and unreviewed entries stay marked as such.
 - **Limit:** an LLM reviewing LLM output can miss errors, so the human queue stays, especially for biblical sources and Hebrew grammar.
 
 ### PRD and issue agents
@@ -479,12 +479,11 @@ Targets to set after the first 100 real sessions; I have no baseline to propose 
 - [ ] The daily LLM budget starts at $3 (global cap). Update it after the first test, once the real cost per session is known, and confirm the 80% warning level.
 - [ ] Who is the legal operator named in the terms, and which country's law and courts govern them?
 - [ ] Which GitHub repository do the PRD and issue agents use, and how often do they run?
-- [ ] What is the one-time budget for the name batch and its QA review?
 - [ ] In v2, how long should a couple session live on the server (proposed 24 hours after the last activity)?
 
 ### Milestones
 
-1. **Name database.** Import CBS data for the 5,000 most common names per sex (ranked by total count in 2000 to 2024; a unisex name is one entry; if a sex has fewer than 5,000 names, all are taken). Compute features, then run the offline batch for meanings, Latin spellings and tags: 50-name check by Shahar first, then the full run on its own budget, QA review and the human queue.
+1. **Name database.** Import CBS data for the Jewish sector and keep every name given to at least 50 babies in 2000 to 2024 (about 1,200 names; a unisex name is one entry). Write meanings, Latin spellings and tags in Claude sessions: 50-name checks by Shahar first, then the full list with a QA review. Compute features and load the list into the database.
 2. **Single-parent flow.** Welcome (just me, sex, due date, terms), Family names, Preferences, rounds, Summary with Our pick, Go again and text export. Includes anonymous analytics, the cost limit, per-session limits, input check, Send feedback with the daily email, and Start over.
 3. **Test with 10 to 20 parents.** Set metric targets from the results.
 4. **Couple mode.** Invite link, shared family list, Match screen and match score, joint rounds.

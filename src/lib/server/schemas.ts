@@ -11,9 +11,9 @@ const familyName = z.object({
 const chips = z.partialRecord(z.enum(CHIP_IDS), z.enum(["want", "must"]));
 
 export const MEANING_CATEGORIES = [
-  "nature", "light", "strength", "joy", "faith", "love", "beauty", "peace", "wisdom", "gift", "royalty", "life",
+  "nature", "light", "strength", "joy", "faith", "love", "beauty", "peace", "wisdom", "gift", "royalty", "life", "biblical",
 ] as const;
-export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "other"] as const;
+export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "yiddish", "english", "other"] as const;
 export const STYLES = ["traditional", "classic", "modern"] as const;
 export const LENGTHS = ["short", "long"] as const;
 export const FACETS = ["meaningCategory", "origin", "style", "length", "ending"] as const;
@@ -46,6 +46,7 @@ export const roundRequestSchema = z.object({
   chips,
   profile: profile.nullable(),
   namesWeLike: z.array(shortText).max(20),
+  declined: z.array(shortText).max(300).default([]),
   ratings: z
     .array(
       z.object({

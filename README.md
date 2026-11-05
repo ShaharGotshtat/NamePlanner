@@ -11,7 +11,7 @@ npm run dev                  # http://localhost:3000
 npm test
 ```
 
-With no environment variables the app runs fully on the sample data in `data/names.sample.json`, keeps counters in memory, and writes every suggestion with the built-in ranking and standard explanations. Add `ANTHROPIC_API_KEY` to have Claude pick names and write the reasons.
+With no environment variables the app runs on the full name list in `data/names.json`, keeps counters in memory, and writes every suggestion with the built-in ranking and standard explanations. Add `ANTHROPIC_API_KEY` to have Claude pick names and write the reasons.
 
 ## How it works
 
@@ -22,16 +22,22 @@ With no environment variables the app runs fully on the sample data in `data/nam
 - **Limits.** A signed session token holds the per-session counters (20 LLM calls, 5 reports per hour). A daily spend counter stops LLM calls at the budget ($3 by default, overridable in the `app_settings` table without a deploy) and emails the owners at 80%. When the model is off, every screen keeps working on the ranking rules.
 - **Feedback** is held in the `reports` table and sent to the owners once a day by `/api/cron/feedback-digest` (scheduled in `vercel.json` at 05:00 UTC, which is 08:00 Israel summer time and 07:00 in winter), then deleted.
 
+## Name data
+
+- `data/cbs/babynamesIL-jewish.csv` holds the CBS yearly counts for the Jewish sector (from the babynamesIL package).
+- `data/name-content.tsv` holds the reviewed content for each name: niqqud, Latin spellings, meaning, origins, biblical source, spelling variants and tags.
+- `npm run data:build` joins the two into `data/names.json`, keeping every name given to at least 50 babies since 2000.
+- `tests/names.sample.json` is a small fixed list the tests use.
+
 ## Database
 
-`db/schema.sql` creates the v1 tables. `db/seed.sql` loads the 56-name sample and is generated from the JSON:
+`npm run db:seed` creates the tables from `db/schema.sql` and loads `data/names.json`, replacing any names already there. With Supabase, use the Transaction pooler connection string (port 6543):
 
 ```bash
-npm run db:seed-sql
-psql "$DATABASE_URL" -f db/schema.sql -f db/seed.sql
+DATABASE_URL="postgres://...pooler.supabase.com:6543/postgres" npm run db:seed
 ```
 
-The sample's meanings, tags and yearly counts are development placeholders, not CBS figures or reviewed meanings. They are replaced by the CBS import and the offline meaning batch (milestone 1 in the PRD).
+Then set the same `DATABASE_URL` in the Vercel project's environment variables and redeploy.
 
 ## Project layout
 

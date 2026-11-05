@@ -1,4 +1,4 @@
-import sample from "../data/names.sample.json";
+import sample from "./names.sample.json";
 import type { NameEntry, RoundRequest } from "@/lib/types";
 
 export const names = sample as NameEntry[];
@@ -15,6 +15,7 @@ export function request(overrides: Partial<RoundRequest> = {}): RoundRequest {
     profile: null,
     namesWeLike: [],
     ratings: [],
+    declined: [],
     shownIds: [],
     ...overrides,
   };

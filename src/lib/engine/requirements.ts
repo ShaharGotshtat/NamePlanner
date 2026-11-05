@@ -73,6 +73,18 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
   }
 }
 
+const BIBLICAL_WORDS = /תנ["״׳']?[כך]|מקרא|biblical|bible/i;
+
+/**
+ * Themes are checked against the name's tags only. If the model maps a biblical wish
+ * to origin or any other facet, it is moved to the biblical tag, so a name like תכלת
+ * (its word appears in the Tanakh, but it is not tagged biblical) is judged by its tag.
+ */
+export function normalizeThemeRequirement<T extends Omit<TextRequirement, "id">>(req: T): T {
+  if (req.facet === "meaningCategory" || !BIBLICAL_WORDS.test(req.label)) return req;
+  return { ...req, facet: "meaningCategory", values: ["biblical"] };
+}
+
 function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
   const features = featuresOf(entry);
   const name = normalizeHebrew(entry.nameHe);
