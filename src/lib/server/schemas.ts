@@ -13,7 +13,7 @@ const chips = z.partialRecord(z.enum(CHIP_IDS), z.enum(["want", "must"]));
 export const MEANING_CATEGORIES = [
   "nature", "light", "strength", "joy", "faith", "love", "beauty", "peace", "wisdom", "gift", "royalty", "life", "biblical",
 ] as const;
-export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "other"] as const;
+export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "yiddish", "english", "other"] as const;
 export const STYLES = ["traditional", "classic", "modern"] as const;
 export const LENGTHS = ["short", "long"] as const;
 export const FACETS = ["meaningCategory", "origin", "style", "length", "ending"] as const;

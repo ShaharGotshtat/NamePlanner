@@ -17,7 +17,7 @@ export type MeaningCategory =
   /** The name is known as the name of a biblical figure. A word that only appears in the Tanakh does not count. */
   | "biblical";
 
-export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "other";
+export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "yiddish" | "english" | "other";
 export type Style = "traditional" | "classic" | "modern";
 
 export interface YearStat {
@@ -35,7 +35,11 @@ export interface NameEntry {
   sexRatio: number;
   meaningHe: string;
   origin: Origin;
+  /** The full origin as shown on the card, for example "תנ״ך; טבע (צמח)". */
+  originHe?: string;
   biblicalRef: string | null;
+  /** Other Hebrew spellings parents use. */
+  variants?: string[];
   tags: {
     meaningCategories: MeaningCategory[];
     hebrewWord: boolean;

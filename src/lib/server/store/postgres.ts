@@ -10,7 +10,9 @@ interface NameRow {
   sex_ratio: number;
   meaning_he: string;
   origin: Origin;
+  origin_he: string | null;
   biblical_ref: string | null;
+  variants: string[];
   tags: NameEntry["tags"];
   stats: YearStat[];
 }
@@ -23,7 +25,9 @@ const toEntry = (r: NameRow): NameEntry => ({
   sexRatio: r.sex_ratio,
   meaningHe: r.meaning_he,
   origin: r.origin,
+  originHe: r.origin_he ?? undefined,
   biblicalRef: r.biblical_ref,
+  variants: r.variants,
   tags: r.tags,
   stats: r.stats,
 });
