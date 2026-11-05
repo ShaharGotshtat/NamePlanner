@@ -1,4 +1,4 @@
-import { checkPreferences, type PreferencesInput } from "./api";
+import { checkPreferences, type PreferencesInput, withErrorId } from "./api";
 import type { AppState } from "./state";
 
 export function preferenceInput(s: AppState): PreferencesInput {
@@ -28,7 +28,7 @@ const DROP_FREE_TEXT = { freeText: "", notes: [], flagged: true };
 /** Sends the free text, names and family list for the input check and parsing. */
 export async function runCheck(s: AppState): Promise<CheckResult> {
   const input = preferenceInput(s);
-  const { status, profile, token } = await checkPreferences(input, s.token);
+  const { status, profile, errorId, token } = await checkPreferences(input, s.token);
   const hasText = input.texts.length > 0 || input.namesWeLike.length > 0;
   const checked = { token, checkedInput: inputKey(s) };
 
@@ -38,7 +38,7 @@ export async function runCheck(s: AppState): Promise<CheckResult> {
     case "unavailable":
       return {
         ok: true,
-        message: hasText ? "לא הצלחנו לעבד את הטקסט כרגע. ההצעות יתבססו על הבחירות שלכם." : null,
+        message: hasText ? withErrorId("לא הצלחנו לעבד את הטקסט כרגע. ההצעות יתבססו על הבחירות שלכם.", errorId) : null,
         patch: checked,
       };
     case "flagged":

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CHIPS } from "@/lib/engine/chips";
+import { errorIdOf, withErrorId } from "@/lib/client/api";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
@@ -37,8 +38,8 @@ export function Preferences() {
       update(result.patch);
       setMessage(result.message);
       if (result.ok && !result.patch.profile?.summary && !result.message) goToRounds();
-    } catch {
-      setMessage("משהו השתבש. נסו שוב.");
+    } catch (error) {
+      setMessage(withErrorId("משהו השתבש. נסו שוב.", errorIdOf(error)));
     } finally {
       setBusy(false);
     }
