@@ -1,4 +1,4 @@
-import sample from "./names.sample.json";
+import sample from "../data/names.sample.json";
 import type { NameEntry, RoundRequest } from "@/lib/types";
 
 export const names = sample as NameEntry[];

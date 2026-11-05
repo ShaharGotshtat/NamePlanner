@@ -1,8 +1,8 @@
-import names from "../../../../data/names.json";
+import names from "../../../../data/names.sample.json";
 import type { NameEntry } from "@/lib/types";
 import type { Report, Store } from "./types";
 
-/** Local development store: the full name list and counters that reset on restart. */
+/** Local development store, used only without DATABASE_URL: a 56-name sample and counters that reset on restart. Production reads names from the database. */
 export function memoryStore(): Store {
   const spend = new Map<string, number>();
   const alerts = new Set<string>();
