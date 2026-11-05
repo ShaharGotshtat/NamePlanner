@@ -1,5 +1,6 @@
 import { APP_NAME_EN } from "@/lib/constants";
 import { sendOwnerEmail } from "./email";
+import { log } from "./request-id";
 import { getStore } from "./store";
 
 const DEFAULT_BUDGET_USD = 3;
@@ -26,6 +27,6 @@ export async function recordSpend(usd: number): Promise<void> {
     await sendOwnerEmail(
       `${APP_NAME_EN}: 80% מתקציב ה-LLM היומי נוצל`,
       `נוצלו ${total.toFixed(2)}$ מתוך ${budget}$ היום (${day}).`,
-    ).catch((error) => console.error("Budget alert failed", error));
+    ).catch((error) => log.error("Budget alert failed", error));
   }
 }

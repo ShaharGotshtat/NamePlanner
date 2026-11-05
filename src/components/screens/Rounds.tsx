@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fetchRound } from "@/lib/client/api";
+import { errorIdOf, fetchRound, withErrorId } from "@/lib/client/api";
 import { runCheck } from "@/lib/client/preferences";
 import { roundRequest, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
@@ -27,7 +27,8 @@ const currentRound = (s: AppState) => {
 export function Rounds() {
   const { state, update } = useApp();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  // Set when a round fails to load; holds the server's error ID when there is one.
+  const [error, setError] = useState<{ errorId: string | null } | null>(null);
   const [roundNote, setRoundNote] = useState("");
   const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
   const [lastVerdict, setLastVerdict] = useState<Verdict | null>(null);
@@ -46,12 +47,12 @@ export function Rounds() {
 
   const loadRound = useCallback(async () => {
     setLoading(true);
-    setError(false);
+    setError(null);
     try {
       const { suggestions, token } = await fetchRound(roundRequest(state), state.token);
       update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false }] }));
-    } catch {
-      setError(true);
+    } catch (err) {
+      setError({ errorId: errorIdOf(err) });
     } finally {
       setLoading(false);
     }
@@ -127,7 +128,7 @@ export function Rounds() {
     return (
       <div className="flex flex-col items-center pt-10 text-center">
         <Mascot mood="sad" size={96} />
-        <p className="mt-3">לא הצלחנו להביא הצעות.</p>
+        <p className="mt-3">{withErrorId("לא הצלחנו להביא הצעות.", error.errorId)}</p>
         <Button className="mt-4" onClick={loadRound}>
           לנסות שוב
         </Button>

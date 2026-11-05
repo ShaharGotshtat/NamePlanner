@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { z } from "zod";
+import { log } from "./request-id";
 import { budgetLeft, recordSpend } from "./spend";
 
 export const MODELS = {
@@ -35,7 +36,14 @@ interface StructuredCall<T extends z.ZodType> {
  */
 export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T>): Promise<z.infer<T> | null> {
   const anthropic = getClient();
-  if (!anthropic || !(await budgetLeft())) return null;
+  if (!anthropic) {
+    log.warn(`${call.model} skipped: ANTHROPIC_API_KEY is not set`);
+    return null;
+  }
+  if (!(await budgetLeft())) {
+    log.warn(`${call.model} skipped: daily budget is spent`);
+    return null;
+  }
 
   try {
     const response = await anthropic.messages.parse({
@@ -47,11 +55,15 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
     });
     const price = USD_PER_MTOK[call.model];
     await recordSpend((response.usage.input_tokens * price.input + response.usage.output_tokens * price.output) / 1e6);
-    if (response.stop_reason !== "end_turn") return null;
+    if (response.stop_reason !== "end_turn") {
+      log.warn(`${call.model} stopped early: ${response.stop_reason}`);
+      return null;
+    }
+    if (!response.parsed_output) log.warn(`${call.model} returned output that did not match the schema`);
     return (response.parsed_output as z.infer<T> | null) ?? null;
   } catch (error) {
     if (error instanceof Anthropic.APIError) {
-      console.error(`Claude API error ${error.status}: ${error.message}`);
+      log.error(`${call.model} API error ${error.status}: ${error.message}`);
       return null;
     }
     throw error;

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, type ReactNode } from "react";
-import { ApiError, sendReport, type ReportInput } from "@/lib/client/api";
+import { ApiError, errorIdOf, sendReport, withErrorId, type ReportInput } from "@/lib/client/api";
 import { useApp } from "@/lib/client/state";
 import { Button, inputClass } from "./ui";
 
@@ -42,6 +42,7 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "limited" | "failed">("idle");
+  const [failedId, setFailedId] = useState<string | null>(null);
 
   const submit = async () => {
     setStatus("sending");
@@ -53,6 +54,7 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
       update({ token });
       setStatus("sent");
     } catch (error) {
+      setFailedId(errorIdOf(error));
       setStatus(error instanceof ApiError && error.status === 429 ? "limited" : "failed");
     }
   };
@@ -107,7 +109,7 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
               {message.length}/{MAX_LENGTH} · ההודעה נשמרת עד שהיא נשלחת לצוות. אנא אל תכללו פרטים אישיים רגישים.
             </p>
             {status === "limited" && <p className="mt-2 text-sm text-rose-dark">שלחתם הרבה הודעות בשעה האחרונה. נסו שוב מאוחר יותר.</p>}
-            {status === "failed" && <p className="mt-2 text-sm text-rose-dark">השליחה לא הצליחה. נסו שוב.</p>}
+            {status === "failed" && <p className="mt-2 text-sm text-rose-dark">{withErrorId("השליחה לא הצליחה. נסו שוב.", failedId)}</p>}
             <div className="mt-4 flex gap-2">
               <Button onClick={submit} disabled={!message.trim() || status === "sending"}>
                 {status === "sending" ? "שולחים..." : "שליחה"}
