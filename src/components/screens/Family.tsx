@@ -94,7 +94,7 @@ function NameListField({
       {names.length > 0 && (
         <span className="mt-2 flex flex-wrap gap-1.5" aria-label={`זיהינו: ${names.join(", ")}`}>
           {names.map((n) => (
-            <span key={n} className="rounded-full bg-teal-soft px-3 py-0.5 text-sm">
+            <span key={n} className="rounded-full bg-lavender-soft px-3 py-0.5 text-sm">
               {n}
             </span>
           ))}

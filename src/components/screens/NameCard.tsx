@@ -9,12 +9,12 @@ import { Card, inputClass } from "../ui";
 
 const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
   { id: "no", label: "לא", selected: "border-ink bg-ink text-white" },
-  { id: "unsure", label: "אולי", selected: "border-teal bg-teal text-white" },
-  { id: "interesting", label: "מעניין!", selected: "border-coral-dark bg-coral-dark text-white" },
+  { id: "unsure", label: "אולי", selected: "border-lavender-dark bg-lavender-dark text-white" },
+  { id: "interesting", label: "מעניין!", selected: "border-rose-dark bg-rose-dark text-white" },
 ];
 
 const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }> = {
-  met: { icon: "✓", label: "מתקיים", className: "bg-teal text-white" },
+  met: { icon: "✓", label: "מתקיים", className: "bg-lavender-dark text-white" },
   partly: { icon: "~", label: "מתקיים חלקית", className: "bg-amber-400 text-ink" },
   not_met: { icon: "✗", label: "לא מתקיים", className: "bg-ink/15 text-ink" },
 };
@@ -81,7 +81,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         <MascotSays mood="surprised" size={48}>
           <span className="font-medium text-ink">{name.nameHe}</span> נוסף לשמות התפוסים במשפחה.
         </MascotSays>
-        <button className="mt-1 min-h-11 text-sm font-medium text-teal underline" onClick={onUndoTaken}>
+        <button className="mt-1 min-h-11 text-sm font-medium text-lavender-dark underline" onClick={onUndoTaken}>
           ביטול
         </button>
       </Card>
@@ -97,10 +97,10 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             {name.translit.join(" / ")}
           </p>
         </div>
-        {showSex && <span className="rounded-full bg-blush px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
+        {showSex && <span className="rounded-full bg-cream px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
       </div>
 
-      <button className="mt-2 min-h-11 text-sm font-medium text-teal" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
+      <button className="mt-2 min-h-11 text-sm font-medium text-lavender-dark" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
         {whyOpen ? "הסתרה" : "למה השם הזה?"}
       </button>
       {whyOpen && (
@@ -139,7 +139,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
                     <span className="font-medium">{line.requirement}:</span> {line.detail}
                     {allowNotes &&
                       (misread.includes(line.requirement) ? (
-                        <span className="block text-xs text-teal">
+                        <span className="block text-xs text-lavender-dark">
                           תודה, נתקן בסבב הבא.{" "}
                           <button
                             className="min-h-9 font-medium underline"

@@ -81,7 +81,7 @@ export function Preferences() {
                     className="flex min-h-11 shrink-0 items-center gap-2 text-sm"
                   >
                     <span className={must ? "font-medium text-ink" : "text-ink-soft"}>{must ? "חובה" : "רצוי"}</span>
-                    <span className={`relative h-6 w-11 rounded-full transition-colors ${must ? "bg-teal" : "bg-ink/20"}`}>
+                    <span className={`relative h-6 w-11 rounded-full transition-colors ${must ? "bg-lavender-dark" : "bg-ink/20"}`}>
                       <span
                         className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-[inset-inline-start] ${must ? "start-[1.375rem]" : "start-0.5"}`}
                       />
@@ -115,7 +115,7 @@ export function Preferences() {
       )}
 
       {!pending && state.profile?.summary && (
-        <p className="mt-4 rounded-2xl bg-teal-soft p-3 text-sm">{state.profile.summary} לא מדויק? שנו את הטקסט ונבדוק שוב.</p>
+        <p className="mt-4 rounded-2xl bg-lavender-soft p-3 text-sm">{state.profile.summary} לא מדויק? שנו את הטקסט ונבדוק שוב.</p>
       )}
       {message && <p className="mt-4 rounded-2xl bg-white p-3 text-sm ring-1 ring-line">{message}</p>}
 

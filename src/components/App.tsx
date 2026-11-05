@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { APP_NAME } from "@/lib/constants";
 import { useEffect, useRef } from "react";
 import { backPatch } from "@/lib/client/navigation";
 import { AppProvider, useApp, type Step } from "@/lib/client/state";
 import { FeedbackProvider, useFeedback } from "./Feedback";
+import { Logo } from "./Mascot";
 import { Family } from "./screens/Family";
 import { Preferences } from "./screens/Preferences";
 import { Rounds } from "./screens/Rounds";
@@ -77,10 +77,7 @@ function Shell() {
       {/* The welcome screen shows the name as its own title, so it has no header. */}
       {state.step !== "welcome" && (
         <header className="flex items-center justify-between py-4">
-          <span dir="ltr" className="font-display text-xl font-semibold">
-            {APP_NAME}
-            <span className="text-coral">.</span>
-          </span>
+          <Logo />
           <button
             className="min-h-11 text-sm text-ink-soft hover:underline"
             onClick={() => confirm("להתחיל חיפוש חדש? הפרטים שהזנתם נשמרים ואפשר לערוך אותם. ההצבעות יימחקו, ושמות שסימנתם \"לא\" לא יוצעו שוב.") && startOver()}
