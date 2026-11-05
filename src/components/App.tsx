@@ -6,6 +6,7 @@ import { backPatch } from "@/lib/client/navigation";
 import { AppProvider, useApp, type Step } from "@/lib/client/state";
 import { FeedbackProvider, useFeedback } from "./Feedback";
 import { Logo } from "./Mascot";
+import { Copyright } from "./ui";
 import { Family } from "./screens/Family";
 import { Preferences } from "./screens/Preferences";
 import { Rounds } from "./screens/Rounds";
@@ -94,19 +95,22 @@ function Shell() {
       <main className="flex-1 pb-8">
         <Screen />
       </main>
-      <footer className="flex justify-center gap-4 border-t border-line py-4 text-sm text-ink-soft">
-        <Link href="/terms" className="min-h-11 content-center hover:underline">
-          תנאי שימוש
-        </Link>
-        <button className="min-h-11 hover:underline" onClick={() => openFeedback()}>
-          שליחת משוב
-        </button>
-        <button
-          className="min-h-11 hover:underline"
-          onClick={() => confirm("למחוק את כל הנתונים? כל מה שהזנתם יימחק מהמכשיר.") && deleteAll()}
-        >
-          מחיקת הנתונים
-        </button>
+      <footer className="border-t border-line py-4 text-sm text-ink-soft">
+        <nav className="flex justify-center gap-4">
+          <Link href="/terms" className="min-h-11 content-center hover:underline">
+            תנאי שימוש
+          </Link>
+          <button className="min-h-11 hover:underline" onClick={() => openFeedback()}>
+            שליחת משוב
+          </button>
+          <button
+            className="min-h-11 hover:underline"
+            onClick={() => confirm("למחוק את כל הנתונים? כל מה שהזנתם יימחק מהמכשיר.") && deleteAll()}
+          >
+            מחיקת הנתונים
+          </button>
+        </nav>
+        <Copyright />
       </footer>
     </div>
   );
