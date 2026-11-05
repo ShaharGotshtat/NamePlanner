@@ -13,7 +13,9 @@ export type MeaningCategory =
   | "wisdom"
   | "gift"
   | "royalty"
-  | "life";
+  | "life"
+  /** The name is known as the name of a biblical figure. A word that only appears in the Tanakh does not count. */
+  | "biblical";
 
 export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "other";
 export type Style = "traditional" | "classic" | "modern";
