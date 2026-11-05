@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Copyright } from "@/components/ui";
 import { APP_NAME, TERMS_VERSION } from "@/lib/constants";
 
 export const metadata = { title: `תנאי שימוש | ${APP_NAME}` };
@@ -29,6 +30,9 @@ export default function TermsPage() {
       <Link href="/" className="mt-8 inline-block font-medium text-rose-dark underline">
         חזרה לאפליקציה
       </Link>
+      <footer className="mt-8 border-t border-line pt-4 text-ink-soft">
+        <Copyright />
+      </footer>
     </main>
   );
 }

@@ -56,3 +56,7 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 
 export const inputClass =
   "min-h-11 w-full rounded-xl border-2 border-line bg-white px-3 text-ink placeholder:text-ink-soft/60 focus:border-lavender-dark focus:outline-none";
+
+export function Copyright() {
+  return <p className="mt-2 text-center text-xs">כל הזכויות שמורות לשחר ולקרן © {new Date().getFullYear()}</p>;
+}
