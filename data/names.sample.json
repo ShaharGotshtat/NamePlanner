@@ -52,7 +52,8 @@
     "biblicalRef": "עזרא ח׳, ט״ז",
     "tags": {
       "meaningCategories": [
-        "strength"
+        "strength",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "classic",
@@ -508,7 +509,8 @@
     "tags": {
       "meaningCategories": [
         "faith",
-        "life"
+        "life",
+        "biblical"
       ],
       "hebrewWord": true,
       "style": "traditional",

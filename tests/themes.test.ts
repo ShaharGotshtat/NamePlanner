@@ -65,3 +65,11 @@ describe("theme wishes use tags, not origin", () => {
     expect(names.some((n) => n.biblicalRef && !n.tags.meaningCategories.includes("biblical"))).toBe(true);
   });
 });
+
+describe("biblical tagging rule in the data", () => {
+  it("tags names from the Tanakh that end in אל as biblical", () => {
+    const el = names.filter((n) => n.nameHe.endsWith("אל") && n.biblicalRef);
+    expect(el.length).toBeGreaterThan(0);
+    for (const n of el) expect(n.tags.meaningCategories).toContain("biblical");
+  });
+});
