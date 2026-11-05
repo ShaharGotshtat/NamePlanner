@@ -50,7 +50,7 @@ function FirstChoice({ favorite, others }: { favorite: Suggestion; others: Sugge
   return (
     <>
       <ScreenTitle mood="cheer" subtitle="שתפו אותו עם בן או בת הזוג.">
-        <span className="text-coral">{favorite.name.niqqud}</span> הוא הבחירה הראשונה שלכם!
+        <span className="text-rose-dark">{favorite.name.niqqud}</span> הוא הבחירה הראשונה שלכם!
       </ScreenTitle>
       {displayMeaning(favorite.name) && (
         <Card>
@@ -74,7 +74,7 @@ function PickFavorite({ names, onPick }: { names: Suggestion[]; onPick: (id: num
       <ul className="space-y-2">
         {names.map((s) => (
           <li key={s.name.id}>
-            <button className="flex min-h-14 w-full items-center justify-between rounded-2xl bg-white px-4 ring-1 ring-line hover:ring-coral" onClick={() => onPick(s.name.id)}>
+            <button className="flex min-h-14 w-full items-center justify-between rounded-2xl bg-white px-4 ring-1 ring-line hover:ring-rose" onClick={() => onPick(s.name.id)}>
               <span className="font-display text-xl font-semibold">{s.name.niqqud}</span>
               <span className="text-sm text-ink-soft">{displayMeaning(s.name)}</span>
             </button>
@@ -123,7 +123,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
       {loading && <MascotSays mood="think" className="mt-6">בוחרים בשבילכם שם...</MascotSays>}
       {pick?.suggestion && !pick.dismissed && (
         <Card className="mt-6">
-          <p className="text-xs font-medium text-teal">הבחירה שלנו, שלא סימנתם</p>
+          <p className="text-xs font-medium text-lavender-dark">הבחירה שלנו, שלא סימנתם</p>
           <h2 className="mt-1 font-display text-3xl font-semibold">{pick.suggestion.name.niqqud}</h2>
           <p className="mt-2 text-sm">{pick.suggestion.reason}</p>
           <div className="mt-4 flex gap-2">

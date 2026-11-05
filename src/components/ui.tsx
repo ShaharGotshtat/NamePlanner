@@ -4,7 +4,7 @@ import { Mascot, type MascotMood } from "./Mascot";
 type Variant = "primary" | "secondary" | "ghost";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-coral-dark text-white hover:bg-coral disabled:bg-coral-dark/40",
+  primary: "bg-rose-dark text-white hover:bg-rose-deep disabled:bg-rose-dark/40",
   secondary: "border-2 border-ink/15 bg-white text-ink hover:border-ink/30 disabled:opacity-50",
   ghost: "text-ink-soft underline-offset-2 hover:underline disabled:opacity-50",
 };
@@ -31,7 +31,7 @@ export function Toggle({
     <button
       aria-pressed={selected}
       className={`min-h-11 rounded-full border-2 px-4 text-sm font-medium transition-colors ${
-        selected ? "border-teal bg-teal text-white" : "border-line bg-white text-ink hover:border-teal/50"
+        selected ? "border-lavender-dark bg-lavender-dark text-white" : "border-line bg-white text-ink hover:border-lavender-dark/50"
       } ${className}`}
       {...props}
     />
@@ -55,4 +55,4 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 }
 
 export const inputClass =
-  "min-h-11 w-full rounded-xl border-2 border-line bg-white px-3 text-ink placeholder:text-ink-soft/60 focus:border-teal focus:outline-none";
+  "min-h-11 w-full rounded-xl border-2 border-line bg-white px-3 text-ink placeholder:text-ink-soft/60 focus:border-lavender-dark focus:outline-none";

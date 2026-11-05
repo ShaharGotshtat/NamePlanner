@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { APP_NAME_EN } from "@/lib/constants";
 import { sendOwnerEmail } from "@/lib/server/email";
 import { getStore, type Report } from "@/lib/server/store";
 
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
 
   const restore = () => Promise.all(reports.map((r) => store.addReport(r)));
   try {
-    const sent = await sendOwnerEmail(`Name Planner: ${reports.length} דיווחים חדשים`, reports.map(formatReport).join("\n\n---\n\n"));
+    const sent = await sendOwnerEmail(`${APP_NAME_EN}: ${reports.length} דיווחים חדשים`, reports.map(formatReport).join("\n\n---\n\n"));
     if (!sent) await restore();
     return NextResponse.json({ sent: sent ? reports.length : 0 });
   } catch (error) {

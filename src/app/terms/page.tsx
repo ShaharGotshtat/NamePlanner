@@ -26,7 +26,7 @@ export default function TermsPage() {
         <li>משוב שאתם שולחים נשמר עד שהוא נשלח לצוות במייל היומי, ואז נמחק.</li>
         <li>ניקוי נתוני הדפדפן או מעבר למכשיר אחר מתחילים מחדש. כדי לשמור תוצאה, ייצאו את הרשימה.</li>
       </ul>
-      <Link href="/" className="mt-8 inline-block font-medium text-coral-dark underline">
+      <Link href="/" className="mt-8 inline-block font-medium text-rose-dark underline">
         חזרה לאפליקציה
       </Link>
     </main>

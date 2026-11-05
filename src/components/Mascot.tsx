@@ -1,13 +1,30 @@
+import { APP_NAME } from "@/lib/constants";
+
 export type MascotMood = "happy" | "cheer" | "think" | "sad" | "surprised";
 
-const INK = "#23214f";
+const INK = "#3a3560";
+const ROSE = "#f7a9a8";
+const LAVENDER = "#a6b8f0";
+const SUN = "#ffcf70";
+const BLUSH = "#e27c7c";
+
+const RAYS = [
+  [138, 95, 150, 95],
+  [121.01, 136.01, 129.5, 144.5],
+  [80, 153, 80, 165],
+  [38.99, 136.01, 30.5, 144.5],
+  [22, 95, 10, 95],
+  [38.99, 53.99, 30.5, 45.5],
+  [80, 37, 80, 25],
+  [121.01, 53.99, 129.5, 45.5],
+];
 
 const LABELS: Record<MascotMood, string> = {
-  happy: "דמות קטנה ומחייכת",
-  cheer: "דמות קטנה ושמחה מאוד",
-  think: "דמות קטנה שחושבת",
-  sad: "דמות קטנה ועצובה",
-  surprised: "דמות קטנה ומופתעת",
+  happy: "שמש קטנה ומחייכת",
+  cheer: "שמש קטנה ושמחה מאוד",
+  think: "שמש קטנה שחושבת",
+  sad: "שמש קטנה ועצובה",
+  surprised: "שמש קטנה ומופתעת",
 };
 
 function Eyes({ mood }: { mood: MascotMood }) {
@@ -54,7 +71,7 @@ function Mouth({ mood }: { mood: MascotMood }) {
       return (
         <g>
           <path d="M68 102 Q80 120 92 102 Z" fill={INK} stroke={INK} strokeWidth="2" strokeLinejoin="round" />
-          <path d="M74 110 Q80 115 86 110" fill="#e8553f" />
+          <path d="M74 110 Q80 115 86 110" fill="#b84a57" />
         </g>
       );
     case "think":
@@ -69,11 +86,11 @@ function Mouth({ mood }: { mood: MascotMood }) {
 }
 
 /**
- * The app's companion: a little bean with a sprout, holding a blank name tag.
- * Pure SVG in the theme palette; the mood changes its face to react to what the user does.
+ * The app's companion and logo: a sun made of two halves, one per parent, that meet in one smile.
+ * The mood changes its face to react to what the user does.
  */
 export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: MascotMood; size?: number; className?: string }) {
-  const droop = mood === "sad";
+  const cheek = mood === "sad" ? 0.2 : mood === "cheer" ? 0.7 : 0.5;
   return (
     <svg
       viewBox="0 0 160 170"
@@ -83,38 +100,31 @@ export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: 
       role="img"
       aria-label={LABELS[mood]}
     >
-      <ellipse cx="80" cy="160" rx="42" ry="6" fill={INK} opacity="0.08" />
-
-      {/* sprout; droops when sad */}
-      <g transform={droop ? "rotate(28 80 42)" : undefined}>
-        <path d="M80 42 C80 32 80 26 82 18" stroke="#1e8c7e" strokeWidth="4" strokeLinecap="round" fill="none" />
-        <path d="M82 22 C70 10 56 14 54 22 C64 28 76 28 82 22Z" fill="#1e8c7e" />
-        <path d="M82 20 C92 6 108 8 110 16 C100 24 88 24 82 20Z" fill="#3fb3a2" />
+      <g stroke={SUN} strokeWidth="12" strokeLinecap="round">
+        {RAYS.map(([x1, y1, x2, y2]) => (
+          <line key={`${x1}-${y1}`} x1={x1} y1={y1} x2={x2} y2={y2} />
+        ))}
       </g>
+      <path d="M80 47 A48 48 0 0 0 80 143 Z" fill={ROSE} />
+      <path d="M80 47 A48 48 0 0 1 80 143 Z" fill={LAVENDER} />
 
-      <path d="M80 40 C116 40 134 72 134 104 C134 136 110 154 80 154 C50 154 26 136 26 104 C26 72 44 40 80 40Z" fill="#f6a08e" />
-      <path
-        d="M80 40 C116 40 134 72 134 104 C134 112 132 120 128 126 C120 92 104 62 70 48 C73 42 76 40 80 40Z"
-        fill="#fff"
-        opacity="0.18"
-      />
-
-      <ellipse cx="50" cy="104" rx="9" ry="6" fill="#e8553f" opacity={mood === "sad" ? 0.15 : mood === "cheer" ? 0.5 : 0.35} />
-      <ellipse cx="110" cy="104" rx="9" ry="6" fill="#e8553f" opacity={mood === "sad" ? 0.15 : mood === "cheer" ? 0.5 : 0.35} />
+      <ellipse cx="54" cy="106" rx="8" ry="5.5" fill={BLUSH} opacity={cheek} />
+      <ellipse cx="106" cy="106" rx="8" ry="5.5" fill={BLUSH} opacity={cheek} />
 
       <Eyes mood={mood} />
       <Mouth mood={mood} />
-      {mood === "sad" && <path d="M48 98 Q44 106 48 110 Q52 106 48 98Z" fill="#7cc7e8" />}
-
-      <g transform="rotate(-6 80 132)">
-        <rect x="56" y="118" width="48" height="28" rx="6" fill="#fff" stroke={INK} strokeWidth="2.5" />
-        <circle cx="62" cy="132" r="2.2" fill="#e8553f" />
-        <path d="M70 128 H96 M70 136 H88" stroke="#f1dcd3" strokeWidth="3" strokeLinecap="round" />
-      </g>
-
-      <ellipse cx="56" cy="133" rx="7" ry="6" fill="#f08d79" />
-      <ellipse cx="104" cy="129" rx="7" ry="6" fill="#f08d79" />
+      {mood === "sad" && <path d="M54 98 Q50 106 54 110 Q58 106 54 98Z" fill="#7cc7e8" />}
     </svg>
+  );
+}
+
+/** The wordmark: the sun with the Hebrew name, as used in the header. */
+export function Logo({ size = 32 }: { size?: number }) {
+  return (
+    <span className="flex items-center gap-2">
+      <Mascot size={size} className="-my-1" />
+      <span className="font-display text-xl font-semibold">{APP_NAME}</span>
+    </span>
   );
 }
 

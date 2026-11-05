@@ -80,7 +80,7 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
                   role="radio"
                   aria-checked={type === t.id}
                   onClick={() => setType(t.id)}
-                  className={`min-h-11 rounded-full border-2 px-4 text-sm ${type === t.id ? "border-teal bg-teal-soft" : "border-line"}`}
+                  className={`min-h-11 rounded-full border-2 px-4 text-sm ${type === t.id ? "border-lavender-dark bg-lavender-soft" : "border-line"}`}
                 >
                   {t.label}
                 </button>
@@ -106,8 +106,8 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
             <p className="mt-1 text-xs text-ink-soft">
               {message.length}/{MAX_LENGTH} · ההודעה נשמרת עד שהיא נשלחת לצוות. אנא אל תכללו פרטים אישיים רגישים.
             </p>
-            {status === "limited" && <p className="mt-2 text-sm text-coral-dark">שלחתם הרבה הודעות בשעה האחרונה. נסו שוב מאוחר יותר.</p>}
-            {status === "failed" && <p className="mt-2 text-sm text-coral-dark">השליחה לא הצליחה. נסו שוב.</p>}
+            {status === "limited" && <p className="mt-2 text-sm text-rose-dark">שלחתם הרבה הודעות בשעה האחרונה. נסו שוב מאוחר יותר.</p>}
+            {status === "failed" && <p className="mt-2 text-sm text-rose-dark">השליחה לא הצליחה. נסו שוב.</p>}
             <div className="mt-4 flex gap-2">
               <Button onClick={submit} disabled={!message.trim() || status === "sending"}>
                 {status === "sending" ? "שולחים..." : "שליחה"}

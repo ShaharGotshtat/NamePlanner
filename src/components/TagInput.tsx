@@ -40,7 +40,7 @@ export function TagInput({
       {values.length > 0 && (
         <ul className="mt-3 flex flex-wrap gap-2">
           {values.map((v) => (
-            <li key={v} className="flex items-center gap-1 rounded-full bg-teal-soft py-1 ps-3 pe-1 text-sm">
+            <li key={v} className="flex items-center gap-1 rounded-full bg-lavender-soft py-1 ps-3 pe-1 text-sm">
               {v}
               <button aria-label={`הסרת ${v}`} className="size-7 rounded-full hover:bg-white" onClick={() => onChange(values.filter((x) => x !== v))}>
                 ×

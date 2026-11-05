@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, APP_NAME_EN } from "@/lib/constants";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: APP_NAME,
+  title: `${APP_NAME} · ${APP_NAME_EN}`,
   description: "בואו נמצא שמות לילדים העתידיים שלכם!",
   manifest: "/manifest.webmanifest",
 };
 
-export const viewport: Viewport = { themeColor: "#FFF4EF", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#FFF8F4", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
