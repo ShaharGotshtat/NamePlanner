@@ -16,7 +16,7 @@ export const MEANING_CATEGORIES = [
 export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "yiddish", "english", "other"] as const;
 export const STYLES = ["traditional", "classic", "modern"] as const;
 export const LENGTHS = ["short", "long"] as const;
-export const POPULARITY = ["common", "rare"] as const;
+export const POPULARITY = ["common", "rare", "veryRare"] as const;
 export const FACETS = ["meaningCategory", "origin", "style", "length", "ending", "popularity"] as const;
 
 const textRequirement = z.object({
@@ -30,6 +30,7 @@ const textRequirement = z.object({
 const profile = z.object({
   summary: z.string().max(300),
   requirements: z.array(textRequirement).max(20),
+  sig: z.string().max(100).optional(),
 });
 
 export const roundRequestSchema = z.object({

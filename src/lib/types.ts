@@ -95,6 +95,8 @@ export interface TextRequirement {
 export interface ParsedProfile {
   summary: string;
   requirements: TextRequirement[];
+  /** Server signature: a profile the client changed or made up is ignored. */
+  sig?: string;
 }
 
 export type Verdict = "no" | "unsure" | "interesting" | "taken";

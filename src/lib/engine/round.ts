@@ -1,4 +1,4 @@
-import type { NameEntry, NameSex, RoundRequest, Suggestion, Verdict } from "@/lib/types";
+import type { NameEntry, NameSex, RoundRequest, Suggestion } from "@/lib/types";
 import { findByName, fitsBabySex, nameSex } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
 import { evaluate, matchContext, type Evaluation, type MatchContext } from "./requirements";
@@ -8,7 +8,7 @@ import { findNoPatterns, matchesPattern, type NoPattern } from "./no-patterns";
 export const ROUND_SIZE = 3;
 export const MODEL_CANDIDATES = 60;
 
-const WEIGHTS = { want: 2, interesting: 3, unsure: 1, no: -3, noPattern: -1.5, reference: 1.5, sibling: 1, diversity: 2 };
+const WEIGHTS = { want: 2, interesting: 3, unsure: 1, noPattern: -1.5, reference: 1.5, sibling: 1, diversity: 2 };
 const LIKED_MATCH = 0.6;
 /** Traits overlap (a short name is also a 2-syllable name), so a name is pushed down for at most two of them. */
 const MAX_PATTERN_HITS = 2;
@@ -23,23 +23,26 @@ export interface Candidate {
 
 interface Signals {
   ctx: MatchContext;
-  byVerdict: Record<Exclude<Verdict, "taken">, NameProfile[]>;
+  byVerdict: Record<"interesting" | "unsure", NameProfile[]>;
   references: NameProfile[];
   noPatterns: NoPattern[];
 }
 
 function signalsFor(names: NameEntry[], req: RoundRequest): Signals {
   const byId = new Map(names.map((n) => [n.id, n]));
-  const byVerdict: Signals["byVerdict"] = { interesting: [], unsure: [], no: [] };
+  const byVerdict: Signals["byVerdict"] = { interesting: [], unsure: [] };
   const noEntries: NameEntry[] = [];
   const interestingEntries: NameEntry[] = [];
   for (const r of req.ratings) {
     const entry = byId.get(r.nameId);
     if (!entry || r.verdict === "taken") continue;
-    if (r.verdict === "no") noEntries.push(entry);
+    // A No never pushes similar names down by itself: its note becomes an avoid wish through the
+    // free-text parser, and from 3 No votes their shared traits count (see no-patterns.ts).
+    if (r.verdict === "no") {
+      noEntries.push(entry);
+      continue;
+    }
     if (r.verdict === "interesting") interestingEntries.push(entry);
-    // A bare No says little, so only a No with a reason pushes similar names down.
-    if (r.verdict === "no" && !r.note?.trim()) continue;
     byVerdict[r.verdict].push(profileOf(entry));
   }
   const references = req.namesWeLike.map((n) => {
@@ -61,7 +64,6 @@ function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate
     evaluation.wantsMet * WEIGHTS.want +
     near(signals.byVerdict.interesting) * WEIGHTS.interesting +
     near(signals.byVerdict.unsure) * WEIGHTS.unsure +
-    near(signals.byVerdict.no) * WEIGHTS.no +
     near(signals.references) * WEIGHTS.reference +
     near(signals.ctx.siblings) * WEIGHTS.sibling +
     Math.min(MAX_PATTERN_HITS, signals.noPatterns.filter((p) => matchesPattern(entry, p)).length) * WEIGHTS.noPattern;

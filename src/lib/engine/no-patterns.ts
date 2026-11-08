@@ -3,8 +3,8 @@ import { featuresOf } from "@/lib/names/catalog";
 
 /** Below this many No votes there is too little to tell a pattern from chance. */
 export const MIN_NO_VOTES = 3;
-/** Share of the No names that must have the trait. */
-const MIN_SHARE = 0.6;
+/** Share of the No names that must have the trait: 3 of 3, 3 of 4, 4 of 5. */
+const MIN_SHARE = 0.75;
 
 export type PatternTrait = "ending" | "syllables" | "length" | "origin" | "style" | "theme" | "popularity";
 

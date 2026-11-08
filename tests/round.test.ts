@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { chooseOurPick, pickDiverse, rankCandidates } from "@/lib/engine/round";
 import { nameSex } from "@/lib/names/catalog";
 import { findNoPatterns } from "@/lib/engine/no-patterns";
-import { checkText, RARE_RANK } from "@/lib/engine/requirements";
+import { checkText, MEDIAN_RANK, VERY_RARE_RANK } from "@/lib/engine/requirements";
 import { normalizeHebrew } from "@/lib/names/features";
 import { byName, names, request } from "./fixtures";
 
@@ -99,14 +99,22 @@ describe("No votes", () => {
     expect(after.map((c) => c.entry.nameHe)).toEqual(base);
   });
 
-  it("a No with a reason pushes similar names down", () => {
+  it("a No with a note does not move other names by itself either", () => {
     const no = byName("תמר");
-    const bare = rankCandidates(names, request({ shownIds: [no.id], ratings: [{ nameId: no.id, verdict: "no" }] }));
-    const withNote = rankCandidates(
+    const base = rankCandidates(names, request({ shownIds: [no.id] })).map((c) => c.score);
+    const after = rankCandidates(
       names,
       request({ shownIds: [no.id], ratings: [{ nameId: no.id, verdict: "no", note: "לא אוהבים את הצליל" }] }),
     );
-    expect(withNote.map((c) => c.score)).not.toEqual(bare.map((c) => c.score));
+    expect(after.map((c) => c.score)).toEqual(base);
+  });
+
+  it("needs three of four No names to share a trait", () => {
+    const endsInHe = girls.filter((n) => normalizeHebrew(n.nameHe).endsWith("ה"));
+    const other = girls.filter((n) => !normalizeHebrew(n.nameHe).endsWith("ה"));
+    const has = (list: typeof girls) => findNoPatterns(list, []).some((p) => p.trait === "ending" && p.value === "ה");
+    expect(has([...endsInHe.slice(0, 3), other[0]])).toBe(true);
+    expect(has([...endsInHe.slice(0, 2), ...other.slice(0, 2)])).toBe(false);
   });
 
   it("finds a trait shared by three No names and pushes it down", () => {
@@ -140,12 +148,15 @@ describe("popularity", () => {
     expect(new Set(ranked.map((c) => c.score)).size).toBe(1);
   });
 
-  it("matches a free-text wish for a rare or a common name by the latest rank", () => {
+  it("splits common and rare at the median rank, and very rare at 150", () => {
     const req = { id: "t1", label: "שם לא נפוץ", kind: "want" as const, facet: "popularity" as const, values: ["rare"] };
-    const common = byName("תמר");
-    const rare = { ...common, stats: [...common.stats.slice(0, -1), { ...common.stats.at(-1)!, rank: RARE_RANK + 1 }] };
-    expect(checkText(req, rare).fit).toBe("met");
-    expect(checkText(req, common).fit).toBe("not_met");
-    expect(checkText({ ...req, values: ["common"] }, common).fit).toBe("met");
+    const girl = byName("תמר");
+    const atRank = (rank: number) => ({ ...girl, stats: [...girl.stats.slice(0, -1), { ...girl.stats.at(-1)!, rank }] });
+    expect(checkText(req, atRank(MEDIAN_RANK.girl + 1)).fit).toBe("met");
+    expect(checkText(req, atRank(MEDIAN_RANK.girl)).fit).toBe("not_met");
+    expect(checkText({ ...req, values: ["common"] }, atRank(MEDIAN_RANK.girl)).fit).toBe("met");
+    expect(checkText({ ...req, values: ["veryRare"] }, atRank(VERY_RARE_RANK)).fit).toBe("not_met");
+    expect(checkText({ ...req, values: ["veryRare"] }, atRank(VERY_RARE_RANK + 1)).fit).toBe("met");
   });
+
 });
