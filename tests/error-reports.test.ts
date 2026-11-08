@@ -51,7 +51,7 @@ describe("journey", () => {
 describe("error issues", () => {
   beforeEach(() => {
     resetErrorReportingForTests();
-    vi.stubEnv("GITHUB_ISSUES_TOKEN", "token");
+    vi.stubEnv("GITHUB_NAME_PLANNER_ISSUES_TOKEN", "token");
     vi.stubEnv("GITHUB_ISSUES_REPO", "team/errors");
   });
   afterEach(() => {
