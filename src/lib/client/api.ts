@@ -1,4 +1,3 @@
-import { turnstileToken } from "./turnstile";
 import { APP_VERSION } from "@/lib/constants";
 import type { ParsedProfile, RoundRequest, Suggestion } from "@/lib/types";
 
@@ -33,8 +32,7 @@ async function post<T>(path: string, body: unknown, token: string | null): Promi
   return response.json();
 }
 
-export const startSession = async () =>
-  post<WithToken<{ open: boolean }>>("/api/session", { turnstileToken: await turnstileToken() }, null);
+export const startSession = () => post<WithToken<{ open: boolean }>>("/api/session", {}, null);
 
 /** Calls an endpoint that needs a session, starting a new one if the token is missing or expired. */
 async function withSession<T>(path: string, body: unknown, token: string | null): Promise<WithToken<T>> {
