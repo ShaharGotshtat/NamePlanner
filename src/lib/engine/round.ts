@@ -3,12 +3,15 @@ import { findByName, fitsBabySex, nameSex } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
 import { evaluate, matchContext, type Evaluation, type MatchContext } from "./requirements";
 import { closest, profileOf, profileOfText, similarity, type NameProfile } from "./similarity";
+import { findNoPatterns, matchesPattern, type NoPattern } from "./no-patterns";
 
 export const ROUND_SIZE = 3;
 export const MODEL_CANDIDATES = 60;
 
-const WEIGHTS = { want: 2, interesting: 3, unsure: 1, no: -3, reference: 1.5, sibling: 1, popularity: 0.5, diversity: 2 };
+const WEIGHTS = { want: 2, interesting: 3, unsure: 1, no: -3, noPattern: -1.5, reference: 1.5, sibling: 1, diversity: 2 };
 const LIKED_MATCH = 0.6;
+/** Traits overlap (a short name is also a 2-syllable name), so a name is pushed down for at most two of them. */
+const MAX_PATTERN_HITS = 2;
 
 export interface Candidate {
   entry: NameEntry;
@@ -22,22 +25,29 @@ interface Signals {
   ctx: MatchContext;
   byVerdict: Record<Exclude<Verdict, "taken">, NameProfile[]>;
   references: NameProfile[];
-  maxCount: number;
+  noPatterns: NoPattern[];
 }
 
 function signalsFor(names: NameEntry[], req: RoundRequest): Signals {
   const byId = new Map(names.map((n) => [n.id, n]));
   const byVerdict: Signals["byVerdict"] = { interesting: [], unsure: [], no: [] };
+  const noEntries: NameEntry[] = [];
+  const interestingEntries: NameEntry[] = [];
   for (const r of req.ratings) {
     const entry = byId.get(r.nameId);
-    if (entry && r.verdict !== "taken") byVerdict[r.verdict].push(profileOf(entry));
+    if (!entry || r.verdict === "taken") continue;
+    if (r.verdict === "no") noEntries.push(entry);
+    if (r.verdict === "interesting") interestingEntries.push(entry);
+    // A bare No says little, so only a No with a reason pushes similar names down.
+    if (r.verdict === "no" && !r.note?.trim()) continue;
+    byVerdict[r.verdict].push(profileOf(entry));
   }
   const references = req.namesWeLike.map((n) => {
     const entry = findByName(names, n);
     return entry ? profileOf(entry) : profileOfText(n);
   });
-  const maxCount = Math.max(1, ...names.map((n) => n.stats.at(-1)?.count ?? 0));
-  return { ctx: matchContext(req), byVerdict, references, maxCount };
+  const noPatterns = findNoPatterns(noEntries, interestingEntries);
+  return { ctx: matchContext(req), byVerdict, references, noPatterns };
 }
 
 function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate | null {
@@ -54,7 +64,7 @@ function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate
     near(signals.byVerdict.no) * WEIGHTS.no +
     near(signals.references) * WEIGHTS.reference +
     near(signals.ctx.siblings) * WEIGHTS.sibling +
-    ((entry.stats.at(-1)?.count ?? 0) / signals.maxCount) * WEIGHTS.popularity;
+    Math.min(MAX_PATTERN_HITS, signals.noPatterns.filter((p) => matchesPattern(entry, p)).length) * WEIGHTS.noPattern;
 
   if (liked && liked.score >= LIKED_MATCH) {
     evaluation.lines.push({
@@ -109,6 +119,9 @@ export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["baby
   }
   return picked;
 }
+
+/** What the No votes so far have in common, for the model prompt. */
+export const noPatternsFor = (names: NameEntry[], req: RoundRequest) => signalsFor(names, req).noPatterns;
 
 export function standardReason(c: Candidate): string {
   const meaning = `משמעות: ${c.entry.meaningHe}.`;

@@ -16,7 +16,8 @@ export const MEANING_CATEGORIES = [
 export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "yiddish", "english", "other"] as const;
 export const STYLES = ["traditional", "classic", "modern"] as const;
 export const LENGTHS = ["short", "long"] as const;
-export const FACETS = ["meaningCategory", "origin", "style", "length", "ending"] as const;
+export const POPULARITY = ["common", "rare"] as const;
+export const FACETS = ["meaningCategory", "origin", "style", "length", "ending", "popularity"] as const;
 
 const textRequirement = z.object({
   id: z.string().max(40),

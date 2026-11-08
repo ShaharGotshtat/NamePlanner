@@ -73,6 +73,10 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
   }
 }
 
+/** Popularity wishes, by the name's rank in the latest year. Names between the two count as neither. */
+export const COMMON_RANK = 50;
+export const RARE_RANK = 150;
+
 const BIBLICAL_WORDS = /תנ["״׳']?[כך]|מקרא|biblical|bible/i;
 
 /**
@@ -101,6 +105,10 @@ function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
       );
     case "ending":
       return req.values.some((v) => name.endsWith(normalizeHebrew(v)));
+    case "popularity": {
+      const rank = entry.stats.at(-1)?.rank ?? Infinity;
+      return req.values.some((v) => (v === "common" ? rank <= COMMON_RANK : rank > RARE_RANK));
+    }
   }
 }
 

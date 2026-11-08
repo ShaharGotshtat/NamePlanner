@@ -3,10 +3,10 @@ import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundReques
 import { chipLabel } from "@/lib/engine/chips";
 import { normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
-import { ROUND_SIZE, type Candidate } from "@/lib/engine/round";
+import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
 import { OUR_PICK_SYSTEM, PREFERENCES_SYSTEM, ROUND_SYSTEM } from "./prompts";
-import { FACETS, LENGTHS, MEANING_CATEGORIES, ORIGINS, STYLES } from "./schemas";
+import { FACETS, LENGTHS, MEANING_CATEGORIES, ORIGINS, POPULARITY, STYLES } from "./schemas";
 
 const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null> = {
   meaningCategory: MEANING_CATEGORIES,
@@ -14,6 +14,7 @@ const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null>
   style: STYLES,
   length: LENGTHS,
   ending: null,
+  popularity: POPULARITY,
 };
 
 const preferencesOutput = z.object({
@@ -99,6 +100,7 @@ export async function pickWithModel(
   const ratedNames = req.ratings
     .filter((r) => r.verdict !== "taken")
     .map((r) => `${nameById.get(r.nameId) ?? r.nameId}: ${r.verdict}`);
+  const patterns = noPatternsFor(names, req).map((p) => `${p.label} (${p.count} names)`);
 
   const chips = Object.entries(req.chips).map(([id, level]) => `${chipLabel(id as ChipId)} (${level})`);
   const prompt = `${SEX_INSTRUCTION[req.babySex]}
@@ -108,6 +110,7 @@ Parent's chips: ${chips.join(", ") || "none"}
 Parent's free-text wishes as understood: ${req.profile?.summary ?? "none"}
 Sibling names: ${req.family.filter((f) => f.relation === "sibling").map((f) => f.name).join(", ") || "none"}
 Verdicts so far: ${ratedNames.join(", ") || "none"}
+What the No names have in common, and no Interesting name has: ${patterns.join(", ") || "nothing yet"}
 
 Candidates, best first by our ranking:
 ${candidates.map(describeCandidate).join("\n")}`;

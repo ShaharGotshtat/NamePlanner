@@ -22,6 +22,7 @@ Themes always use meaningCategory, never origin. A wish for a biblical name, or 
   - style: traditional, classic, modern
   - length: short, long
   - ending: Hebrew letters the name ends with, for example "אל"
+  - popularity: common, rare. Use it only when the parent asks about how common the name is, for example "a common name", "not too rare" or "something unusual".
 Skip wishes that do not map to any facet, and mention that in the summary.
 Notes about specific names (for example "too similar to my cousin Noa") tell you what the parent dislikes about a style: map them to an avoid requirement when you can.
 Names the parent likes are style references: describe their shared style as want requirements.

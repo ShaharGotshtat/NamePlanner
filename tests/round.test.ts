@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { chooseOurPick, pickDiverse, rankCandidates } from "@/lib/engine/round";
 import { nameSex } from "@/lib/names/catalog";
+import { findNoPatterns } from "@/lib/engine/no-patterns";
+import { checkText, RARE_RANK } from "@/lib/engine/requirements";
+import { normalizeHebrew } from "@/lib/names/features";
 import { byName, names, request } from "./fixtures";
 
 describe("rankCandidates", () => {
@@ -83,5 +86,66 @@ describe("chooseOurPick", () => {
   it("returns null when every shown name was rejected", () => {
     const a = byName("תמר");
     expect(chooseOurPick(names, request({ shownIds: [a.id], ratings: [{ nameId: a.id, verdict: "no" }] }))).toBeNull();
+  });
+});
+
+describe("No votes", () => {
+  const girls = names.filter((n) => nameSex(n) === "girl");
+
+  it("a No without a reason does not move other names", () => {
+    const no = byName("תמר");
+    const base = rankCandidates(names, request({ shownIds: [no.id] })).map((c) => c.entry.nameHe);
+    const after = rankCandidates(names, request({ shownIds: [no.id], ratings: [{ nameId: no.id, verdict: "no" }] }));
+    expect(after.map((c) => c.entry.nameHe)).toEqual(base);
+  });
+
+  it("a No with a reason pushes similar names down", () => {
+    const no = byName("תמר");
+    const bare = rankCandidates(names, request({ shownIds: [no.id], ratings: [{ nameId: no.id, verdict: "no" }] }));
+    const withNote = rankCandidates(
+      names,
+      request({ shownIds: [no.id], ratings: [{ nameId: no.id, verdict: "no", note: "לא אוהבים את הצליל" }] }),
+    );
+    expect(withNote.map((c) => c.score)).not.toEqual(bare.map((c) => c.score));
+  });
+
+  it("finds a trait shared by three No names and pushes it down", () => {
+    const sameEnding = girls.filter((n) => normalizeHebrew(n.nameHe).endsWith("ה")).slice(0, 3);
+    expect(sameEnding).toHaveLength(3);
+    const ratings = sameEnding.map((n) => ({ nameId: n.id, verdict: "no" as const }));
+    const patterns = findNoPatterns(sameEnding, []);
+    expect(patterns.some((p) => p.trait === "ending" && p.value === "ה")).toBe(true);
+
+    const req = request({ shownIds: sameEnding.map((n) => n.id) });
+    const before = new Map(rankCandidates(names, req).map((c) => [c.entry.id, c.score]));
+    for (const c of rankCandidates(names, { ...req, ratings })) {
+      if (normalizeHebrew(c.entry.nameHe).endsWith("ה")) expect(c.score).toBeLessThan(before.get(c.entry.id)!);
+    }
+  });
+
+  it("ignores a trait that a name marked Interesting also has", () => {
+    const sameEnding = girls.filter((n) => normalizeHebrew(n.nameHe).endsWith("ה")).slice(0, 4);
+    const patterns = findNoPatterns(sameEnding.slice(0, 3), [sameEnding[3]]);
+    expect(patterns.some((p) => p.trait === "ending" && p.value === "ה")).toBe(false);
+  });
+
+  it("needs at least three No votes", () => {
+    expect(findNoPatterns(girls.slice(0, 2), [])).toEqual([]);
+  });
+});
+
+describe("popularity", () => {
+  it("does not favour common names unless asked", () => {
+    const ranked = rankCandidates(names, request());
+    expect(new Set(ranked.map((c) => c.score)).size).toBe(1);
+  });
+
+  it("matches a free-text wish for a rare or a common name by the latest rank", () => {
+    const req = { id: "t1", label: "שם לא נפוץ", kind: "want" as const, facet: "popularity" as const, values: ["rare"] };
+    const common = byName("תמר");
+    const rare = { ...common, stats: [...common.stats.slice(0, -1), { ...common.stats.at(-1)!, rank: RARE_RANK + 1 }] };
+    expect(checkText(req, rare).fit).toBe("met");
+    expect(checkText(req, common).fit).toBe("not_met");
+    expect(checkText({ ...req, values: ["common"] }, common).fit).toBe("met");
   });
 });
