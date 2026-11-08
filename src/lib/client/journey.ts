@@ -35,14 +35,18 @@ export const clearJourney = () => {
   reportedErrorIds.clear();
 };
 
-// The exact due date never leaves the browser (see the terms) and the session token is a secret.
+// The exact due date never leaves the browser, names that could identify the family are left out (see the terms),
+// and the session token is a secret.
 // The step is tracked by setScreen, and the rest are large derived values that add noise.
-const SKIPPED_KEYS = new Set(["token", "checkedInput", "rounds", "dueDate", "step"]);
+const SKIPPED_KEYS = new Set(["token", "checkedInput", "rounds", "step"]);
+const IDENTIFYING_KEYS = new Set(["dueDate", "surname", "family"]);
+
+const isEmpty = (value: unknown) => value === "" || value == null || (Array.isArray(value) && value.length === 0);
 
 /** One line per changed field of a state update, e.g. `freeText = "שם קצר"`. */
 export function describeChange(patch: Record<string, unknown>): string[] {
   return Object.entries(patch).flatMap(([key, value]) => {
-    if (key === "dueDate") return value ? ["dueDate = (set)"] : [];
+    if (IDENTIFYING_KEYS.has(key)) return [`${key} = ${isEmpty(value) ? "(empty)" : "(set)"}`];
     if (SKIPPED_KEYS.has(key)) return [];
     if (key === "ratings" && value && typeof value === "object") return [`ratings: ${Object.keys(value).length} rated`];
     return [`${key} = ${JSON.stringify(value) ?? "undefined"}`];

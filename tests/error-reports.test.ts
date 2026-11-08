@@ -36,10 +36,13 @@ const calls = (fetchMock: ReturnType<typeof mockGitHub>) =>
   fetchMock.mock.calls.map(([url, init]) => `${init?.method ?? "GET"} ${String(url).replace("https://api.github.com/repos/team/errors", "")}`);
 
 describe("journey", () => {
-  it("keeps typed input but not the exact due date or the session token", () => {
-    expect(describeChange({ freeText: "קצר", dueDate: "2027-03-01", token: "secret", ratings: { 1: {}, 2: {} } })).toEqual([
+  it("keeps typed input but not the due date, family names or the session token", () => {
+    const patch = { freeText: "קצר", dueDate: "2027-03-01", surname: "כהן", family: [], token: "secret", ratings: { 1: {}, 2: {} } };
+    expect(describeChange(patch)).toEqual([
       'freeText = "קצר"',
       "dueDate = (set)",
+      "surname = (set)",
+      "family = (empty)",
       "ratings: 2 rated",
     ]);
   });
