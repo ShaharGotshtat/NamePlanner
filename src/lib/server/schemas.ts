@@ -77,3 +77,18 @@ export const reportRequestSchema = z.object({
   website: z.string().max(200).optional(),
   elapsedMs: z.number().nonnegative(),
 });
+
+export const errorReportRequestSchema = z.object({
+  kind: z.enum(["server", "client"]),
+  message: z.string().max(500),
+  stack: z.string().max(4000).optional(),
+  errorId: z.string().regex(/^[2-9A-Z]{8}$/).optional(),
+  path: z.string().regex(/^\/api\/[a-z-/]{1,40}$/).optional(),
+  status: z.number().int().min(500).max(599).optional(),
+  screen: z.string().max(40),
+  appVersion: z.string().max(20),
+  device: z.string().max(200),
+  journey: z.array(z.object({ at: z.string().max(30), what: z.string().max(220) })).max(50),
+});
+
+export type ErrorReportRequest = z.infer<typeof errorReportRequestSchema>;

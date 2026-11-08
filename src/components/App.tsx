@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { setScreen, watchPage } from "@/lib/client/journey";
 import { backPatch } from "@/lib/client/navigation";
 import { AppProvider, useApp, type Step } from "@/lib/client/state";
 import { FeedbackProvider, useFeedback } from "./Feedback";
@@ -42,6 +43,9 @@ function Shell() {
   const fromHistory = useRef(false);
   const stateRef = useRef(state);
   stateRef.current = state;
+
+  useEffect(watchPage, []);
+  useEffect(() => setScreen(state.step), [state.step]);
 
   useEffect(() => {
     if (fromHistory.current) {
