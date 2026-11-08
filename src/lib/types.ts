@@ -20,6 +20,19 @@ export type MeaningCategory =
 export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "yiddish" | "english" | "other";
 export type Style = "traditional" | "classic" | "modern";
 
+/**
+ * How a name feels, scored once offline by a model (data/name-style.tsv), 1 to 5 on each axis.
+ * Only used to compare names with each other: never shown to parents and never used to filter.
+ */
+export interface StyleAxes {
+  /** 1 grandparents' generation, 2 parents' generation or long-standing traditional, 3 timeless, 4 contemporary, 5 newest wave. */
+  era: number;
+  /** 1 hard to say or unknown outside Israel, 3 easy to say but unfamiliar abroad, 5 works abroad as it is. */
+  reach: number;
+  /** Who mostly gives the name today: 1 mainly Haredi families, 3 every community, 5 mainly secular families. */
+  religious: number;
+}
+
 export interface YearStat {
   year: number;
   count: number;
@@ -50,6 +63,8 @@ export interface NameEntry {
     links: string[];
   };
   stats: YearStat[];
+  /** Missing until the scores are loaded; comparisons then fall back to the coarse style tag. */
+  styleAxes?: StyleAxes;
 }
 
 export type Relation = "sibling" | "cousin" | "parent" | "grandparent" | "other";

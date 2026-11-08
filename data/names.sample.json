@@ -37,7 +37,12 @@
         "count": 1800,
         "rank": 1
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 2
+    }
   },
   {
     "id": 2,
@@ -77,7 +82,12 @@
         "count": 1600,
         "rank": 2
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 5,
+      "religious": 3
+    }
   },
   {
     "id": 3,
@@ -118,7 +128,12 @@
         "count": 1550,
         "rank": 3
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 3,
+      "religious": 2
+    }
   },
   {
     "id": 4,
@@ -158,7 +173,12 @@
         "count": 1400,
         "rank": 4
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 5,
@@ -198,7 +218,12 @@
         "count": 1380,
         "rank": 5
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 3
+    }
   },
   {
     "id": 6,
@@ -240,7 +265,12 @@
         "count": 1200,
         "rank": 8
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 3
+    }
   },
   {
     "id": 7,
@@ -281,7 +311,12 @@
         "count": 1280,
         "rank": 6
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 8,
@@ -323,7 +358,12 @@
         "count": 1100,
         "rank": 9
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 2,
+      "religious": 2
+    }
   },
   {
     "id": 9,
@@ -368,7 +408,12 @@
         "count": 850,
         "rank": 14
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 3,
+      "religious": 2
+    }
   },
   {
     "id": 10,
@@ -410,7 +455,12 @@
         "count": 820,
         "rank": 15
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 2,
+      "religious": 3
+    }
   },
   {
     "id": 11,
@@ -449,7 +499,12 @@
         "count": 1000,
         "rank": 11
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 12,
@@ -492,7 +547,12 @@
         "count": 800,
         "rank": 16
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 13,
@@ -534,7 +594,12 @@
         "count": 1050,
         "rank": 10
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 2
+    }
   },
   {
     "id": 14,
@@ -574,7 +639,12 @@
         "count": 560,
         "rank": 20
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 15,
@@ -614,7 +684,12 @@
         "count": 600,
         "rank": 19
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 16,
@@ -655,7 +730,12 @@
         "count": 900,
         "rank": 12
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 2
+    }
   },
   {
     "id": 17,
@@ -696,7 +776,12 @@
         "count": 620,
         "rank": 18
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 18,
@@ -736,7 +821,12 @@
         "count": 1250,
         "rank": 7
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 3,
+      "religious": 2
+    }
   },
   {
     "id": 19,
@@ -773,7 +863,12 @@
         "count": 450,
         "rank": 24
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 20,
@@ -813,7 +908,12 @@
         "count": 740,
         "rank": 17
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 21,
@@ -853,7 +953,12 @@
         "count": 410,
         "rank": 25
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 22,
@@ -890,7 +995,12 @@
         "count": 260,
         "rank": 32
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 23,
@@ -931,7 +1041,12 @@
         "count": 870,
         "rank": 13
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 5,
+      "religious": 3
+    }
   },
   {
     "id": 24,
@@ -970,7 +1085,12 @@
         "count": 560,
         "rank": 21
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 25,
@@ -1012,7 +1132,12 @@
         "count": 340,
         "rank": 28
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 26,
@@ -1054,7 +1179,12 @@
         "count": 510,
         "rank": 23
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 2,
+      "religious": 3
+    }
   },
   {
     "id": 27,
@@ -1096,7 +1226,12 @@
         "count": 1500,
         "rank": 2
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 3
+    }
   },
   {
     "id": 28,
@@ -1135,7 +1270,12 @@
         "count": 1800,
         "rank": 1
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 3
+    }
   },
   {
     "id": 29,
@@ -1174,7 +1314,12 @@
         "count": 860,
         "rank": 6
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 3
+    }
   },
   {
     "id": 30,
@@ -1214,7 +1359,12 @@
         "count": 1050,
         "rank": 4
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 3,
+      "religious": 3
+    }
   },
   {
     "id": 31,
@@ -1255,7 +1405,12 @@
         "count": 1300,
         "rank": 3
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 2
+    }
   },
   {
     "id": 32,
@@ -1299,7 +1454,12 @@
         "count": 1000,
         "rank": 5
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 3
+    }
   },
   {
     "id": 33,
@@ -1381,7 +1541,12 @@
         "count": 560,
         "rank": 11
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 3,
+      "religious": 3
+    }
   },
   {
     "id": 35,
@@ -1421,7 +1586,12 @@
         "count": 520,
         "rank": 14
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 3,
+      "religious": 3
+    }
   },
   {
     "id": 36,
@@ -1464,7 +1634,12 @@
         "count": 540,
         "rank": 13
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 4,
+      "religious": 2
+    }
   },
   {
     "id": 37,
@@ -1508,7 +1683,12 @@
         "count": 340,
         "rank": 22
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 5,
+      "religious": 3
+    }
   },
   {
     "id": 38,
@@ -1549,7 +1729,12 @@
         "count": 440,
         "rank": 17
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 39,
@@ -1589,7 +1774,12 @@
         "count": 800,
         "rank": 8
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 40,
@@ -1628,7 +1818,12 @@
         "count": 800,
         "rank": 9
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 41,
@@ -1668,7 +1863,12 @@
         "count": 860,
         "rank": 7
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 5,
+      "religious": 4
+    }
   },
   {
     "id": 42,
@@ -1711,7 +1911,12 @@
         "count": 320,
         "rank": 23
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 2,
+      "religious": 4
+    }
   },
   {
     "id": 43,
@@ -1753,7 +1958,12 @@
         "count": 470,
         "rank": 15
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 4,
+      "religious": 2
+    }
   },
   {
     "id": 44,
@@ -1794,7 +2004,12 @@
         "count": 640,
         "rank": 10
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 2,
+      "reach": 5,
+      "religious": 2
+    }
   },
   {
     "id": 45,
@@ -1836,7 +2051,12 @@
         "count": 190,
         "rank": 24
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 2,
+      "religious": 3
+    }
   },
   {
     "id": 46,
@@ -1873,7 +2093,12 @@
         "count": 400,
         "rank": 20
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 5,
+      "religious": 5
+    }
   },
   {
     "id": 47,
@@ -1916,7 +2141,12 @@
         "count": 540,
         "rank": 22
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 48,
@@ -1955,7 +2185,12 @@
         "count": 380,
         "rank": 21
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 3,
+      "religious": 4
+    }
   },
   {
     "id": 49,
@@ -1994,7 +2229,12 @@
         "count": 410,
         "rank": 18
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 3,
+      "religious": 5
+    }
   },
   {
     "id": 50,
@@ -2033,7 +2273,12 @@
         "count": 460,
         "rank": 16
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 51,
@@ -2074,7 +2319,12 @@
         "count": 400,
         "rank": 26
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 52,
@@ -2116,7 +2366,12 @@
         "count": 330,
         "rank": 29
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 4,
+      "religious": 4
+    }
   },
   {
     "id": 53,
@@ -2157,7 +2412,12 @@
         "count": 360,
         "rank": 27
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 5,
+      "reach": 4,
+      "religious": 5
+    }
   },
   {
     "id": 54,
@@ -2197,7 +2457,12 @@
         "count": 310,
         "rank": 30
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 3,
+      "reach": 2,
+      "religious": 4
+    }
   },
   {
     "id": 55,
@@ -2237,7 +2502,12 @@
         "count": 410,
         "rank": 19
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 2,
+      "religious": 4
+    }
   },
   {
     "id": 56,
@@ -2276,6 +2546,11 @@
         "count": 310,
         "rank": 31
       }
-    ]
+    ],
+    "styleAxes": {
+      "era": 4,
+      "reach": 3,
+      "religious": 4
+    }
   }
 ]

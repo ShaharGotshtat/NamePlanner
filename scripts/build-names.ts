@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { readStyles } from "./styles";
 import type { MeaningCategory, NameEntry, Origin, Style, YearStat } from "../src/lib/types";
 
 /** Names given to fewer babies than this in 2000-2024 are too rare for the lists. */
@@ -107,6 +108,12 @@ const content = new Map(
 const missing = chosen.filter((c) => !content.has(c.name)).map((c) => c.name);
 if (missing.length) throw new Error(`No content for ${missing.length} names: ${missing.join(", ")}`);
 
+// Style scores, one row per name. A name without a row keeps the coarse style tag only.
+const styles = readStyles();
+const chosenNames = new Set(chosen.map((c) => c.name));
+const unknownStyled = [...styles.keys()].filter((name) => !chosenNames.has(name));
+if (unknownStyled.length) throw new Error(`Style scores for names that are not in the list: ${unknownStyled.join(", ")}`);
+
 const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const c = content.get(name)!;
   const sexRatio = boys / (girls + boys);
@@ -140,8 +147,11 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
       links: links(c.links),
     },
     stats,
+    ...(styles.has(name) ? { styleAxes: styles.get(name) } : {}),
   };
 });
 
 writeFileSync("data/names.json", JSON.stringify(names));
+const unstyled = names.filter((n) => !n.styleAxes).map((n) => n.nameHe);
+if (unstyled.length) console.warn(`No style scores yet for ${unstyled.length} names (run npm run styles:score): ${unstyled.join(", ")}`);
 console.log(`Wrote ${names.length} names to data/names.json (CBS ${FROM_YEAR}-${lastYear}, at least ${MIN_BABIES} babies)`);

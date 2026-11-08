@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import type { NameEntry, Origin, YearStat } from "@/lib/types";
+import type { NameEntry, Origin, StyleAxes, YearStat } from "@/lib/types";
 import type { Report, ReportContext, ReportType, Store } from "./types";
 
 interface NameRow {
@@ -15,6 +15,8 @@ interface NameRow {
   variants: string[];
   tags: NameEntry["tags"];
   stats: YearStat[];
+  /** Undefined before the column exists, null for a name without scores. */
+  style_axes?: StyleAxes | null;
 }
 
 const toEntry = (r: NameRow): NameEntry => ({
@@ -30,6 +32,7 @@ const toEntry = (r: NameRow): NameEntry => ({
   variants: r.variants,
   tags: r.tags,
   stats: r.stats,
+  styleAxes: r.style_axes ?? undefined,
 });
 
 export function postgresStore(url: string): Store {
