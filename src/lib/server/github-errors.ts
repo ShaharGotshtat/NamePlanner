@@ -22,7 +22,7 @@ interface Occurrence {
 const DEFAULT_REPO = "ShaharGotshtat/name-planner-issues";
 
 const config = () => {
-  const token = process.env.GITHUB_ISSUES_TOKEN;
+  const token = process.env.GITHUB_NAME_PLANNER_ISSUES_TOKEN;
   return token ? { token, repo: process.env.GITHUB_ISSUES_REPO || DEFAULT_REPO } : null;
 };
 
