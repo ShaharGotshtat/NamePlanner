@@ -48,8 +48,8 @@ describe("journey", () => {
 describe("error issues", () => {
   beforeEach(() => {
     resetErrorReportingForTests();
-    vi.stubEnv("GITHUB_ERRORS_TOKEN", "token");
-    vi.stubEnv("GITHUB_ERRORS_REPO", "team/errors");
+    vi.stubEnv("GITHUB_ISSUES_TOKEN", "token");
+    vi.stubEnv("GITHUB_ISSUES_REPO", "team/errors");
   });
   afterEach(() => {
     vi.restoreAllMocks();
@@ -81,7 +81,14 @@ describe("error issues", () => {
     expect(fetchMock.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(10);
   });
 
-  it("do nothing when the repo is not configured", async () => {
+  it("go to the team's issues repo unless another one is set", async () => {
+    vi.stubEnv("GITHUB_ISSUES_REPO", "");
+    const fetchMock = mockGitHub();
+    await sendToGitHub(occurrence);
+    expect(String(fetchMock.mock.calls[0][0])).toContain("/repos/ShaharGotshtat/name-planner-issues/issues");
+  });
+
+  it("do nothing without a token", async () => {
     vi.unstubAllEnvs();
     const fetchMock = mockGitHub();
     await sendToGitHub(occurrence);

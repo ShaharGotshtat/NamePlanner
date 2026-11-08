@@ -88,7 +88,7 @@ export const errorReportRequestSchema = z.object({
   screen: z.string().max(40),
   appVersion: z.string().max(20),
   device: z.string().max(200),
-  journey: z.array(z.object({ at: z.string().max(30), what: z.string().max(220) })).max(50),
+  journey: z.array(z.object({ at: z.string().max(30), what: z.string().max(220) })).max(100),
 });
 
 export type ErrorReportRequest = z.infer<typeof errorReportRequestSchema>;

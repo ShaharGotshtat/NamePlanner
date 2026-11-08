@@ -4,7 +4,7 @@ import { APP_VERSION } from "@/lib/constants";
  * The last steps of this visit, kept in memory only. They leave the browser only inside an error report,
  * so the team can see what led to the error.
  */
-const MAX_STEPS = 50;
+const MAX_STEPS = 100;
 const MAX_TEXT = 200;
 
 export interface JourneyStep {

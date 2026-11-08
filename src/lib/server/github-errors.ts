@@ -19,9 +19,11 @@ interface Occurrence {
   comment: string;
 }
 
+const DEFAULT_REPO = "ShaharGotshtat/name-planner-issues";
+
 const config = () => {
-  const { GITHUB_ERRORS_TOKEN: token, GITHUB_ERRORS_REPO: repo } = process.env;
-  return token && repo ? { token, repo } : null;
+  const token = process.env.GITHUB_ISSUES_TOKEN;
+  return token ? { token, repo: process.env.GITHUB_ISSUES_REPO || DEFAULT_REPO } : null;
 };
 
 export const errorReportingEnabled = () => config() !== null;
