@@ -3,11 +3,12 @@ import { pickWithModel } from "@/lib/server/ai";
 import { handler, readBody, readSession } from "@/lib/server/http";
 import { getNames } from "@/lib/server/names";
 import { roundRequestSchema } from "@/lib/server/schemas";
-import { canCallModel } from "@/lib/server/token";
+import { canCallModel, verifiedProfile } from "@/lib/server/token";
 
 export const POST = handler(async (request) => {
   const session = readSession(request);
-  const req = await readBody(request, roundRequestSchema);
+  const body = await readBody(request, roundRequestSchema);
+  const req = { ...body, profile: verifiedProfile(body.profile) };
   const names = await getNames();
   const ranked = rankCandidates(names, req);
 

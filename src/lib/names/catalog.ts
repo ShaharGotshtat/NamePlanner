@@ -1,8 +1,8 @@
 import type { BabySex, NameEntry, NameSex, YearStat } from "@/lib/types";
 import { computeFeatures, normalizeHebrew, type NameFeatures } from "./features";
 
-const UNISEX_LOW = 0.2;
-const UNISEX_HIGH = 0.8;
+const UNISEX_LOW = 0.1;
+const UNISEX_HIGH = 0.9;
 
 export function nameSex(entry: NameEntry): NameSex {
   if (entry.sexRatio > UNISEX_HIGH) return "boy";

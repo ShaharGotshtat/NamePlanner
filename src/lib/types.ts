@@ -81,7 +81,7 @@ export interface DueDerived {
   season: string;
 }
 
-export type Facet = "meaningCategory" | "origin" | "style" | "length" | "ending";
+export type Facet = "meaningCategory" | "origin" | "style" | "length" | "ending" | "popularity";
 
 /** One free-text wish, parsed into something the ranking can check against the name data. */
 export interface TextRequirement {
@@ -95,6 +95,8 @@ export interface TextRequirement {
 export interface ParsedProfile {
   summary: string;
   requirements: TextRequirement[];
+  /** Server signature: a profile the client changed or made up is ignored. */
+  sig?: string;
 }
 
 export type Verdict = "no" | "unsure" | "interesting" | "taken";

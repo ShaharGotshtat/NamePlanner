@@ -2,7 +2,7 @@ import { parsePreferences } from "@/lib/server/ai";
 import { handler, readBody, readSession } from "@/lib/server/http";
 import { currentRequestId, log } from "@/lib/server/request-id";
 import { preferencesRequestSchema } from "@/lib/server/schemas";
-import { canCallModel, freeTextAllowed } from "@/lib/server/token";
+import { canCallModel, freeTextAllowed, signProfile } from "@/lib/server/token";
 
 export const POST = handler(async (request) => {
   const session = readSession(request);
@@ -27,5 +27,5 @@ export const POST = handler(async (request) => {
     session.flags++;
     return { body: { status: freeTextAllowed(session) ? "flagged" : "disabled" }, session };
   }
-  return { body: { status: "ok", profile: texts.length || input.namesWeLike.length ? result.profile : null }, session };
+  return { body: { status: "ok", profile: texts.length || input.namesWeLike.length ? signProfile(result.profile) : null }, session };
 });
