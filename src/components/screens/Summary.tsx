@@ -49,8 +49,8 @@ export function Summary() {
 function FirstChoice({ favorite, others }: { favorite: Suggestion; others: Suggestion[] }) {
   return (
     <>
-      <ScreenTitle mood="cheer" subtitle="שתפו אותו עם בן או בת הזוג.">
-        <span className="text-rose-dark">{favorite.name.niqqud}</span> הוא הבחירה הראשונה שלכם!
+      <ScreenTitle mood="cheer" subtitle="אפשר לשתף עם בן או בת הזוג.">
+        <span className="text-rose-dark">{favorite.name.niqqud}</span> הוא הבחירה הראשונה!
       </ScreenTitle>
       {displayMeaning(favorite.name) && (
         <Card>
@@ -60,7 +60,7 @@ function FirstChoice({ favorite, others }: { favorite: Suggestion; others: Sugge
         </Card>
       )}
       {others.length > 0 && (
-        <p className="mt-4 text-sm text-ink-soft">עוד שמות שאהבתם: {others.map((s) => s.name.nameHe).join(", ")}</p>
+        <p className="mt-4 text-sm text-ink-soft">עוד שמות אהובים: {others.map((s) => s.name.nameHe).join(", ")}</p>
       )}
     </>
   );
@@ -70,7 +70,7 @@ function PickFavorite({ names, onPick }: { names: Suggestion[]; onPick: (id: num
   const top = names.slice(0, TOP_COUNT).map((s) => s.name.nameHe);
   return (
     <>
-      <ScreenTitle mood="happy" subtitle="איזה מהם הכי אהבתם?">השמות המובילים שאהבתם הם {top.join(", ")}.</ScreenTitle>
+      <ScreenTitle mood="happy" subtitle="איזה מהם הכי אהבתם?">השמות המובילים: {top.join(", ")}.</ScreenTitle>
       <ul className="space-y-2">
         {names.map((s) => (
           <li key={s.name.id}>
@@ -106,13 +106,13 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
 
   return (
     <>
-      <ScreenTitle mood="sad">מצטערים, לא מצאנו התאמה מושלמת.</ScreenTitle>
-      {unsure.length > 0 && <p className="text-ink-soft">שמות שסימנתם כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
+      <ScreenTitle mood="sad">סליחה, לא מצאנו התאמה מושלמת.</ScreenTitle>
+      {unsure.length > 0 && <p className="text-ink-soft">שמות שסומנו כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
 
       <div className="mt-6">
-        <p className="mb-2 font-medium">שמות שאתם אוהבים, גם אם הם תפוסים</p>
+        <p className="mb-2 font-medium">שמות אהובים, גם אם הם תפוסים</p>
         <TagInput
-          label="שם שאתם אוהבים"
+          label="שם אהוב"
           values={state.namesWeLike}
           onChange={(namesWeLike) => update({ namesWeLike })}
           placeholder="למשל: שם של ילד של חברים"
@@ -120,10 +120,10 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
         <p className="mt-1 text-xs text-ink-soft">בסבב הבא נחפש שמות בסגנון שלהם.</p>
       </div>
 
-      {loading && <MascotSays mood="think" className="mt-6">בוחרים בשבילכם שם...</MascotSays>}
+      {loading && <MascotSays mood="think" className="mt-6">עוד רגע נבחר שם...</MascotSays>}
       {pick?.suggestion && !pick.dismissed && (
         <Card className="mt-6">
-          <p className="text-xs font-medium text-lavender-dark">הבחירה שלנו, שלא סימנתם</p>
+          <p className="text-xs font-medium text-lavender-dark">הבחירה שלנו, מתוך השמות שלא סומנו</p>
           <h2 className="mt-1 font-display text-3xl font-semibold">{pick.suggestion.name.niqqud}</h2>
           <p className="mt-2 text-sm">{pick.suggestion.reason}</p>
           <div className="mt-4 flex gap-2">

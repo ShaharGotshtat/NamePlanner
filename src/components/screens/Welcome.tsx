@@ -13,7 +13,7 @@ import { Button, inputClass, Toggle } from "../ui";
 const SEXES: { id: BabySex; label: string }[] = [
   { id: "boy", label: "בן" },
   { id: "girl", label: "בת" },
-  { id: "unknown", label: "עוד לא יודעים" },
+  { id: "unknown", label: "לא ידוע עדיין" },
 ];
 
 export function Welcome() {
@@ -78,11 +78,11 @@ export function Welcome() {
 
       {open === false ? (
         <p className="mt-8 rounded-2xl bg-white p-4 text-center font-medium">
-          היום כבר מלא אצלנו. נשמח לראות אתכם מחר!
+          היום כבר מלא אצלנו. נשמח לראותכם מחר!
         </p>
       ) : (
         <Button className="mt-8 w-full text-lg" disabled={!canStart(state.babySex, open)} onClick={start}>
-          בואו נתחיל
+          בואו נתחיל!
         </Button>
       )}
     </div>

@@ -70,7 +70,7 @@ function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate
 
   if (liked && liked.score >= LIKED_MATCH) {
     evaluation.lines.push({
-      requirement: "השמות שסימנתם כמעניינים",
+      requirement: "השמות שסומנו כמעניינים",
       fit: "met",
       detail: `בסגנון של ${liked.profile.entry!.nameHe}`,
     });
@@ -133,7 +133,7 @@ export function standardReason(c: Candidate): string {
   const meaning = `משמעות: ${c.entry.meaningHe}.`;
   if (c.likedMatch) return `בסגנון של ${c.likedMatch} שאהבתם. ${meaning}`;
   const { wantsMet, wantsTotal } = c.evaluation;
-  if (wantsTotal) return `עונה על ${wantsMet} מתוך ${wantsTotal} מההעדפות שלכם. ${meaning}`;
+  if (wantsTotal) return `עונה על ${wantsMet} מתוך ${wantsTotal} מההעדפות. ${meaning}`;
   return meaning;
 }
 

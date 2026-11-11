@@ -106,13 +106,13 @@ function FeedbackDialog({ options, onClose }: { options: OpenOptions; onClose: (
               onChange={(e) => setWebsite(e.target.value)}
             />
             <p className="mt-1 text-xs text-ink-soft">
-              {message.length}/{MAX_LENGTH} · ההודעה נשמרת עד שהיא נשלחת לצוות. אנא אל תכללו פרטים אישיים רגישים.
+              {message.length}/{MAX_LENGTH} · ההודעה נשמרת עד שהיא נשלחת לצוות. אין לכלול פרטים אישיים רגישים.
             </p>
-            {status === "limited" && <p className="mt-2 text-sm text-rose-dark">שלחתם הרבה הודעות בשעה האחרונה. נסו שוב מאוחר יותר.</p>}
-            {status === "failed" && <p className="mt-2 text-sm text-rose-dark">{withErrorId("השליחה לא הצליחה. נסו שוב.", failedId)}</p>}
+            {status === "limited" && <p className="mt-2 text-sm text-rose-dark">נשלחו הרבה הודעות בשעה האחרונה. אפשר לנסות שוב מאוחר יותר.</p>}
+            {status === "failed" && <p className="mt-2 text-sm text-rose-dark">{withErrorId("השליחה לא הצליחה. אפשר לנסות שוב.", failedId)}</p>}
             <div className="mt-4 flex gap-2">
               <Button onClick={submit} disabled={!message.trim() || status === "sending"}>
-                {status === "sending" ? "שולחים..." : "שליחה"}
+                {status === "sending" ? "בשליחה..." : "שליחה"}
               </Button>
               <Button variant="secondary" onClick={onClose}>
                 ביטול

@@ -8,11 +8,11 @@ export interface ChipDefinition {
 
 export const CHIPS: ChipDefinition[] = [
   { id: "unisex", label: "יוניסקס" },
-  { id: "englishFriendly", label: "קל לדוברי אנגלית" },
+  { id: "englishFriendly", label: "קל באנגלית" },
   { id: "oneSpelling", label: "כתיב אחד ברור" },
   { id: "clearMeaning", label: "משמעות עברית ברורה" },
   { id: "notTop20", label: "לא בטופ 20 בשנתיים האחרונות" },
-  { id: "fitsSiblings", label: "מתאים לשמות האחים" },
+  { id: "fitsSiblings", label: "מתאים לשמות האחים והאחיות" },
   { id: "flowsWithSurname", label: "זורם עם שם המשפחה" },
   { id: "grandparentFriendly", label: "יתקבל יפה אצל סבא וסבתא" },
   { id: "dueDateLink", label: "קשור לחג, לעונה או למזל", needsDueDate: true },

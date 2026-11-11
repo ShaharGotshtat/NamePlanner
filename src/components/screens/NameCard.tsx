@@ -36,9 +36,9 @@ const ORIGIN_LABELS: Record<Origin, string> = {
 
 /** The mascot's reaction to each verdict; the line is picked by name id so it stays put on re-render. */
 const REACTIONS: Record<Verdict, { mood: MascotMood; lines: string[] }> = {
-  interesting: { mood: "cheer", lines: ["יש! שמרתי אותו בצד.", "איזה יופי, נשמע מבטיח!", "מעולה, יש לנו מועמד!"] },
+  interesting: { mood: "cheer", lines: ["יש! שמרתי אותו בצד.", "איזה יופי, נשמע מבטיח!", "מעולה, יש לנו כיוון מבטיח!"] },
   unsure: { mood: "think", lines: ["בסדר, אפשר לחשוב על זה עוד.", "נחזור אליו בסיכום.", "גם \"אולי\" זו תשובה."] },
-  no: { mood: "sad", lines: ["אוף. לא נורא, יש עוד הרבה שמות.", "הבנתי, ממשיכים לחפש.", "אוקיי, הוא לא בשבילכם."] },
+  no: { mood: "sad", lines: ["אוף. לא נורא, יש עוד הרבה שמות.", "הבנתי, נמשיך לחפש.", "אוקיי, הוא לא מתאים."] },
   taken: { mood: "surprised", lines: ["אה, כבר תפוס! לא נציע אותו שוב."] },
 };
 
@@ -128,7 +128,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
           </dl>
           {explanation.length > 0 && (
             <div>
-              <p className="mb-2 font-medium">מול מה שביקשתם</p>
+              <p className="mb-2 font-medium">מול הבקשות</p>
               <ul className="space-y-2">
               {explanation.map((line) => (
                 <li key={line.requirement} className="flex items-start gap-2">
@@ -171,7 +171,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         </div>
       )}
 
-      <div className="mt-4 grid grid-cols-3 gap-2" role="radiogroup" aria-label={`מה דעתכם על ${name.nameHe}?`}>
+      <div className="mt-4 grid grid-cols-3 gap-2" role="radiogroup" aria-label={`הדירוג של ${name.nameHe}`}>
         {VERDICTS.map((v) => (
           <button
             key={v.id}
