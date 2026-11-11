@@ -37,11 +37,9 @@ export function Summary() {
 
       {(favorite || interesting.length > 1) && <ExportList names={interesting} favorite={favorite} />}
 
-      {!state.flagged && (
-        <Button variant="secondary" className="mt-8 w-full" onClick={goAgain}>
-          עוד סבב של שמות חדשים
-        </Button>
-      )}
+      <Button variant="secondary" className="mt-8 w-full" onClick={goAgain}>
+        עוד סבב של שמות חדשים
+      </Button>
     </div>
   );
 }

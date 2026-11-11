@@ -23,7 +23,7 @@ export interface CheckResult {
   ok: boolean;
 }
 
-const DROP_FREE_TEXT = { freeText: "", notes: [], flagged: true };
+const DROP_FREE_TEXT = { freeText: "", notes: [] };
 
 /** Sends the free text, names and family list for the input check and parsing. */
 export async function runCheck(s: AppState): Promise<CheckResult> {
