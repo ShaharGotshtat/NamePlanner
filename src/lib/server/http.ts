@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
+import { sendInBackground, serverErrorOccurrence } from "./github-errors";
 import { log, newRequestId, REQUEST_ID_HEADER, withRequestId } from "./request-id";
 import { decodeToken, encodeToken, type SessionClaims } from "./token";
 
 export const TOKEN_HEADER = "x-session-token";
+/** The error report endpoint never reports its own failures, so a broken report cannot loop. */
+const ERRORS_PATH = "/api/errors";
 
 export class HttpError extends Error {
   constructor(
@@ -48,6 +51,7 @@ export function handler(run: (request: Request) => Promise<{ body: object; sessi
           return fail(error.status, error.message);
         }
         log.error(`${path} 500`, error);
+        if (path !== ERRORS_PATH) sendInBackground(serverErrorOccurrence(path, requestId, error));
         return fail(500, "Server error");
       }
     });

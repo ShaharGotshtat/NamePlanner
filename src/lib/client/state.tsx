@@ -11,6 +11,7 @@ import type {
   RoundRequest,
   Suggestion,
 } from "@/lib/types";
+import { clearJourney, describeChange, track } from "./journey";
 
 export type Step = "welcome" | "family" | "preferences" | "rounds" | "summary";
 
@@ -111,7 +112,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const update = useCallback((change: Update) => {
-    setState((s) => (s ? { ...s, ...(typeof change === "function" ? change(s) : change) } : s));
+    setState((s) => {
+      if (!s) return s;
+      const patch = typeof change === "function" ? change(s) : change;
+      describeChange(patch).forEach(track);
+      return { ...s, ...patch };
+    });
   }, []);
 
   const startOver = useCallback(() => update(restartPatch), [update]);
@@ -120,6 +126,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
+    clearJourney();
     setState(initialState);
   }, []);
 
