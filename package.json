@@ -10,7 +10,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "data:build": "tsx scripts/build-names.ts",
-    "db:seed": "tsx scripts/seed-db.ts"
+    "db:seed": "tsx scripts/seed-db.ts",
+    "db:styles": "tsx scripts/load-styles.ts",
+    "styles:score": "tsx scripts/score-styles.ts",
+    "styles:sample": "tsx scripts/style-sample.ts",
+    "siblings:eval": "tsx scripts/sibling-eval.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

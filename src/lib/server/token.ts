@@ -1,4 +1,5 @@
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
+import type { ParsedProfile } from "@/lib/types";
 
 /** Limit counters for one session. Signed so the client cannot change them; holds no names or preferences. */
 export interface SessionClaims {
@@ -42,6 +43,23 @@ export function decodeToken(token: string | null, now = Date.now()): SessionClai
   if (expected.length !== given.length || !timingSafeEqual(expected, given)) return null;
   const claims = JSON.parse(Buffer.from(payload, "base64url").toString()) as SessionClaims;
   return now - claims.iat > LIMITS.sessionTtlMs ? null : claims;
+}
+
+/** Field by field, so the signature does not depend on key order after a JSON round trip. */
+const canonicalProfile = (p: ParsedProfile) =>
+  JSON.stringify([p.summary, p.requirements.map((r) => [r.id, r.label, r.kind, r.facet, r.values])]);
+
+export const signProfile = (profile: ParsedProfile): ParsedProfile => ({
+  ...profile,
+  sig: sign(`profile:${canonicalProfile(profile)}`),
+});
+
+/** The profile as the server parsed it, or null if it is unsigned or was changed on the client. */
+export function verifiedProfile(profile: ParsedProfile | null): ParsedProfile | null {
+  if (!profile?.sig) return null;
+  const expected = Buffer.from(sign(`profile:${canonicalProfile(profile)}`));
+  const given = Buffer.from(profile.sig);
+  return expected.length === given.length && timingSafeEqual(expected, given) ? profile : null;
 }
 
 export const canCallModel = (c: SessionClaims) => c.calls < LIMITS.callsPerSession;

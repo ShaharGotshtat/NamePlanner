@@ -26,8 +26,10 @@ With no environment variables the app runs on a 56-name sample (`data/names.samp
 
 - `data/cbs/babynamesIL-jewish.csv` holds the CBS yearly counts for the Jewish sector (from the babynamesIL package).
 - `data/name-content.tsv` holds the reviewed content for each name: niqqud, Latin spellings, meaning, origins, biblical source, spelling variants and tags.
+- `data/name-style.tsv` holds style scores, 1 to 5, scored once offline by a model and checked by a person: reach (easy to say abroad) and religious (mainly Haredi to mainly secular families). The rubric is in `scripts/styles.ts`. A third axis, era, is computed from CBS data only: the share-weighted average birth year of the babies given the name, cut by decade (`src/lib/names/era.ts`). Ranking uses them only to compare names, for "similar to the siblings" and "similar to names you liked"; they are never shown or used as filters. Sound hardness and length are computed from the letters.
+  - `npm run styles:score` scores names that have no row yet (needs `ANTHROPIC_API_KEY`); `npm run styles:sample -- out.md` writes the 50-name sample to check before loading.
 - `data/name-merges.tsv` lists spellings of one name that CBS counts apart (בת שבע and בתשבע, ליה and לייה). The first column is the spelling the app shows; the babies of the others are added to it before ranking, so counts, ranks, sex ratio and trends cover the whole name, and the other spellings become its variants. Only spellings said the same way go here; look-alike names (הלל and הילל) stay apart.
-- `npm run data:build` joins the files into `data/names.json`, keeping every name given to at least 50 babies since 2000.
+- `npm run data:build` joins these into `data/names.json`, keeping every name given to at least 50 babies since 2000.
 - `data/names.sample.json` is a small fixed list for local development and tests. The app never imports the full list: in production it reads names only from the database, and `data/names.json` is input for `npm run db:seed`.
 
 ## Database
@@ -37,6 +39,8 @@ With no environment variables the app runs on a 56-name sample (`data/names.samp
 ```bash
 DATABASE_URL="postgres://...pooler.supabase.com:6543/postgres" npm run db:seed
 ```
+
+`npm run db:styles` writes only the style scores from `data/names.json` (run `npm run data:build` first) into the names already in the database, matched by Hebrew name, and adds the `style_axes` column if needed. It changes nothing else. Until it runs, ranking falls back to the coarse style tag.
 
 Then set the same `DATABASE_URL` in the Vercel project's environment variables and redeploy.
 

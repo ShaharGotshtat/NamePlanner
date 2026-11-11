@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { setScreen, watchPage } from "@/lib/client/journey";
 import { backPatch } from "@/lib/client/navigation";
+import { hasSavedData } from "@/lib/client/options";
 import { AppProvider, useApp, type Step } from "@/lib/client/state";
 import { FeedbackProvider, useFeedback } from "./Feedback";
 import { Logo } from "./Mascot";
+import { OptionsButton } from "./Options";
 import { Copyright } from "./ui";
 import { Family } from "./screens/Family";
 import { Preferences } from "./screens/Preferences";
@@ -33,7 +35,7 @@ export function App() {
 }
 
 function Shell() {
-  const { state, update, startOver, deleteAll } = useApp();
+  const { state, update } = useApp();
   const openFeedback = useFeedback();
   const Screen = SCREENS[state.step];
   const canGoBack = backPatch(state) !== null;
@@ -80,16 +82,17 @@ function Shell() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col px-4">
       {/* The welcome screen shows the name as its own title, so it has no header. */}
-      {state.step !== "welcome" && (
+      {state.step !== "welcome" ? (
         <header className="flex items-center justify-between py-4">
           <Logo />
-          <button
-            className="min-h-11 text-sm text-ink-soft hover:underline"
-            onClick={() => confirm("להתחיל חיפוש חדש? הפרטים שהזנתם נשמרים ואפשר לערוך אותם. ההצבעות יימחקו, ושמות שסימנתם \"לא\" לא יוצעו שוב.") && startOver()}
-          >
-            התחלה מחדש
-          </button>
+          <OptionsButton />
         </header>
+      ) : (
+        hasSavedData(state) && (
+          <div className="flex justify-end pt-4">
+            <OptionsButton />
+          </div>
+        )
       )}
       {canGoBack && (
         <button className="-ms-2 mb-2 flex min-h-11 items-center gap-1 self-start rounded-xl px-2 text-sm font-medium text-ink-soft hover:bg-white" onClick={goBack}>
@@ -106,12 +109,6 @@ function Shell() {
           </Link>
           <button className="min-h-11 hover:underline" onClick={() => openFeedback()}>
             שליחת משוב
-          </button>
-          <button
-            className="min-h-11 hover:underline"
-            onClick={() => confirm("למחוק את כל הנתונים? כל מה שהזנתם יימחק מהמכשיר.") && deleteAll()}
-          >
-            מחיקת הנתונים
           </button>
         </nav>
         <Copyright />
