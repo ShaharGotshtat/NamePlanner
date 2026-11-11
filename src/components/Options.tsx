@@ -6,7 +6,7 @@ import { useApp } from "@/lib/client/state";
 import { Mascot } from "./Mascot";
 import { Button } from "./ui";
 
-type View = "menu" | "restart" | "delete";
+type View = "menu" | "delete";
 
 /** The header's "options" button. It opens a sheet that holds restarting and deleting all data. */
 export function OptionsButton({ className = "" }: { className?: string }) {
@@ -70,7 +70,10 @@ function OptionsSheet({ view, setView, onClose }: { view: View; setView: (v: Vie
                     icon={<RestartIcon />}
                     title="התחלה מחדש"
                     hint="ההצבעות מתאפסות. הפרטים וההעדפות נשמרים."
-                    onClick={() => setView("restart")}
+                    onClick={() => {
+                      startOver();
+                      onClose();
+                    }}
                   />
                   <hr className="border-line" />
                 </>
@@ -89,48 +92,32 @@ function OptionsSheet({ view, setView, onClose }: { view: View; setView: (v: Vie
           </>
         )}
 
-        {view === "restart" && (
-          <Confirm
-            titleId={titleId}
-            mood="think"
-            title="להתחיל חיפוש חדש?"
-            body={
-              <>
-                <Fact tone="safe" label="נשמר" text="פרטי המשפחה וההעדפות שהזנתם. אפשר לערוך אותם." />
-                <Fact tone="danger" label="מתאפס" text={'ההצבעות. שמות שסימנתם "לא" לא יוצעו שוב.'} />
-              </>
-            }
-            confirmLabel="כן, חיפוש חדש"
-            confirmClass="bg-lavender-dark text-white hover:bg-ink"
-            cancelLabel="ביטול"
-            onConfirm={() => {
-              startOver();
-              onClose();
-            }}
-            onCancel={onClose}
-          />
-        )}
-
         {view === "delete" && (
-          <Confirm
-            titleId={titleId}
-            mood="sad"
-            title="למחוק את כל הנתונים?"
-            body={
-              <>
-                <Fact tone="danger" label="יימחק מהמכשיר הזה" text="פרטי המשפחה, ההעדפות, כל ההצבעות והשמות שאהבתם." />
-                <p className="text-sm font-medium text-rose-deep">אי אפשר לשחזר אחרי המחיקה.</p>
-              </>
-            }
-            confirmLabel="כן, למחוק הכול"
-            confirmClass="bg-rose-deep text-white hover:bg-ink"
-            cancelLabel="השארת הנתונים"
-            onConfirm={() => {
-              deleteAll();
-              onClose();
-            }}
-            onCancel={onClose}
-          />
+          <div className="flex flex-col items-center gap-3 text-center">
+            <Mascot mood="sad" size={64} className="animate-mascot-pop" />
+            <h2 id={titleId} className="font-display text-xl font-semibold">
+              למחוק את כל הנתונים?
+            </h2>
+            <p className="w-full rounded-xl bg-cream px-3 py-2 text-start text-sm">
+              <span className="block text-xs font-semibold text-rose-deep">יימחק מהמכשיר הזה</span>
+              פרטי המשפחה, ההעדפות, כל ההצבעות והשמות שאהבתם.
+            </p>
+            <p className="text-sm font-medium text-rose-deep">אי אפשר לשחזר אחרי המחיקה.</p>
+            <div className="mt-1 flex w-full flex-col gap-2">
+              <button
+                className="min-h-11 w-full rounded-2xl bg-rose-deep px-5 font-medium text-white transition-colors hover:bg-ink"
+                onClick={() => {
+                  deleteAll();
+                  onClose();
+                }}
+              >
+                כן, למחוק הכול
+              </button>
+              <Button variant="secondary" className="w-full" onClick={onClose}>
+                השארת הנתונים
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </div>
@@ -164,55 +151,6 @@ function MenuRow({
         <span className="block text-sm text-ink-soft">{hint}</span>
       </span>
     </button>
-  );
-}
-
-function Confirm({
-  titleId,
-  mood,
-  title,
-  body,
-  confirmLabel,
-  confirmClass,
-  cancelLabel,
-  onConfirm,
-  onCancel,
-}: {
-  titleId: string;
-  mood: "think" | "sad";
-  title: string;
-  body: React.ReactNode;
-  confirmLabel: string;
-  confirmClass: string;
-  cancelLabel: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
-  return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <Mascot mood={mood} size={64} className="animate-mascot-pop" />
-      <h2 id={titleId} className="font-display text-xl font-semibold">
-        {title}
-      </h2>
-      <div className="flex w-full flex-col gap-2">{body}</div>
-      <div className="mt-1 flex w-full flex-col gap-2">
-        <button className={`min-h-11 w-full rounded-2xl px-5 font-medium transition-colors ${confirmClass}`} onClick={onConfirm}>
-          {confirmLabel}
-        </button>
-        <Button variant="secondary" className="w-full" onClick={onCancel}>
-          {cancelLabel}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function Fact({ tone, label, text }: { tone: "safe" | "danger"; label: string; text: string }) {
-  return (
-    <p className="rounded-xl bg-cream px-3 py-2 text-start text-sm">
-      <span className={`block text-xs font-semibold ${tone === "safe" ? "text-lavender-dark" : "text-rose-deep"}`}>{label}</span>
-      {text}
-    </p>
   );
 }
 
