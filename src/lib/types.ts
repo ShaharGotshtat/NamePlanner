@@ -81,7 +81,7 @@ export interface FamilyName {
 }
 
 export type ChipId =
-  | "unisex"
+  | "noUnisex"
   | "englishFriendly"
   | "oneSpelling"
   | "clearMeaning"

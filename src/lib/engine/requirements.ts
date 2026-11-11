@@ -1,7 +1,7 @@
 import type { ChipId, ChipLevel, ExplanationLine, Fit, NameEntry, RoundRequest, TextRequirement } from "@/lib/types";
 import { featuresOf, findByName, nameSex, wasInTop } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
-import { chipLabel } from "./chips";
+import { chipLabel, isFilterChip } from "./chips";
 import { closest, profileOf, profileOfText, type NameProfile } from "./similarity";
 
 export interface MatchContext {
@@ -46,8 +46,8 @@ function surnameClashes(entry: NameEntry, surname: string): string[] {
 /** Returns null when the parent gave no data to check the chip against. */
 function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | null {
   switch (id) {
-    case "unisex":
-      return fit(nameSex(entry) === "unisex", "ניתן גם לבנים וגם לבנות", "ניתן בעיקר למין אחד");
+    case "noUnisex":
+      return fit(nameSex(entry) !== "unisex", "ניתן בעיקר למין אחד", "ניתן גם לבנים וגם לבנות");
     case "englishFriendly":
       return fit(entry.tags.englishFriendly, "קל להגייה ולאיות באנגלית", "יש בו צליל שקשה להגות באנגלית");
     case "oneSpelling":
@@ -155,6 +155,10 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
   for (const [id, level] of Object.entries(req.chips) as [ChipId, ChipLevel][]) {
     const check = checkChip(id, entry, ctx);
     if (!check) continue;
+    if (isFilterChip(id)) {
+      mustsMet &&= check.fit === "met";
+      continue;
+    }
     const label = level === "must" ? `${chipLabel(id)} (חובה)` : chipLabel(id);
     lines.push({ requirement: label, ...check });
     if (level === "must") mustsMet &&= check.fit === "met";
