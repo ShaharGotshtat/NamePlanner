@@ -15,7 +15,7 @@ const HEADER_MOOD: Record<Verdict | "start", MascotMood> = {
   start: "happy",
   interesting: "cheer",
   unsure: "idea",
-  no: "sad",
+  no: "neutral",
   taken: "surprised",
 };
 
