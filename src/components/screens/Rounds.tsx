@@ -6,7 +6,7 @@ import { runCheck } from "@/lib/client/preferences";
 import { roundRequest, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
-import { Mascot, type MascotMood } from "../Mascot";
+import { Mascot, ThinkingMascot, type MascotMood } from "../Mascot";
 import { Button, inputClass } from "../ui";
 import { NameCard } from "./NameCard";
 
@@ -14,8 +14,8 @@ import { NameCard } from "./NameCard";
 const HEADER_MOOD: Record<Verdict | "start", MascotMood> = {
   start: "happy",
   interesting: "cheer",
-  unsure: "think",
-  no: "sad",
+  unsure: "idea",
+  no: "neutral",
   taken: "surprised",
 };
 
@@ -139,7 +139,7 @@ export function Rounds() {
   if (!round || loading) {
     return (
       <div className="flex flex-col items-center pt-16 text-center text-ink-soft">
-        <Mascot mood="think" size={96} className="animate-mascot-bob" />
+        <ThinkingMascot size={96} className="animate-mascot-bob" />
         <p className="mt-3">עוד רגע יגיעו הצעות...</p>
       </div>
     );
