@@ -1,4 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { readStyles } from "./styles";
+import { averageBirthYear, eraOfYear } from "../src/lib/names/era";
 import type { MeaningCategory, NameEntry, Origin, Style, YearStat } from "../src/lib/types";
 
 /** Names given to fewer babies than this in 2000-2024 are too rare for the lists. */
@@ -71,6 +73,12 @@ for (const line of readFileSync("data/cbs/babynamesIL-jewish.csv", "utf8").trim(
   counts.set(name, byYear);
 }
 
+// All babies born each year, for the era: a name's share of a year, not its raw count.
+const birthsByYear = new Map<number, number>();
+for (const byYear of counts.values()) {
+  for (const [year, cell] of byYear) birthsByYear.set(year, (birthsByYear.get(year) ?? 0) + cell.F + cell.M);
+}
+
 const lastYear = Math.max(...[...counts.values()].flatMap((m) => [...m.keys()]));
 
 // Rank of each name within each sex, every year.
@@ -107,6 +115,13 @@ const content = new Map(
 const missing = chosen.filter((c) => !content.has(c.name)).map((c) => c.name);
 if (missing.length) throw new Error(`No content for ${missing.length} names: ${missing.join(", ")}`);
 
+// Style scores, one row per name. A name without a row keeps the coarse style tag only.
+const styles = readStyles();
+const chosenNames = new Set(chosen.map((c) => c.name));
+const unknownStyled = [...styles.keys()].filter((name) => !chosenNames.has(name));
+// A spelling merged into another name keeps its old row until someone removes it: harmless, so only warn.
+if (unknownStyled.length) console.warn(`Style scores for names that are not in the list (ignored): ${unknownStyled.join(", ")}`);
+
 const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const c = content.get(name)!;
   const sexRatio = boys / (girls + boys);
@@ -140,8 +155,11 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
       links: links(c.links),
     },
     stats,
+    ...(styles.has(name) ? { styleAxes: { era: eraOfYear(averageBirthYear(stats, birthsByYear)), ...styles.get(name)! } } : {}),
   };
 });
 
 writeFileSync("data/names.json", JSON.stringify(names));
+const unstyled = names.filter((n) => !n.styleAxes).map((n) => n.nameHe);
+if (unstyled.length) console.warn(`No style scores yet for ${unstyled.length} names (run npm run styles:score): ${unstyled.join(", ")}`);
 console.log(`Wrote ${names.length} names to data/names.json (CBS ${FROM_YEAR}-${lastYear}, at least ${MIN_BABIES} babies)`);

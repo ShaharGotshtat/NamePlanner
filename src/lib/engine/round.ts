@@ -50,7 +50,7 @@ function signalsFor(names: NameEntry[], req: RoundRequest): Signals {
     return entry ? profileOf(entry) : profileOfText(n);
   });
   const noPatterns = findNoPatterns(noEntries, interestingEntries);
-  return { ctx: matchContext(req), byVerdict, references, noPatterns };
+  return { ctx: matchContext(req, names), byVerdict, references, noPatterns };
 }
 
 function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate | null {
@@ -110,10 +110,14 @@ export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["baby
   const picked: Candidate[] = [];
   const slots: (NameSex | null)[] = babySex === "unknown" ? SLOTS_FOR_UNKNOWN : Array(ROUND_SIZE).fill(null);
 
+  // Only strong names: the same shortlist the model chooses from. A slot with no name of its sex
+  // on the shortlist takes the best one further down.
+  const shortlist = candidates.slice(0, MODEL_CANDIDATES);
   for (const slot of slots) {
-    const pool = candidates.filter((c) => !picked.includes(c));
+    const pool = shortlist.filter((c) => !picked.includes(c));
     const inSlot = slot ? pool.filter((c) => c.sex === slot) : pool;
-    const choices = inSlot.length ? inSlot : pool;
+    const firstOfSex = slot && !inSlot.length ? candidates.find((c) => c.sex === slot && !picked.includes(c)) : undefined;
+    const choices = inSlot.length ? inSlot : firstOfSex ? [firstOfSex] : pool;
     const adjusted = (c: Candidate) =>
       c.score - WEIGHTS.diversity * Math.max(0, ...picked.map((p) => similarity(profileOf(c.entry), profileOf(p.entry))));
     const best = choices.reduce<Candidate | null>((top, c) => (!top || adjusted(c) > adjusted(top) ? c : top), null);

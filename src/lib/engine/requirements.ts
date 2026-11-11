@@ -1,8 +1,8 @@
 import type { ChipId, ChipLevel, ExplanationLine, Fit, NameEntry, RoundRequest, TextRequirement } from "@/lib/types";
-import { featuresOf, nameSex, wasInTop } from "@/lib/names/catalog";
+import { featuresOf, findByName, nameSex, wasInTop } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
 import { chipLabel } from "./chips";
-import { closest, profileOfText, type NameProfile } from "./similarity";
+import { closest, profileOf, profileOfText, type NameProfile } from "./similarity";
 
 export interface MatchContext {
   siblings: NameProfile[];
@@ -10,14 +10,22 @@ export interface MatchContext {
   dueLinks: string[];
 }
 
-export function matchContext(req: Pick<RoundRequest, "family" | "surname" | "dueDerived">): MatchContext {
+/** Siblings found in the name list are compared on everything we know about them, including style. */
+export function matchContext(req: Pick<RoundRequest, "family" | "surname" | "dueDerived">, names: NameEntry[] = []): MatchContext {
   const due = req.dueDerived;
+  const profileOfName = (name: string) => {
+    const entry = findByName(names, name);
+    return entry ? profileOf(entry) : profileOfText(name);
+  };
   return {
-    siblings: req.family.filter((f) => f.relation === "sibling").map((f) => profileOfText(f.name)),
+    siblings: req.family.filter((f) => f.relation === "sibling").map((f) => profileOfName(f.name)),
     surname: normalizeHebrew(req.surname),
     dueLinks: due ? [due.hebrewMonth, due.holiday, due.zodiac, due.season].filter((v): v is string => !!v) : [],
   };
 }
+
+/** Similarity at which a name counts as being in the siblings' style. */
+export const SIBLING_MATCH = 0.67;
 
 interface Check {
   fit: Fit;
@@ -58,9 +66,9 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
       return fit(!!link, `קשור ל${link}`, "אין לו קשר לתאריך הלידה");
     }
     case "fitsSiblings": {
-      const match = closest({ features: featuresOf(entry), entry }, ctx.siblings);
+      const match = closest(profileOf(entry), ctx.siblings);
       if (!match) return null;
-      if (match.score >= 0.67) return { fit: "met", detail: "באורך ובצליל של שמות האחים" };
+      if (match.score >= SIBLING_MATCH) return { fit: "met", detail: `בסגנון של ${match.profile.name}` };
       if (match.score >= 0.34) return { fit: "partly", detail: "דומה בחלק מהמאפיינים לשמות האחים" };
       return { fit: "not_met", detail: "שונה בסגנון משמות האחים" };
     }
@@ -164,9 +172,9 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
   }
 
   if (ctx.siblings.length && !req.chips.fitsSiblings) {
-    const match = closest({ features: featuresOf(entry), entry }, ctx.siblings);
-    if (match && match.score >= 0.67) {
-      lines.push({ requirement: "הטעם של שמות האחים", fit: "met", detail: "באורך ובצליל של שמות האחים" });
+    const match = closest(profileOf(entry), ctx.siblings);
+    if (match && match.score >= SIBLING_MATCH) {
+      lines.push({ requirement: "הטעם של שמות האחים", fit: "met", detail: `בסגנון של ${match.profile.name}` });
     }
   }
 

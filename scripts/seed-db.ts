@@ -28,6 +28,7 @@ await sql.begin(async (tx) => {
     tags: tx.json(n.tags),
     features: tx.json(computeFeatures(n.nameHe, n.translit[0])),
     stats: tx.json(n.stats),
+    style_axes: n.styleAxes ? tx.json({ ...n.styleAxes }) : null,
   }));
   for (let i = 0; i < rows.length; i += 200) await tx`insert into names ${tx(rows.slice(i, i + 200))}`;
   await tx`insert into app_settings (key, value) values ('daily_budget_usd', '3') on conflict (key) do nothing`;

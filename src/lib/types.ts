@@ -20,6 +20,20 @@ export type MeaningCategory =
 export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "yiddish" | "english" | "other";
 export type Style = "traditional" | "classic" | "modern";
 
+/**
+ * How a name feels, 1 to 5 on each axis. Era is computed from CBS data; reach and religious are
+ * scored once offline by a model (data/name-style.tsv) and checked by a person.
+ * Only used to compare names with each other: never shown to parents and never used to filter.
+ */
+export interface StyleAxes {
+  /** From the share-weighted average birth year: 1 before 1975, 2 1975-1989, 3 the 1990s, 4 the 2000s, 5 from 2010 (src/lib/names/era.ts). */
+  era: number;
+  /** 1 very hard to say abroad, 3 sayable but awkward, 5 an international name with the same sound. */
+  reach: number;
+  /** Who mostly gives the name today: 1 mainly Haredi families, 3 every community, 5 mainly secular families. */
+  religious: number;
+}
+
 export interface YearStat {
   year: number;
   count: number;
@@ -50,6 +64,8 @@ export interface NameEntry {
     links: string[];
   };
   stats: YearStat[];
+  /** Missing until the scores are loaded; comparisons then fall back to the coarse style tag. */
+  styleAxes?: StyleAxes;
 }
 
 export type Relation = "sibling" | "cousin" | "parent" | "grandparent" | "other";
