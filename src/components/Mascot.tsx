@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
 
-export type MascotMood = "happy" | "cheer" | "cloud" | "idea" | "detective" | "neutral" | "sad" | "surprised";
+export type MascotMood = "happy" | "cheer" | "cloud" | "idea" | "detective" | "neutral" | "hopeful" | "sad" | "surprised";
 
 /** The three ways the sun can look while it thinks or searches. */
 export const THINKING_MOODS = ["cloud", "idea", "detective"] as const satisfies readonly MascotMood[];
@@ -46,6 +46,7 @@ const LABELS: Record<MascotMood, string> = {
   idea: "שמש קטנה עם רעיון",
   detective: "שמש בלשית שמחפשת שמות",
   neutral: "שמש קטנה שמקבלת את ההחלטה",
+  hopeful: "שמש קטנה עם עיניים נוצצות של תקווה",
   sad: "שמש קטנה ועצובה",
   surprised: "שמש קטנה ומופתעת",
 };
@@ -82,6 +83,26 @@ function Eyes({ mood }: { mood: MascotMood }) {
       <g fill={INK}>
         <ellipse cx="60" cy="90" rx="6.5" ry="8" />
         <circle cx="62" cy="87" r="2.4" fill="#fff" />
+      </g>
+    );
+  }
+  if (mood === "hopeful") {
+    return (
+      <g>
+        <g stroke={INK} strokeWidth="3" strokeLinecap="round" fill="none">
+          <path d="M54 75 Q60 70 68 73" />
+          <path d="M106 75 Q100 70 92 73" />
+        </g>
+        <g fill={INK}>
+          <ellipse cx="62" cy="88" rx="8" ry="9.5" />
+          <ellipse cx="98" cy="88" rx="8" ry="9.5" />
+        </g>
+        <g fill="#fff">
+          <path d="M65 79.5 Q65 84 69.5 84 Q65 84 65 88.5 Q65 84 60.5 84 Q65 84 65 79.5Z" />
+          <path d="M101 79.5 Q101 84 105.5 84 Q101 84 101 88.5 Q101 84 96.5 84 Q101 84 101 79.5Z" />
+          <circle cx="59" cy="93" r="1.6" />
+          <circle cx="95" cy="93" r="1.6" />
+        </g>
       </g>
     );
   }
@@ -126,6 +147,8 @@ function Mouth({ mood }: { mood: MascotMood }) {
       return <path d="M66 106 Q76 116 86 106" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
     case "sad":
       return <path d="M72 110 Q80 103 88 110" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
+    case "hopeful":
+      return <path d="M75 108 Q80 109 85 108" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
     case "neutral":
       return <path d="M73 107 H87" stroke={INK} strokeWidth="3.5" strokeLinecap="round" />;
     case "surprised":
@@ -222,7 +245,7 @@ function MagnifyingGlass() {
  * The mood changes its face to react to what the user does.
  */
 export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: MascotMood; size?: number; className?: string }) {
-  const cheek = mood === "sad" ? 0.3 : mood === "neutral" ? 0.4 : mood === "cheer" ? 0.7 : mood === "idea" ? 0.65 : 0.5;
+  const cheek = mood === "sad" ? 0.3 : mood === "neutral" ? 0.4 : mood === "cheer" ? 0.7 : mood === "idea" || mood === "hopeful" ? 0.65 : 0.5;
   return (
     <svg
       viewBox="0 0 160 170"
@@ -249,6 +272,12 @@ export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: 
       {mood === "detective" && <MagnifyingGlass />}
       {mood === "idea" && <Lightbulb />}
       {mood === "cloud" && <ThoughtCloud />}
+      {mood === "hopeful" && (
+        <g fill={SUN} stroke={SUN_EDGE} strokeWidth="1.2">
+          <path d="M124 29 Q124 36 131 36 Q124 36 124 43 Q124 36 117 36 Q124 36 124 29Z" />
+          <path d="M36 35 Q36 40 41 40 Q36 40 36 45 Q36 40 31 40 Q36 40 36 35Z" />
+        </g>
+      )}
     </svg>
   );
 }
