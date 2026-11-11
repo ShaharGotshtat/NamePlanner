@@ -26,7 +26,8 @@ With no environment variables the app runs on a 56-name sample (`data/names.samp
 
 - `data/cbs/babynamesIL-jewish.csv` holds the CBS yearly counts for the Jewish sector (from the babynamesIL package).
 - `data/name-content.tsv` holds the reviewed content for each name: niqqud, Latin spellings, meaning, origins, biblical source, spelling variants and tags.
-- `npm run data:build` joins the two into `data/names.json`, keeping every name given to at least 50 babies since 2000.
+- `data/name-merges.tsv` lists spellings of one name that CBS counts apart (בת שבע and בתשבע, ליה and לייה). The first column is the spelling the app shows; the babies of the others are added to it before ranking, so counts, ranks, sex ratio and trends cover the whole name, and the other spellings become its variants. Only spellings said the same way go here; look-alike names (הלל and הילל) stay apart.
+- `npm run data:build` joins the files into `data/names.json`, keeping every name given to at least 50 babies since 2000.
 - `data/names.sample.json` is a small fixed list for local development and tests. The app never imports the full list: in production it reads names only from the database, and `data/names.json` is input for `npm run db:seed`.
 
 ## Database
