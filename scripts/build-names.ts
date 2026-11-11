@@ -63,16 +63,38 @@ function links(value: string): string[] {
   return [...new Set(cleaned.filter((l) => LINKS.has(l)))];
 }
 
+// Spellings of one name that CBS counts apart (בת שבע and בתשבע, ליה and לייה). Each line is the
+// spelling the app shows, then the others. Their babies are added to it before ranking, so counts,
+// ranks, sex ratio and trends are those of the whole name; the other spellings become variants.
+const mainOf = new Map<string, string>();
+const spellingsOf = new Map<string, string[]>();
+for (const row of readFileSync("data/name-merges.tsv", "utf8").trim().split("\n").slice(1)) {
+  const [main, others] = row.split("\t");
+  const spellings = list(others ?? "");
+  if (!spellings.length) throw new Error(`name-merges.tsv: ${main} has no other spellings`);
+  for (const spelling of [main, ...spellings]) {
+    if (mainOf.has(spelling) || spellingsOf.has(spelling)) throw new Error(`name-merges.tsv: ${spelling} is listed twice`);
+  }
+  spellingsOf.set(main, spellings);
+  for (const spelling of spellings) mainOf.set(spelling, main);
+}
+
 // CBS counts: year,sex,name,n for the Jewish sector, from the babynamesIL package.
 const counts = new Map<string, Map<number, { F: number; M: number }>>();
+const cbsNames = new Set<string>();
 for (const line of readFileSync("data/cbs/babynamesIL-jewish.csv", "utf8").trim().split("\n").slice(1)) {
-  const [year, sex, name, n] = line.split(",");
+  const [year, sex, spelling, n] = line.split(",");
+  cbsNames.add(spelling);
+  const name = mainOf.get(spelling) ?? spelling;
   const byYear = counts.get(name) ?? new Map();
   const cell = byYear.get(Number(year)) ?? { F: 0, M: 0 };
   cell[sex as "F" | "M"] += Number(n);
   byYear.set(Number(year), cell);
   counts.set(name, byYear);
 }
+
+const notInCbs = [...spellingsOf.keys(), ...mainOf.keys()].filter((n) => !cbsNames.has(n));
+if (notInCbs.length) throw new Error(`name-merges.tsv lists spellings that are not in the CBS data: ${notInCbs.join(", ")}`);
 
 // All babies born each year, for the era: a name's share of a year, not its raw count.
 const birthsByYear = new Map<number, number>();
@@ -113,6 +135,11 @@ const content = new Map(
   }),
 );
 
+const mergedAway = [...mainOf].filter(([spelling]) => content.has(spelling));
+if (mergedAway.length) {
+  throw new Error(`Content rows for spellings merged into another name: ${mergedAway.map(([s, m]) => `${s} (into ${m})`).join(", ")}`);
+}
+
 const missing = chosen.filter((c) => !content.has(c.name)).map((c) => c.name);
 if (missing.length) throw new Error(`No content for ${missing.length} names: ${missing.join(", ")}`);
 
@@ -135,7 +162,7 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   }
   const unknownTags = list(c.tags).filter((t) => !CATEGORIES[t]);
   if (unknownTags.length) throw new Error(`${name}: unknown tags ${unknownTags.join(", ")}`);
-  const variants = list(c.variants);
+  const variants = [...new Set([...(spellingsOf.get(name) ?? []), ...list(c.variants)])].filter((v) => v !== name);
   return {
     id: i + 1,
     nameHe: name,
