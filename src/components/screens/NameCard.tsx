@@ -38,7 +38,7 @@ const ORIGIN_LABELS: Record<Origin, string> = {
 const REACTIONS: Record<Verdict, { mood: MascotMood; lines: string[] }> = {
   interesting: { mood: "cheer", lines: ["יש! שמרתי אותו בצד.", "איזה יופי, נשמע מבטיח!", "מעולה, יש לנו מועמד!"] },
   unsure: { mood: "think", lines: ["בסדר, אפשר לחשוב על זה עוד.", "נחזור אליו בסיכום.", "גם \"אולי\" זו תשובה."] },
-  no: { mood: "sad", lines: ["אוף. לא נורא, יש עוד הרבה שמות.", "הבנתי, ממשיכים לחפש.", "אוקיי, הוא לא בשבילכם."] },
+  no: { mood: "sad", lines: ["לא נורא ואנחנו על זה, יש עוד הרבה שמות!", "הבנתי, ממשיכים לחפש.", "אוקיי, הוא לא בשבילכם."] },
   taken: { mood: "surprised", lines: ["אה, כבר תפוס! לא נציע אותו שוב."] },
 };
 

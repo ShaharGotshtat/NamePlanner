@@ -106,7 +106,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
 
   return (
     <>
-      <ScreenTitle mood="sad">מצטערים, לא מצאנו התאמה מושלמת.</ScreenTitle>
+      <ScreenTitle mood="sad">עוד לא מצאנו את השם המושלם, אפשר להמשיך לחפש!</ScreenTitle>
       {unsure.length > 0 && <p className="text-ink-soft">שמות שסימנתם כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
 
       <div className="mt-6">
