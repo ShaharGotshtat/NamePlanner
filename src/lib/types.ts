@@ -15,7 +15,12 @@ export type MeaningCategory =
   | "royalty"
   | "life"
   /** The name is known as the name of a biblical figure. A word that only appears in the Tanakh does not count. */
-  | "biblical";
+  | "biblical"
+  /**
+   * The name describes its bearer (תמיר, יפה, בלה, אהובה) or is a character trait or feeling word
+   * (תום, עוז, שמחה). A possessive form (רוני: "my joy") or another abstract noun (שלום, הדר) does not count.
+   */
+  | "trait";
 
 export type Origin = "hebrew" | "aramaic" | "arabic" | "greek" | "latin" | "persian" | "yiddish" | "english" | "other";
 export type Style = "traditional" | "classic" | "modern";

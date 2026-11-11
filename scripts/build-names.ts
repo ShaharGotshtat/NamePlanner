@@ -22,6 +22,7 @@ const CATEGORIES: Record<string, MeaningCategory> = {
   מלכות: "royalty",
   חיים: "life",
   "תנ״כי": "biblical",
+  תכונה: "trait",
 };
 
 const ORIGINS: [string, Origin][] = [

@@ -32,9 +32,9 @@ Otherwise, turn each wish into requirements. Each requirement has:
 - label: the wish in short, natural Hebrew, as the parent would say it.
 - kind: "want" for something the parent wants, "avoid" for something they do not want.
 - facet and values, using only these:
-  - meaningCategory: nature, light, strength, joy, faith, love, beauty, peace, wisdom, gift, royalty, life, biblical
+  - meaningCategory: nature, light, strength, joy, faith, love, beauty, peace, wisdom, gift, royalty, life, biblical, trait
   - origin: hebrew, aramaic, arabic, greek, latin, persian, yiddish, english, other. This is the language the name comes from. Use it only when the parent names a language, for example "a Hebrew name" or "not Arabic".
-Themes always use meaningCategory, never origin. A wish for a biblical name, or to avoid one ("not biblical", "too biblical"), is meaningCategory biblical with kind want or avoid. A name whose word only appears in the Tanakh, such as a colour or a plant, is not biblical.
+Themes always use meaningCategory, never origin. A wish for a biblical name, or to avoid one ("not biblical", "too biblical"), is meaningCategory biblical with kind want or avoid. A name whose word only appears in the Tanakh, such as a colour or a plant, is not biblical. A wish for a name that is a character trait or a feeling ("שם שהוא תכונה", "a name like Tom or Simcha") is meaningCategory trait.
   - style: traditional, classic, modern
   - length: short, long
   - ending: Hebrew letters the name ends with, for example "אל"
