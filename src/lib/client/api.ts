@@ -1,4 +1,5 @@
 import { APP_VERSION } from "@/lib/constants";
+import { reportError, track } from "./journey";
 import type { ParsedProfile, RoundRequest, Suggestion } from "@/lib/types";
 
 export class ApiError extends Error {
@@ -27,8 +28,14 @@ async function post<T>(path: string, body: unknown, token: string | null): Promi
   });
   if (!response.ok) {
     const body = await response.json().catch(() => null);
-    throw new ApiError(response.status, body?.errorId ?? response.headers.get("x-request-id"));
+    const errorId = body?.errorId ?? response.headers.get("x-request-id");
+    track(`api ${path} ${response.status}${errorId ? ` (${errorId})` : ""}`);
+    if (response.status >= 500) {
+      reportError({ kind: "server", message: `${path} ${response.status}`, errorId, path, status: response.status });
+    }
+    throw new ApiError(response.status, errorId);
   }
+  track(`api ${path} ${response.status}`);
   return response.json();
 }
 
