@@ -39,7 +39,7 @@ export function Preferences() {
       setMessage(result.message);
       if (result.ok && !result.patch.profile?.summary && !result.message) goToRounds();
     } catch (error) {
-      setMessage(withErrorId("משהו השתבש. נסו שוב.", errorIdOf(error)));
+      setMessage(withErrorId("משהו השתבש. אפשר לנסות שוב.", errorIdOf(error)));
     } finally {
       setBusy(false);
     }
@@ -47,7 +47,7 @@ export function Preferences() {
 
   return (
     <div>
-      <ScreenTitle mood="happy" subtitle="בחרו כל מה שחשוב לכם. אפשר לבחור כמה שרוצים.">מה חשוב לכם בשם?</ScreenTitle>
+      <ScreenTitle mood="happy" subtitle="אפשר לבחור כל מה שחשוב.">מה חשוב לכם בשם?</ScreenTitle>
 
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => {
@@ -97,14 +97,14 @@ export function Preferences() {
 
       <div className="mt-8">
         <p className="mb-2 font-medium">
-          שמות שאתם אוהבים <span className="text-sm font-normal text-ink-soft">(נלמד מהסגנון שלהם, בלי להציע אותם)</span>
+          שמות אהובים <span className="text-sm font-normal text-ink-soft">(נלמד מהסגנון שלהם, בלי להציע אותם)</span>
         </p>
-        <TagInput label="שם שאתם אוהבים" values={state.namesWeLike} onChange={(namesWeLike) => update({ namesWeLike })} placeholder="למשל: תמר" />
+        <TagInput label="שם אהוב" values={state.namesWeLike} onChange={(namesWeLike) => update({ namesWeLike })} placeholder="למשל: תמר" />
       </div>
 
       {!state.freeTextDisabled && (
         <label className="mt-8 block">
-          <span className="mb-2 block font-medium">ספרו לנו עוד</span>
+          <span className="mb-2 block font-medium">עוד משהו שחשוב לדעת?</span>
           <textarea
             className={`${inputClass} min-h-24 py-2`}
             maxLength={500}
@@ -116,12 +116,12 @@ export function Preferences() {
       )}
 
       {!pending && state.profile?.summary && (
-        <p className="mt-4 rounded-2xl bg-lavender-soft p-3 text-sm">{state.profile.summary} לא מדויק? שנו את הטקסט ונבדוק שוב.</p>
+        <p className="mt-4 rounded-2xl bg-lavender-soft p-3 text-sm">{state.profile.summary} לא מדויק? אפשר לנסות שוב.</p>
       )}
       {message && <p className="mt-4 rounded-2xl bg-white p-3 text-sm ring-1 ring-line">{message}</p>}
 
       <Button className="mt-8 w-full" onClick={proceed} disabled={busy}>
-        {busy ? "בודקים..." : pending ? "המשך" : "נראה טוב, להצעות"}
+        {busy ? "אנחנו על זה..." : pending ? "המשך" : "נראה טוב, להצעות"}
       </Button>
     </div>
   );

@@ -49,7 +49,7 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
     case "unisex":
       return fit(nameSex(entry) === "unisex", "ניתן גם לבנים וגם לבנות", "ניתן בעיקר למין אחד");
     case "englishFriendly":
-      return fit(entry.tags.englishFriendly, "קל להגייה ולאיות באנגלית", "יש בו צליל שקשה לדוברי אנגלית");
+      return fit(entry.tags.englishFriendly, "קל להגייה ולאיות באנגלית", "יש בו צליל שקשה להגות באנגלית");
     case "oneSpelling":
       return fit(entry.tags.singleSpelling, "נכתב רק בדרך אחת", "יש לו יותר מכתיב מקובל אחד");
     case "clearMeaning":
@@ -69,8 +69,8 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
       const match = closest(profileOf(entry), ctx.siblings);
       if (!match) return null;
       if (match.score >= SIBLING_MATCH) return { fit: "met", detail: `בסגנון של ${match.profile.name}` };
-      if (match.score >= 0.34) return { fit: "partly", detail: "דומה בחלק מהמאפיינים לשמות האחים" };
-      return { fit: "not_met", detail: "שונה בסגנון משמות האחים" };
+      if (match.score >= 0.34) return { fit: "partly", detail: "דומה בחלק מהמאפיינים לשמות האחים והאחיות" };
+      return { fit: "not_met", detail: "שונה בסגנון משמות האחים והאחיות" };
     }
     case "flowsWithSurname": {
       if (!ctx.surname) return null;
@@ -174,7 +174,7 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
   if (ctx.siblings.length && !req.chips.fitsSiblings) {
     const match = closest(profileOf(entry), ctx.siblings);
     if (match && match.score >= SIBLING_MATCH) {
-      lines.push({ requirement: "הטעם של שמות האחים", fit: "met", detail: `בסגנון של ${match.profile.name}` });
+      lines.push({ requirement: "הטעם של שמות האחים והאחיות", fit: "met", detail: `בסגנון של ${match.profile.name}` });
     }
   }
 

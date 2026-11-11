@@ -38,7 +38,7 @@ export async function runCheck(s: AppState): Promise<CheckResult> {
     case "unavailable":
       return {
         ok: true,
-        message: hasText ? withErrorId("לא הצלחנו לעבד את הטקסט כרגע. ההצעות יתבססו על הבחירות שלכם.", errorId) : null,
+        message: hasText ? withErrorId("לא הצלחנו לעבד את הטקסט כרגע. ההצעות יתבססו על הבחירות שסומנו.", errorId) : null,
         patch: checked,
       };
     case "flagged":

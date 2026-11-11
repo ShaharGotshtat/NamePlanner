@@ -83,7 +83,7 @@ describe("siblings", () => {
   it("still work for a sibling name that is not in the list", () => {
     const ranked = rankCandidates(names, request({ babySex: "girl", family: siblings("זהבית"), chips: { fitsSiblings: "want" } }));
     expect(ranked.length).toBeGreaterThan(0);
-    expect(ranked[0].evaluation.lines[0].requirement).toBe("מתאים לשמות האחים");
+    expect(ranked[0].evaluation.lines[0].requirement).toBe("מתאים לשמות האחים והאחיות");
   });
 });
 
