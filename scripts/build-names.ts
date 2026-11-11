@@ -112,7 +112,8 @@ if (missing.length) throw new Error(`No content for ${missing.length} names: ${m
 const styles = readStyles();
 const chosenNames = new Set(chosen.map((c) => c.name));
 const unknownStyled = [...styles.keys()].filter((name) => !chosenNames.has(name));
-if (unknownStyled.length) throw new Error(`Style scores for names that are not in the list: ${unknownStyled.join(", ")}`);
+// A spelling merged into another name keeps its old row until someone removes it: harmless, so only warn.
+if (unknownStyled.length) console.warn(`Style scores for names that are not in the list (ignored): ${unknownStyled.join(", ")}`);
 
 const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const c = content.get(name)!;

@@ -10,19 +10,19 @@ export const AXES = ["era", "reach", "religious"] as const satisfies readonly (k
  */
 export const RUBRIC = `Score each Israeli first name from 1 to 5 on three axes. Judge how the name is perceived in Israel today, not its etymology.
 
-era: how old or new the name feels.
-1 = grandparents' generation, now rarely given to babies (שושנה, יורם, זהבה).
-2 = parents' generation, or long-standing traditional (מיכל, אורית, משה, רבקה).
-3 = timeless, used in every generation without feeling old or new (דניאל, תמר, יונתן).
-4 = contemporary, typical of babies of the 2000s and 2010s (נועה, עומר, איתי).
-5 = newest wave, mostly since about 2015 (ארבל, ליב, אימרי, גאיה).
+era: how old or new the name feels to Israeli parents today. This is about the feel, not how many babies get it: a traditional name can feel old even if religious families still give it often.
+1 = old-fashioned: grandparents' names, and traditional biblical or rabbinic names with an old feel (שושנה, יורם, משה, ראובן, יהושע, אלישבע).
+2 = dated: typical of the parents' generation, born in the 1960s to 1980s (מיכל, אורית, אבישי, יועד). Names of immigrants from the former Soviet Union and other foreign names of that generation are 2, not 1 (מרינה).
+3 = established: in use since the 1980s or 1990s and still current, or timeless (דניאל, תמר, איתמר, נגה, דביר, מיכאלה).
+4 = contemporary: came into wide use in the 2000s and 2010s (נועם, שקד, עומרי).
+5 = newest wave, mostly since about 2015 (ארבל, ליב, אימרי, גוני).
 
-reach: how well the name works outside Israel.
-1 = hard to say or unknown abroad, often because of ח, ע or צ (חיים, צבי, נהוראי).
-2 = Hebrew-specific but sayable (איתמר, הראל, יובל).
-3 = easy to say abroad but unfamiliar there (עומר, נדב).
-4 = familiar abroad in a close form (נועה, יונתן, נעמי).
-5 = works abroad as it is (דניאל, אדם, מאיה, ליאו).
+reach: how easy the name is for someone abroad to say and recognise.
+1 = very hard abroad: a strong ח or ע sound, or long and distinctly Hebrew (חיים, יחזקאל, נהוראי).
+2 = hard: a kh sound (ח, or כ said as kh) or a sound cluster foreigners stumble on (מיכל, שניר, אחינועם).
+3 = sayable but awkward or long (איתמר, נגה, ידידיה).
+4 = easy to say, even if unfamiliar abroad, or a close form of a known name (גלעד, גוני, ראובן, מיכאלה).
+5 = an international name with the same sound (אביגיל, דניאל, מאיה, ליאו).
 
 religious: which families mostly give the name today. Describe usage only, never judge it.
 1 = mainly Haredi or Hasidic families, including most Yiddish names (מנחם, יוכבד, גיטל).
