@@ -41,7 +41,6 @@ export interface AppState {
   /** The free text, notes and names last sent for checking, so unchanged input is not sent twice. */
   checkedInput: string | null;
   freeTextDisabled: boolean;
-  flagged: boolean;
   pass: number;
   rounds: RoundState[];
   ratings: Record<number, Rating>;
@@ -66,7 +65,6 @@ export const initialState: AppState = {
   profile: null,
   checkedInput: null,
   freeTextDisabled: false,
-  flagged: false,
   pass: 1,
   rounds: [],
   ratings: {},
