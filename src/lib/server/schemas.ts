@@ -11,7 +11,7 @@ const familyName = z.object({
 const chips = z.partialRecord(z.enum(CHIP_IDS), z.enum(["want", "must"]));
 
 export const MEANING_CATEGORIES = [
-  "nature", "light", "strength", "joy", "faith", "love", "beauty", "peace", "wisdom", "gift", "royalty", "life", "biblical",
+  "nature", "light", "strength", "joy", "faith", "love", "beauty", "peace", "wisdom", "gift", "royalty", "life", "biblical", "trait",
 ] as const;
 export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persian", "yiddish", "english", "other"] as const;
 export const STYLES = ["traditional", "classic", "modern"] as const;

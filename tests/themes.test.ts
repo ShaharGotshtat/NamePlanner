@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { rankCandidates } from "@/lib/engine/round";
 import { checkText, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import type { NameEntry, TextRequirement } from "@/lib/types";
+import allNames from "../data/names.json";
 import { byName, names, request } from "./fixtures";
 
 // Test-only entry: its word appears in the Tanakh, but it is not tagged biblical.
@@ -71,5 +72,24 @@ describe("biblical tagging rule in the data", () => {
     const el = names.filter((n) => n.nameHe.endsWith("אל") && n.biblicalRef);
     expect(el.length).toBeGreaterThan(0);
     for (const n of el) expect(n.tags.meaningCategories).toContain("biblical");
+  });
+});
+
+describe("trait tagging rule in the data", () => {
+  const full = allNames as NameEntry[];
+  const tagged = (nameHe: string) => full.find((n) => n.nameHe === nameHe)!.tags.meaningCategories.includes("trait");
+
+  it("tags trait and feeling words and names that describe their bearer", () => {
+    for (const n of ["תום", "עוז", "שלו", "עדינה", "יפה", "שמחה", "גיל", "רון", "בלה", "אהובה", "תמיר"]) expect(tagged(n), n).toBe(true);
+  });
+
+  it("does not tag possessive forms or other abstract nouns", () => {
+    for (const n of ["רוני", "גילי", "שלום", "הדר", "חרות", "דוד", "נדב"]) expect(tagged(n), n).toBe(false);
+  });
+
+  it("a trait wish matches on the tag", () => {
+    const wish: TextRequirement = { id: "t1", label: "שם שהוא תכונה", kind: "want", facet: "meaningCategory", values: ["trait"] };
+    expect(checkText(wish, byName("נועם")).fit).toBe("met");
+    expect(checkText(wish, byName("רות")).fit).toBe("not_met");
   });
 });
