@@ -140,7 +140,7 @@ export function Rounds() {
     return (
       <div className="flex flex-col items-center pt-16 text-center text-ink-soft">
         <ThinkingMascot size={96} className="animate-mascot-bob" />
-        <p className="mt-3">מחפשים שמות בשבילכם...</p>
+        <p className="mt-3">עוד רגע יגיעו הצעות...</p>
       </div>
     );
   }
@@ -149,7 +149,7 @@ export function Rounds() {
     return (
       <div className="flex flex-col items-center pt-10 text-center">
         <Mascot mood="surprised" size={96} />
-        <p className="mt-3">נגמרו לנו השמות שמתאימים לכל הבחירות שלכם.</p>
+        <p className="mt-3">נגמרו לנו השמות שמתאימים בול...</p>
         <Button className="mt-4" onClick={() => update({ step: "summary" })}>
           לסיכום
         </Button>
@@ -188,7 +188,7 @@ export function Rounds() {
           </Button>
         )}
       </div>
-      <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. בדקו שם לפני שאתם רושמים אותו.</p>
+      <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
 
       <div className="space-y-4">
         {round.suggestions.map((s, i) =>

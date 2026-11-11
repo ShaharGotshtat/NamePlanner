@@ -60,7 +60,7 @@ function OptionsSheet({ view, setView, onClose }: { view: View; setView: (v: Vie
         {view === "menu" && (
           <>
             <h2 id={titleId} className="font-display text-xl font-semibold">
-              מה תרצו לעשות?
+              מה עכשיו?
             </h2>
             <div className="mt-4 flex flex-col gap-3">
               {canRestart(state) && (
@@ -100,7 +100,7 @@ function OptionsSheet({ view, setView, onClose }: { view: View; setView: (v: Vie
             </h2>
             <p className="w-full rounded-xl bg-cream px-3 py-2 text-start text-sm">
               <span className="block text-xs font-semibold text-rose-deep">יימחק מהמכשיר הזה</span>
-              פרטי המשפחה, ההעדפות, כל ההצבעות והשמות שאהבתם.
+              פרטי המשפחה, ההעדפות, כל ההצבעות והשמות האהובים.
             </p>
             <p className="text-sm font-medium text-rose-deep">אי אפשר לשחזר אחרי המחיקה.</p>
             <div className="mt-1 flex w-full flex-col gap-2">

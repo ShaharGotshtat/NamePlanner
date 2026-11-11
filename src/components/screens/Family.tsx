@@ -29,7 +29,7 @@ export function Family() {
 
   return (
     <div>
-      <ScreenTitle mood="cloud" subtitle="לא נציע שמות שכבר תפוסים, ושמות האחים יעזרו לנו להבין את הטעם שלכם. אפשר להשאיר ריק.">
+      <ScreenTitle mood="cloud" subtitle="לא נציע שמות שכבר תפוסים, ושמות האחים יעזרו לנו להבין איזה סגנון מתאים. אפשר להשאיר ריק.">
         אילו שמות כבר תפוסים במשפחה?
       </ScreenTitle>
 
@@ -47,10 +47,10 @@ export function Family() {
         names={parseNameList(drafts.sibling)}
         onChange={(text) => setList("sibling", text)}
       />
-      <p className="mt-2 text-sm text-ink-soft">אפשר להפריד בפסיק, ברווח, ב״ו״ או בשורה חדשה. שמות נוספים מהמשפחה תוכלו לסמן כ״תפוס״ כשנציע אותם.</p>
+      <p className="mt-2 text-sm text-ink-soft">אפשר להפריד בפסיק, ברווח, ב״ו״ או בשורה חדשה. שמות נוספים מהמשפחה אפשר לסמן כ״תפוס״ כשנציע אותם.</p>
 
       {others.length > 0 && (
-        <p className="mt-3 text-sm text-ink-soft">סימנתם כתפוסים בסבבים: {others.map((f) => f.name).join(", ")}</p>
+        <p className="mt-3 text-sm text-ink-soft">סומנו כתפוסים בסבבים: {others.map((f) => f.name).join(", ")}</p>
       )}
 
       <label className="mt-8 block">
