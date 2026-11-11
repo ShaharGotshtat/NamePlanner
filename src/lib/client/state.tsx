@@ -11,6 +11,7 @@ import type {
   RoundRequest,
   Suggestion,
 } from "@/lib/types";
+import { CHIP_IDS } from "@/lib/engine/chips";
 import { clearJourney, describeChange, track } from "./journey";
 
 export type Step = "welcome" | "family" | "preferences" | "rounds" | "summary";
@@ -88,10 +89,17 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+/** Drops chips saved by an older version (the old "unisex" chip), which the server would reject. */
+function knownChips(chips: AppState["chips"]): AppState["chips"] {
+  return Object.fromEntries(Object.entries(chips ?? {}).filter(([id]) => (CHIP_IDS as string[]).includes(id)));
+}
+
 function load(): AppState {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? { ...initialState, ...JSON.parse(saved) } : initialState;
+    if (!saved) return initialState;
+    const state: AppState = { ...initialState, ...JSON.parse(saved) };
+    return { ...state, chips: knownChips(state.chips) };
   } catch {
     return initialState;
   }

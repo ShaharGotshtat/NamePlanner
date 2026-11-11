@@ -24,6 +24,17 @@ describe("rankCandidates", () => {
     expect(ids).not.toContain("תמר");
   });
 
+  it("includes unisex names by default and drops them when the parent opts out", () => {
+    const sexes = (chips = {}) => rankCandidates(names, request({ babySex: "boy", chips })).map((c) => nameSex(c.entry));
+    expect(sexes()).toContain("unisex");
+    expect(sexes({ noUnisex: "must" })).not.toContain("unisex");
+  });
+
+  it("adds no explanation line for the unisex opt-out", () => {
+    const [top] = rankCandidates(names, request({ chips: { noUnisex: "must" } }));
+    expect(top.evaluation.lines).toEqual([]);
+  });
+
   it("drops every name that misses a Must chip", () => {
     const ranked = rankCandidates(names, request({ chips: { notTop20: "must", englishFriendly: "must" } }));
     expect(ranked.length).toBeGreaterThan(0);
@@ -34,8 +45,8 @@ describe("rankCandidates", () => {
   });
 
   it("explains each requirement with met, partly or not met", () => {
-    const [top] = rankCandidates(names, request({ chips: { unisex: "want", grandparentFriendly: "want" } }));
-    expect(top.evaluation.lines.map((l) => l.requirement)).toEqual(["יוניסקס", "יתקבל יפה אצל סבא וסבתא"]);
+    const [top] = rankCandidates(names, request({ chips: { englishFriendly: "want", grandparentFriendly: "want" } }));
+    expect(top.evaluation.lines.map((l) => l.requirement)).toEqual(["קל באנגלית", "יתקבל יפה אצל סבא וסבתא"]);
   });
 
   it("checks free-text requirements against the name data", () => {
@@ -61,6 +72,13 @@ describe("pickDiverse", () => {
   it("mixes one boy, one girl and one unisex name when the sex is not known", () => {
     const picked = pickDiverse(rankCandidates(names, request({ babySex: "unknown" })), "unknown");
     expect(picked.map((c) => nameSex(c.entry)).sort()).toEqual(["boy", "girl", "unisex"]);
+  });
+
+  it("leaves out unisex names when the parent opts out", () => {
+    const picked = pickDiverse(rankCandidates(names, request({ babySex: "unknown", chips: { noUnisex: "must" } })), "unknown");
+    expect(picked).toHaveLength(3);
+    expect(picked.map((c) => nameSex(c.entry))).not.toContain("unisex");
+    expect(picked.map((c) => nameSex(c.entry))).toEqual(expect.arrayContaining(["boy", "girl"]));
   });
 
   it("returns three different names", () => {

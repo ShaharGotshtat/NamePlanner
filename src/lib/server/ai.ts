@@ -84,11 +84,13 @@ function describeCandidate(c: Candidate): string {
   return `id=${c.entry.id} | ${c.entry.nameHe} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
 }
 
-const SEX_INSTRUCTION: Record<BabySex, string> = {
-  boy: "The baby is a boy.",
-  girl: "The baby is a girl.",
-  unknown: "The baby's sex is not known yet: pick exactly one boy name, one girl name and one unisex name.",
-};
+function sexInstruction(babySex: BabySex, noUnisex: boolean): string {
+  if (babySex === "boy") return "The baby is a boy.";
+  if (babySex === "girl") return "The baby is a girl.";
+  return noUnisex
+    ? "The baby's sex is not known yet: pick at least one boy name and one girl name. The parent asked for no unisex names."
+    : "The baby's sex is not known yet: pick exactly one boy name, one girl name and one unisex name.";
+}
 
 /** Lets the model choose among the ranked candidates. Ids outside the list are dropped. */
 export async function pickWithModel(
@@ -103,7 +105,7 @@ export async function pickWithModel(
   const patterns = noPatternsFor(names, req).map((p) => `${p.label} (${p.count} names)`);
 
   const chips = Object.entries(req.chips).map(([id, level]) => `${chipLabel(id as ChipId)} (${level})`);
-  const prompt = `${SEX_INSTRUCTION[req.babySex]}
+  const prompt = `${sexInstruction(req.babySex, !!req.chips.noUnisex)}
 Pick ${ROUND_SIZE} names.
 
 Parent's chips: ${chips.join(", ") || "none"}

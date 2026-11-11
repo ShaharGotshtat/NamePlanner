@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CHIPS } from "@/lib/engine/chips";
+import { CHIPS, isFilterChip } from "@/lib/engine/chips";
 import { errorIdOf, withErrorId } from "@/lib/client/api";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp } from "@/lib/client/state";
@@ -21,12 +21,12 @@ export function Preferences() {
   const toggle = (id: ChipId) =>
     update((s) => {
       const { [id]: current, ...rest } = s.chips;
-      return { chips: current ? rest : { ...rest, [id]: "want" } };
+      return { chips: current ? rest : { ...rest, [id]: isFilterChip(id) ? "must" : "want" } };
     });
 
   const setLevel = (id: ChipId, level: ChipLevel) => update((s) => ({ chips: { ...s.chips, [id]: level } }));
 
-  const selected = chips.filter((c) => state.chips[c.id]);
+  const selected = chips.filter((c) => state.chips[c.id] && !c.filter);
 
   const goToRounds = () => update({ step: "rounds" });
 
@@ -57,7 +57,7 @@ export function Preferences() {
             <Toggle key={chip.id} selected={!!level} onClick={() => toggle(chip.id)}>
               {level && <span aria-hidden>✓ </span>}
               {chip.label}
-              {level === "must" && <span className="ms-1 rounded-full bg-white/25 px-2 text-xs">חובה</span>}
+              {level === "must" && !chip.filter && <span className="ms-1 rounded-full bg-white/25 px-2 text-xs">חובה</span>}
             </Toggle>
           );
         })}
