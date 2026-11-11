@@ -6,6 +6,7 @@ import { errorIdOf, withErrorId } from "@/lib/client/api";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
+import { LevelPicker } from "../LevelPicker";
 import { TagInput } from "../TagInput";
 import { Button, inputClass, ScreenTitle, Toggle } from "../ui";
 
@@ -65,29 +66,16 @@ export function Preferences() {
       {selected.length > 0 && (
         <section className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-line" aria-labelledby="must-title">
           <h2 id="must-title" className="font-medium">
-            משהו מזה חובה?
+            כמה זה חשוב?
           </h2>
-          <p className="mt-1 text-sm text-ink-soft">שם שלא עומד בדרישת חובה לא יוצע בכלל. כל השאר רק יקבלו עדיפות.</p>
+          <p className="mt-1 text-sm text-ink-soft">רצוי: שמות כאלה יקבלו עדיפות. חובה: שם שלא עומד בזה לא יוצע בכלל.</p>
           <ul className="mt-3 divide-y divide-line">
             {selected.map((chip) => {
-              const must = state.chips[chip.id] === "must";
+              const level = state.chips[chip.id] ?? "want";
               return (
                 <li key={chip.id} className="flex min-h-12 items-center justify-between gap-3 py-1">
                   <span className="text-sm">{chip.label}</span>
-                  <button
-                    role="switch"
-                    aria-checked={must}
-                    aria-label={`${chip.label}: חובה`}
-                    onClick={() => setLevel(chip.id, must ? "want" : "must")}
-                    className="flex min-h-11 shrink-0 items-center gap-2 text-sm"
-                  >
-                    <span className={must ? "font-medium text-ink" : "text-ink-soft"}>{must ? "חובה" : "רצוי"}</span>
-                    <span className={`relative h-6 w-11 rounded-full transition-colors ${must ? "bg-lavender-dark" : "bg-ink/20"}`}>
-                      <span
-                        className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-[inset-inline-start] ${must ? "start-[1.375rem]" : "start-0.5"}`}
-                      />
-                    </span>
-                  </button>
+                  <LevelPicker label={chip.label} level={level} onChange={(next) => setLevel(chip.id, next)} />
                 </li>
               );
             })}
