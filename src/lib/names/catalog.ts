@@ -45,9 +45,21 @@ export function featuresOf(entry: NameEntry): NameFeatures {
   return features;
 }
 
+/**
+ * The list entry for a name a parent typed: the exact name, then another spelling of it
+ * (מעין for מעיין), then the first part of a double name (מאיה for מאיה רות).
+ */
 export function findByName(names: NameEntry[], name: string): NameEntry | undefined {
-  const key = normalizeHebrew(name);
-  return names.find((n) => normalizeHebrew(n.nameHe) === key);
+  const lookup = (text: string) => {
+    const key = normalizeHebrew(text);
+    if (!key) return undefined;
+    return (
+      names.find((n) => normalizeHebrew(n.nameHe) === key) ??
+      names.find((n) => n.variants?.some((v) => normalizeHebrew(v) === key))
+    );
+  };
+  const first = name.trim().split(/[\s-]+/)[0];
+  return lookup(name) ?? (first !== name.trim() ? lookup(first) : undefined);
 }
 
 /**
