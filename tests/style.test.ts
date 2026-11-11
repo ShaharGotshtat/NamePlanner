@@ -5,6 +5,7 @@ import { soundHardness } from "@/lib/names/features";
 import { profileOf, similarity } from "@/lib/engine/similarity";
 import { MODEL_CANDIDATES, pickDiverse, rankCandidates } from "@/lib/engine/round";
 import { readStyles } from "../scripts/styles";
+import { averageBirthYear, eraOfYear } from "@/lib/names/era";
 import { byName, names, request } from "./fixtures";
 
 const fullList: NameEntry[] = JSON.parse(readFileSync("data/names.json", "utf8"));
@@ -13,7 +14,32 @@ describe("style scores", () => {
   it("cover every name in the list, and data/names.json carries them", () => {
     const styles = readStyles();
     expect(fullList.filter((n) => !styles.has(n.nameHe)).map((n) => n.nameHe)).toEqual([]);
-    for (const n of fullList) expect(n.styleAxes).toEqual(styles.get(n.nameHe));
+    for (const n of fullList) {
+      const { era, ...scored } = n.styleAxes!;
+      expect(scored).toEqual(styles.get(n.nameHe));
+      expect(era).toBeGreaterThanOrEqual(1);
+      expect(era).toBeLessThanOrEqual(5);
+    }
+  });
+
+  it("take era from CBS data: older names get a lower era", () => {
+    const era = (name: string) => fullList.find((n) => n.nameHe === name)!.styleAxes!.era;
+    expect(era("שושנה")).toBe(1);
+    expect(era("ארבל")).toBe(5);
+    expect(era("יורם")).toBeLessThan(era("דניאל"));
+    expect(era("דניאל")).toBeLessThan(era("גוני"));
+  });
+
+  it("cut the average birth year by decade", () => {
+    expect([1960, 1975, 1989, 1990, 2005, 2010, 2020].map(eraOfYear)).toEqual([1, 2, 2, 3, 4, 5, 5]);
+  });
+});
+
+describe("averageBirthYear", () => {
+  it("weights each year by the name's share of births, not its raw count", () => {
+    const totals = new Map([[1980, 1000], [2020, 4000]]);
+    // 10 babies in each year: a far larger share of 1980, so the average leans to 1980.
+    expect(averageBirthYear([{ year: 1980, count: 10 }, { year: 2020, count: 10 }], totals)).toBe(1988);
   });
 });
 

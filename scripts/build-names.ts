@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { readStyles } from "./styles";
+import { averageBirthYear, eraOfYear } from "../src/lib/names/era";
 import type { MeaningCategory, NameEntry, Origin, Style, YearStat } from "../src/lib/types";
 
 /** Names given to fewer babies than this in 2000-2024 are too rare for the lists. */
@@ -70,6 +71,12 @@ for (const line of readFileSync("data/cbs/babynamesIL-jewish.csv", "utf8").trim(
   cell[sex as "F" | "M"] += Number(n);
   byYear.set(Number(year), cell);
   counts.set(name, byYear);
+}
+
+// All babies born each year, for the era: a name's share of a year, not its raw count.
+const birthsByYear = new Map<number, number>();
+for (const byYear of counts.values()) {
+  for (const [year, cell] of byYear) birthsByYear.set(year, (birthsByYear.get(year) ?? 0) + cell.F + cell.M);
 }
 
 const lastYear = Math.max(...[...counts.values()].flatMap((m) => [...m.keys()]));
@@ -148,7 +155,7 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
       links: links(c.links),
     },
     stats,
-    ...(styles.has(name) ? { styleAxes: styles.get(name) } : {}),
+    ...(styles.has(name) ? { styleAxes: { era: eraOfYear(averageBirthYear(stats, birthsByYear)), ...styles.get(name)! } } : {}),
   };
 });
 
