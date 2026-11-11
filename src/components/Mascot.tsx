@@ -116,7 +116,7 @@ function Eyes({ mood }: { mood: MascotMood }) {
       </g>
     );
   }
-  const y = mood === "sad" ? 91 : 89;
+  const y = mood === "sad" ? 92 : 89;
   const glint = -3;
   return (
     <g fill={INK}>
@@ -126,8 +126,8 @@ function Eyes({ mood }: { mood: MascotMood }) {
       <circle cx="100" cy={y + glint} r="2.4" fill="#fff" />
       {mood === "sad" && (
         <g stroke={INK} strokeWidth="3" strokeLinecap="round">
-          <path d="M53 79 L67 75" />
-          <path d="M107 79 L93 75" />
+          <path d="M52 80 L67 74" />
+          <path d="M108 80 L93 74" />
         </g>
       )}
     </g>
@@ -146,7 +146,7 @@ function Mouth({ mood }: { mood: MascotMood }) {
     case "detective":
       return <path d="M66 106 Q76 116 86 106" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
     case "sad":
-      return <path d="M72 110 Q80 103 88 110" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
+      return <path d="M71 110 Q80 101 89 110" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
     case "hopeful":
       return <path d="M75 108 Q80 109 85 108" stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none" />;
     case "neutral":
@@ -245,7 +245,7 @@ function MagnifyingGlass() {
  * The mood changes its face to react to what the user does.
  */
 export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: MascotMood; size?: number; className?: string }) {
-  const cheek = mood === "sad" ? 0.3 : mood === "neutral" ? 0.4 : mood === "cheer" ? 0.7 : mood === "idea" || mood === "hopeful" ? 0.65 : 0.5;
+  const cheek = mood === "sad" ? 0.2 : mood === "neutral" ? 0.4 : mood === "cheer" ? 0.7 : mood === "idea" || mood === "hopeful" ? 0.65 : 0.5;
   return (
     <svg
       viewBox="0 0 160 170"
