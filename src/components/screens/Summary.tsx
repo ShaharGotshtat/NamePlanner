@@ -5,7 +5,7 @@ import { fetchOurPick } from "@/lib/client/api";
 import { displayMeaning } from "@/lib/names/catalog";
 import { roundRequest, shownSuggestions, useApp } from "@/lib/client/state";
 import type { Suggestion } from "@/lib/types";
-import { MascotSays } from "../Mascot";
+import { ThinkingMascotSays } from "../Mascot";
 import { TagInput } from "../TagInput";
 import { Button, Card, ScreenTitle } from "../ui";
 import { ExportList } from "./ExportList";
@@ -120,7 +120,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
         <p className="mt-1 text-xs text-ink-soft">בסבב הבא נחפש שמות בסגנון שלהם.</p>
       </div>
 
-      {loading && <MascotSays mood="think" className="mt-6">בוחרים בשבילכם שם...</MascotSays>}
+      {loading && <ThinkingMascotSays className="mt-6">בוחרים בשבילכם שם...</ThinkingMascotSays>}
       {pick?.suggestion && !pick.dismissed && (
         <Card className="mt-6">
           <p className="text-xs font-medium text-lavender-dark">הבחירה שלנו, שלא סימנתם</p>
