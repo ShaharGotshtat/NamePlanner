@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME_EN, APP_NAME_PARTS } from "@/lib/constants";
 
 export type MascotMood = "happy" | "cheer" | "cloud" | "idea" | "detective" | "neutral" | "hopeful" | "sad" | "surprised";
 
@@ -282,12 +282,33 @@ export function Mascot({ mood = "happy", size = 140, className = "" }: { mood?: 
   );
 }
 
-/** The wordmark: the sun with the Hebrew name, as used in the header. */
+/** The Hebrew name with niqqud: "שמ" in the sun's pink and "אץ׳" in its blue. */
+export function Wordmark({ className = "" }: { className?: string }) {
+  const [shem, match] = APP_NAME_PARTS;
+  return (
+    <span className={`font-display font-semibold ${className}`}>
+      <span className="text-shem">{shem}</span>
+      <span className="text-match">{match}</span>
+    </span>
+  );
+}
+
+/** The English name in the same two colors. */
+export function WordmarkEn({ className = "" }: { className?: string }) {
+  return (
+    <span dir="ltr" className={`font-display font-semibold ${className}`}>
+      <span className="text-shem">{APP_NAME_EN.slice(0, 4)}</span>
+      <span className="text-match">{APP_NAME_EN.slice(4)}</span>
+    </span>
+  );
+}
+
+/** The sun with the Hebrew name, as used in the header. */
 export function Logo({ size = 32 }: { size?: number }) {
   return (
     <span className="flex items-center gap-2">
       <Mascot size={size} className="-my-1" />
-      <span className="font-display text-xl font-semibold">{APP_NAME}</span>
+      <Wordmark className="text-xl" />
     </span>
   );
 }

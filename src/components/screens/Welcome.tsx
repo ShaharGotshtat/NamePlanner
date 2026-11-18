@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { startSession } from "@/lib/client/api";
 import { useApp } from "@/lib/client/state";
 import { canStart } from "@/lib/client/welcome";
-import { APP_NAME, TERMS_VERSION } from "@/lib/constants";
+import { TERMS_VERSION } from "@/lib/constants";
 import { deriveFromDueDate } from "@/lib/due-date";
 import type { BabySex } from "@/lib/types";
-import { Mascot } from "../Mascot";
+import { Mascot, Wordmark, WordmarkEn } from "../Mascot";
 import { Button, inputClass, Toggle } from "../ui";
 
 const SEXES: { id: BabySex; label: string }[] = [
@@ -38,11 +38,10 @@ export function Welcome() {
     <div className="pt-8">
       <div className="flex flex-col items-center text-center">
         <Mascot className="animate-mascot-bob" />
-        <h1 className="mt-3 font-display text-5xl font-semibold leading-tight">{APP_NAME}</h1>
-        <p dir="ltr" className="font-display text-lg font-semibold">
-          <span className="text-rose-dark">Shem</span>
-          <span className="text-lavender-dark">Match</span>
-        </p>
+        <h1 className="mt-3 text-5xl leading-tight">
+          <Wordmark />
+        </h1>
+        <WordmarkEn className="text-lg" />
         <p className="mt-2 text-lg text-ink-soft">בואו נמצא שמות לילדים העתידיים שלכם!</p>
       </div>
 
