@@ -58,14 +58,16 @@ describe("rankCandidates", () => {
 });
 
 describe("pickDiverse", () => {
-  it("mixes one boy, one girl and one unisex name when the sex is not known", () => {
+  it("includes a boy, a girl and a unisex name when the sex is not known", () => {
     const picked = pickDiverse(rankCandidates(names, request({ babySex: "unknown" })), "unknown");
-    expect(picked.map((c) => nameSex(c.entry)).sort()).toEqual(["boy", "girl", "unisex"]);
+    const sexes = picked.map((c) => nameSex(c.entry));
+    expect(picked).toHaveLength(4);
+    expect(new Set(sexes)).toEqual(new Set(["boy", "girl", "unisex"]));
   });
 
-  it("returns three different names", () => {
+  it("returns four different names", () => {
     const picked = pickDiverse(rankCandidates(names, request()), "girl");
-    expect(new Set(picked.map((c) => c.entry.id)).size).toBe(3);
+    expect(new Set(picked.map((c) => c.entry.id)).size).toBe(4);
   });
 });
 

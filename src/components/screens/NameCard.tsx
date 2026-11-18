@@ -64,9 +64,11 @@ interface Props {
   onNote: (note: string) => void;
   onMisread: (requirement: string, misread: boolean) => void;
   onUndoTaken: () => void;
+  /** Bigger name for the one-at-a-time round view. */
+  large?: boolean;
 }
 
-export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread, onUndoTaken }: Props) {
+export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread, onUndoTaken, large }: Props) {
   const openFeedback = useFeedback();
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
@@ -92,7 +94,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
     <Card>
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h2 className="font-display text-3xl font-semibold">{name.niqqud}</h2>
+          <h2 className={`font-display font-semibold ${large ? "text-5xl leading-tight" : "text-3xl"}`}>{name.niqqud}</h2>
           <p className="text-sm text-ink-soft" dir="ltr">
             {name.translit.join(" / ")}
           </p>

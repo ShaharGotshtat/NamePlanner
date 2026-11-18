@@ -74,9 +74,9 @@ A single user goes through four steps and a summary. In couple mode both users d
 flowchart TD
     W["Welcome<br/>Just me or with partner, baby's sex"] --> F["Family names<br/>Taken names, sibling taste"]
     F --> P["Preferences<br/>Chips plus free-text chat"]
-    P --> R["Round of 3 names<br/>Rate: No, Not sure, Interesting"]
+    P --> R["Round of 4 names, one at a time<br/>Rate: No, Not sure, Interesting"]
     R -- "next round, up to 5" --> R
-    R -- "after round 5 or early finish" --> S["Summary<br/>No match, top 3, or first choice"]
+    R -- "after round 3 or early finish" --> S["Summary<br/>No match, top 3, or first choice"]
     J["Partner joins by link<br/>WhatsApp invite, skips Welcome"] -- "enters at Family" --> F
     S -- "couple mode, both done" --> M["Match<br/>Likes, maybes, and No votes"]
     M --> JR["Joint rounds<br/>Up to 2, both rate each name"]
@@ -131,10 +131,10 @@ An optional "Names we like" field takes a few reference names; the app learns th
 
 ### 4. Suggestion rounds
 
-- Three name cards per round. Each card: the name with niqqud and its Latin spelling, meaning, origin, how common it is (babies given the name last year, its rank, and whether it is rising or falling, from CBS data; a "Full data" button opens a chart of the name's yearly count since 1949, split by sex), and one line on why it fits this family. A "Why this name?" button opens the full explanation (below).
+- Four names per round, shown one big card at a time. The first name of each round starts sealed behind a "?" card with an explicit reveal button; after a vote, a big "Next name" button opens the next one, and a "Back to the previous name" link allows changing a vote. Each card: the name with niqqud and its Latin spelling, meaning, origin, how common it is (babies given the name last year, its rank, and whether it is rising or falling, from CBS data; a "Full data" button opens a chart of the name's yearly count since 1949, split by sex), and one line on why it fits this family. A "Why this name?" button opens the full explanation (below).
 - Per card, three buttons: **No**, **Not sure**, **Interesting**, plus an optional free-text note ("too similar to my cousin Noa"). A smaller fourth action, "Taken in our family", removes the name and adds it to the family list.
 - An optional round-level note ("all too old-fashioned").
-- A Next round button, enabled once all three cards are rated.
+- A Next round button, shown on the fourth name, enabled once all four names are rated.
 - A visible counter: Round 2 of 5.
 - An "I found it" button on every round, which jumps to Summary.
 
@@ -150,7 +150,7 @@ Every suggestion explains itself against the parent's own requirements, so the p
 
 ### 5. Summary
 
-See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (v2, below), Go again (another 5 rounds with the same or edited preferences, never repeating a name already shown), and, from v2 in single mode, invite my partner to do the same.
+See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (v2, below), Go again (another 3 rounds with the same or edited preferences, never repeating a name already shown), and, from v2 in single mode, invite my partner to do the same.
 
 **Export my list** opens a sheet with two formats (v1 has text only):
 
@@ -197,20 +197,20 @@ A Send feedback link sits in the footer of every screen, next to the terms link.
 
 ## Suggestion logic and outcomes
 
-Each round learns from the last: hard constraints filter the candidate pool, and feedback reshapes what the next three names look like.
+Each round learns from the last: hard constraints filter the candidate pool, and feedback reshapes what the next four names look like.
 
 ### How a round is built
 
 1. **Filter.** Remove names that break a hard rule: wrong sex, a close family name, a name already shown, any chip marked Must.
 2. **Score.** Rank the rest against chips marked Want, the parsed free-text preferences, and feedback so far (a No on a name pushes down similar names by sound, origin, length, and style; an Interesting pushes them up).
-3. **Pick three.** Take three strong candidates that differ from each other (not three variations of the same name), so each round also tests a direction.
+3. **Pick four.** Take four strong candidates that differ from each other (not four variations of the same name), so each round also tests a direction.
 4. **Explain.** Write the one-line "why it fits" and the full per-requirement explanation for each card.
 
 Free-text feedback ("too biblical", "I like names ending in -el") is parsed into the same preference profile, so it affects every later round, not only the next one.
 
 ### Ending the flow
 
-The flow ends after round 5, or earlier when the parent taps "I found it".
+The flow ends after round 3, or earlier when the parent taps "I found it".
 
 | What the parent marked | Summary shown |
 | --- | --- |
