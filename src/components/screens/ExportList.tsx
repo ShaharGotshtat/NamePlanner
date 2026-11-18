@@ -7,7 +7,7 @@ import { displayMeaning } from "@/lib/names/catalog";
 import type { Suggestion } from "@/lib/types";
 import { Button } from "../ui";
 
-function buildMessage(names: Suggestion[], favorite: Suggestion | null): string {
+function buildMessage(names: Suggestion[], favorite: Suggestion | null, unsure: Suggestion[]): string {
   const line = (s: Suggestion) => {
     const meaning = displayMeaning(s.name);
     return meaning ? `${s.name.nameHe} (${meaning})` : s.name.nameHe;
@@ -16,17 +16,18 @@ function buildMessage(names: Suggestion[], favorite: Suggestion | null): string 
   const heading = favorite
     ? [`הבחירה הראשונה שלנו: ${line(favorite)}`, ...(others.length ? ["עוד שמות שאהבנו:"] : [])]
     : ["השמות שאהבנו:"];
-  return [...heading, ...others.map((s) => `• ${line(s)}`), "", `מצאנו אותם ב-${APP_NAME}: ${location.origin}`].join("\n");
+  const maybe = unsure.length ? ["", "ואולי גם:", ...unsure.map((s) => `• ${line(s)}`)] : [];
+  return [...heading, ...others.map((s) => `• ${line(s)}`), ...maybe, "", `מצאנו אותם ב-${APP_NAME}: ${location.origin}`].join("\n");
 }
 
-export function ExportList({ names, favorite }: { names: Suggestion[]; favorite: Suggestion | null }) {
+export function ExportList({ names, favorite, unsure }: { names: Suggestion[]; favorite: Suggestion | null; unsure: Suggestion[] }) {
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
   useEffect(() => setCanShare(typeof navigator.share === "function"), []);
 
   const share = async () => {
     try {
-      await navigator.share({ text: buildMessage(names, favorite) });
+      await navigator.share({ text: buildMessage(names, favorite, unsure) });
       trackEvent({ name: "share", props: { channel: "share" } });
     } catch {
       // Cancelled or blocked: the other options are right there.
@@ -34,7 +35,7 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
   };
 
   const copy = async () => {
-    await navigator.clipboard.writeText(buildMessage(names, favorite));
+    await navigator.clipboard.writeText(buildMessage(names, favorite, unsure));
     setCopied(true);
     trackEvent({ name: "share", props: { channel: "copy" } });
   };
@@ -44,7 +45,7 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
       <p className="mb-2 font-medium">ייצוא הרשימה</p>
       <a
         className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-whatsapp font-medium text-white hover:brightness-95"
-        href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite))}`}
+        href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite, unsure))}`}
         target="_blank"
         rel="noreferrer"
         onClick={() => trackEvent({ name: "share", props: { channel: "whatsapp" } })}

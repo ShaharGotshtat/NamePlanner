@@ -39,7 +39,12 @@ export function Summary() {
         <NoMatch unsure={unsure} />
       )}
 
-      {(favorite || interesting.length > 1) && <ExportList names={interesting} favorite={favorite} />}
+      {(favorite || interesting.length > 1) && (
+        <>
+          <MaybeNames unsure={unsure} />
+          <ExportList names={interesting} favorite={favorite} unsure={unsure} />
+        </>
+      )}
 
       <Button variant="secondary" className="mt-8 w-full" onClick={goAgain}>
         עוד סבב של שמות חדשים
@@ -87,6 +92,15 @@ function PickFavorite({ names, onPick }: { names: Suggestion[]; onPick: (id: num
   );
 }
 
+function MaybeNames({ unsure, className = "mt-4" }: { unsure: Suggestion[]; className?: string }) {
+  if (unsure.length === 0) return null;
+  return (
+    <p className={`${className} text-ink-soft`}>
+      שמות שסומנו כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}
+    </p>
+  );
+}
+
 function NoMatch({ unsure }: { unsure: Suggestion[] }) {
   const { state, update } = useApp();
   const [loading, setLoading] = useState(false);
@@ -111,7 +125,7 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
   return (
     <>
       <ScreenTitle mood="hopeful">עוד לא מצאנו את השם המושלם, אפשר להמשיך לחפש!</ScreenTitle>
-      {unsure.length > 0 && <p className="text-ink-soft">שמות שסומנו כ״אולי״: {unsure.map((s) => s.name.nameHe).join(", ")}</p>}
+      <MaybeNames unsure={unsure} className="" />
 
       <div className="mt-6">
         <p className="mb-2 font-medium">שמות אהובים, גם אם הם תפוסים</p>
