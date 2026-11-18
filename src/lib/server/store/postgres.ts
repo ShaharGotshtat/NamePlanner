@@ -1,4 +1,5 @@
 import postgres from "postgres";
+import type { EventName, StoredEvent } from "@/lib/analytics/events";
 import type { NameEntry, Origin, StyleAxes, YearStat } from "@/lib/types";
 import type { Report, ReportContext, ReportType, Store } from "./types";
 
@@ -79,6 +80,28 @@ export function postgresStore(url: string): Store {
       return rows
         .map((r): Report => ({ type: r.type, message: r.message, context: r.context, createdAt: r.created_at }))
         .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    },
+
+    addEvent: async ({ daily, run, event }) => {
+      await sql`
+        insert into events (daily, run, name, props)
+        values (${daily}, ${run}, ${event.name}, ${sql.json(event.props as postgres.JSONValue)})`;
+    },
+
+    listEvents: async (since) => {
+      const rows = await sql<{ at: Date; daily: string; run: string; name: EventName; props: Record<string, unknown> }[]>`
+        select at, daily, run, name, props from events
+        where ${since ? sql`at >= ${since}` : sql`true`}
+        order by at`;
+      return rows.map((r): StoredEvent => ({ ...r }));
+    },
+
+    listSpend: async (sinceDay) => {
+      const rows = await sql<{ date: string; usd_spent: string }[]>`
+        select to_char(date, 'YYYY-MM-DD') as date, usd_spent from daily_spend
+        where ${sinceDay ? sql`date >= ${sinceDay}` : sql`true`}
+        order by date`;
+      return rows.map((r) => ({ date: r.date, usd: Number(r.usd_spent) }));
     },
   };
 }

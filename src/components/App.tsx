@@ -6,6 +6,7 @@ import { setScreen, watchPage } from "@/lib/client/journey";
 import { backPatch } from "@/lib/client/navigation";
 import { hasSavedData } from "@/lib/client/options";
 import { AppProvider, useApp, type Step } from "@/lib/client/state";
+import { useAnalytics } from "@/lib/client/use-analytics";
 import { FeedbackProvider, useFeedback } from "./Feedback";
 import { Logo } from "./Mascot";
 import { OptionsButton } from "./Options";
@@ -47,6 +48,7 @@ function Shell() {
   stateRef.current = state;
 
   useEffect(watchPage, []);
+  useAnalytics(state);
   useEffect(() => setScreen(state.step), [state.step]);
 
   useEffect(() => {

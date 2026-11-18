@@ -251,10 +251,10 @@ The core decision: names and their facts come from a curated database, and the L
 | Frontend | Next.js (React, TypeScript), Tailwind, installable PWA | One codebase, good RTL support, fast on mobile |
 | i18n | Hebrew only, `dir="rtl"` at the root | All UI, names, meanings, and model output in Hebrew |
 | Backend | Next.js route handlers on Vercel | No separate server to run for v1 |
-| Database | Postgres (Supabase) | In v1 only the name database, the daily spend counter, QA results and feedback reports; no user data. Realtime built in for couple mode (v2) |
+| Database | Postgres (Supabase) | In v1 only the name database, the daily spend counter, QA results, feedback reports and anonymous usage events; no user data. Realtime built in for couple mode (v2) |
 | Couple sync (v2) | Supabase Realtime | Only the Match screen needs it |
 | LLM | Claude API: Sonnet 5.5 for picking and explaining, Haiku 5.5 for parsing free text | Strong Hebrew, structured JSON output |
-| Analytics | PostHog | Funnel per screen, no PII |
+| Analytics | Own `events` table in Postgres and a password-protected dashboard at `/admin` | No third party gets visitor data; LLM cost is already in the same database |
 | Email and schedule | A transactional email service and a scheduled job (for example Vercel Cron) | The daily feedback email and the owner alerts |
 
 ### Name data
@@ -273,6 +273,7 @@ The core decision: names and their facts come from a curated database, and the L
 | `daily_spend` | date, usd\_spent (the cost counter; no user data) |
 | `qa_checks` | id, name\_id, verdict, issue types, created\_at (results for sampled rounds; no preferences and no text) |
 | `reports` | id, type (error/suggestion/other), message, context (json: screen, app version, device, name\_id if sent from a card), created\_at. Held until the daily feedback email is sent, then deleted |
+| `events` | id, at, daily (random id, replaced daily), run (random id per search), name, props (json: counts and choice ids only). Anonymous usage events for the dashboard |
 
 **On the parent's device (v1).** The browser's local storage on the phone holds: baby's sex, the values derived from the due date, surname, family names, chips, free text and the parsed profile, the rounds and names already shown, verdicts and notes, and the accepted terms version. Start over clears it.
 
@@ -334,7 +335,7 @@ The principle: the server stores nothing about the parent.
 - **Due date.** The full date is entered on the device. The app works out the Hebrew month, a nearby holiday and the zodiac sign there and sends only those values. The date itself is never sent or stored.
 - **What the server does keep:** the name database; the daily spend counter; feedback reports, which are the only text a parent writes that is stored, because the parent chose to send it (held only until the daily email goes out, then deleted from the server; the form says so); QA results for sampled rounds (name id, verdict and issue types only); flagged-input counts (category and time only, no text); and aggregate analytics.
 - **Third parties.** Free text, family names and preferences are sent to the LLM provider to produce suggestions. The privacy note says so.
-- **Analytics** are aggregate only: time in session and sessions by hour. Events carry a random visit id made on the device and dropped when the visit ends, with no persistent cookie and no person profiles. IP addresses are not stored or hashed, and the analytics tool is set to discard them. All limits are counted per session token. The privacy note lists this.
+- **Analytics** are anonymous events stored in our own database: visits, screens reached, rounds completed, vote counts at the summary, chosen preference chips (ids only), share channel, Go again and Our pick. No names, free text, family names or dates are sent. Events carry two random ids made on the device: a daily id, replaced at midnight Israel time, which counts unique users per day but cannot link days, and a run id per search, replaced on Start over or after a day without use. No cookie and no person profiles. IP addresses are not stored. The dashboard at `/admin` shows entries, unique users per day, finished and shared searches, the mean, median and standard deviation of Interesting and Not sure votes per finished search, the screen and round funnel, share channels, top chips, Go again and Our pick rates, median time to finish, LLM cost (total and per finished search), days the budget ran out and rounds served without the model. All limits are counted per session token. The privacy note lists this.
 - **Deleting data.** Nothing about the parent is on the server, so there is nothing to delete there and no delete function in v1. Start over clears the device. Feedback reports carry no contact details, so they cannot be traced to a parent.
 - **Lost progress.** With no server copy, a parent who clears the browser data or switches phones starts again. Export my list is the way to keep a result, and the privacy note says so. Continuing on another device comes with the optional account in v3.
 - **V2 couple mode is the one exception.** Each participant gets an unguessable token in their link and a cookie on their device. The shared session (family names, preferences, verdicts) is held on the server only while the couple plays and is deleted automatically 24 hours after the last activity (proposed). A participant sees the other's verdicts, including No, only on the Match screen and only after both have finished their rounds.

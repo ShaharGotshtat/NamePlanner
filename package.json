@@ -11,6 +11,7 @@
     "test": "vitest run",
     "data:build": "tsx scripts/build-names.ts",
     "db:seed": "tsx scripts/seed-db.ts",
+    "db:schema": "tsx scripts/apply-schema.ts",
     "db:styles": "tsx scripts/load-styles.ts",
     "styles:score": "tsx scripts/score-styles.ts",
     "styles:sample": "tsx scripts/style-sample.ts",

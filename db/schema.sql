@@ -1,5 +1,5 @@
 -- NamePlanner v1 schema. The server keeps no user data: only names, the spend counter,
--- QA results and feedback reports waiting for the daily email.
+-- QA results, feedback reports waiting for the daily email and anonymous usage events.
 
 create table if not exists names (
   id            integer primary key,
@@ -50,6 +50,18 @@ create table if not exists reports (
   created_at  timestamptz not null default now()
 );
 
+-- Anonymous usage events for the dashboard. daily is a random id made on the device and replaced every day (unique
+-- users per day); run is a random id for one search. props hold counts and choice ids only, never names or text.
+create table if not exists events (
+  id          bigserial primary key,
+  at          timestamptz not null default now(),
+  daily       uuid not null,
+  run         uuid not null,
+  name        text not null,
+  props       jsonb not null default '{}'::jsonb
+);
+create index if not exists events_at on events (at);
+
 -- Supabase exposes the public schema through its REST API with a key that browsers can see.
 -- The app connects to Postgres directly as the table owner, so RLS with no policies blocks the API without affecting the app.
 alter table names enable row level security;
@@ -57,3 +69,4 @@ alter table daily_spend enable row level security;
 alter table app_settings enable row level security;
 alter table qa_checks enable row level security;
 alter table reports enable row level security;
+alter table events enable row level security;
