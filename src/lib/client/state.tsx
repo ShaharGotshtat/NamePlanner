@@ -76,6 +76,12 @@ export const initialState: AppState = {
 
 const STORAGE_KEY = "nameplanner:v1";
 
+/** After this long without use, a returning visit starts a new search (issue #64). Matches the analytics run TTL. */
+export const IDLE_RESTART_MS = 24 * 60 * 60 * 1000;
+
+/** What is stored: the state plus when it was last saved. */
+type Saved = Partial<AppState> & { savedAt?: number };
+
 type Update = Partial<AppState> | ((state: AppState) => Partial<AppState>);
 
 interface AppContextValue {
@@ -87,10 +93,26 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+/**
+ * Resumes where the parent left off, unless the app sat unused for a day or more. Then it opens on the
+ * welcome screen with everything entered kept (sex, due date, family, preferences) and the names
+ * voted "no" remembered, the same as Start over. Data saved before timestamps existed counts as old.
+ */
+export function restore(saved: Saved | null, now = Date.now()): { state: AppState; restarted: boolean } {
+  if (!saved) return { state: initialState, restarted: false };
+  const { savedAt, ...rest } = saved;
+  const state: AppState = { ...initialState, ...rest };
+  const idle = savedAt === undefined || now - savedAt >= IDLE_RESTART_MS;
+  if (!idle || state.step === "welcome") return { state, restarted: false };
+  return { state: { ...state, ...restartPatch(state) }, restarted: true };
+}
+
 function load(): AppState {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? { ...initialState, ...JSON.parse(saved) } : initialState;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const { state, restarted } = restore(raw ? JSON.parse(raw) : null);
+    if (restarted) newRun();
+    return state;
   } catch {
     return initialState;
   }
@@ -104,7 +126,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!state) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
     } catch {
       // Storage can be unavailable (private mode); the flow still works for this visit.
     }
