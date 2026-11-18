@@ -5,7 +5,7 @@ import { evaluate, matchContext, type Evaluation, type MatchContext } from "./re
 import { closest, profileOf, profileOfText, similarity, type NameProfile } from "./similarity";
 import { findNoPatterns, matchesPattern, type NoPattern } from "./no-patterns";
 
-export const ROUND_SIZE = 3;
+export const ROUND_SIZE = 4;
 export const MODEL_CANDIDATES = 60;
 
 const WEIGHTS = { want: 2, interesting: 3, unsure: 1, noPattern: -1.5, reference: 1.5, sibling: 1, diversity: 2 };
@@ -103,7 +103,8 @@ export function rankCandidates(names: NameEntry[], req: RoundRequest): Candidate
   return mostWants.length >= ROUND_SIZE ? mostWants : passing;
 }
 
-const SLOTS_FOR_UNKNOWN: NameSex[] = ["boy", "girl", "unisex"];
+/** Unknown sex: one of each, plus a fourth slot open to any sex. */
+const SLOTS_FOR_UNKNOWN: (NameSex | null)[] = ["boy", "girl", "unisex", null];
 
 /** Picks strong names that differ from each other, so each round also tests a direction. */
 export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["babySex"]): Candidate[] {

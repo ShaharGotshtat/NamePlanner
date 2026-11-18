@@ -33,13 +33,19 @@ export function Rounds() {
   const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
   const [lastVerdict, setLastVerdict] = useState<Verdict | null>(null);
   const requested = useRef(false);
-  // Names in a round are revealed one at a time. Already-rated names (e.g. after a reload) start revealed.
-  const [revealed, setRevealed] = useState(() => {
+  // One name is shown at a time. The first name of a round starts sealed; the rest open with the
+  // "next name" button. After a reload, resume at the first unrated name.
+  const [index, setIndex] = useState(() => {
     const r = currentRound(state);
-    return r ? r.suggestions.filter((x) => state.ratings[x.name.id]?.verdict).length : 0;
+    if (!r) return 0;
+    const firstUnrated = r.suggestions.findIndex((x) => !state.ratings[x.name.id]?.verdict);
+    return firstUnrated < 0 ? r.suggestions.length - 1 : firstUnrated;
   });
-  const [animateFrom, setAnimateFrom] = useState(Infinity);
-  const revealedRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [opened, setOpened] = useState(() => {
+    const r = currentRound(state);
+    return !!r && r.suggestions.some((x) => state.ratings[x.name.id]?.verdict);
+  });
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const round = currentRound(state);
   const roundNumber = state.rounds.filter((r) => r.pass === state.pass).length;
@@ -118,8 +124,8 @@ export function Rounds() {
     setRoundNote("");
     setMisreads([]);
     setLastVerdict(null);
-    setRevealed(0);
-    setAnimateFrom(0);
+    setIndex(0);
+    setOpened(false);
     requested.current = false;
     update(patch);
   };
@@ -160,16 +166,16 @@ export function Rounds() {
   const anyInteresting = Object.values(state.ratings).some((r) => r.verdict === "interesting");
   const allRated = round.suggestions.every((x) => state.ratings[x.name.id]?.verdict);
   const total = round.suggestions.length;
-  const allRevealed = revealed >= total;
+  const current = round.suggestions[Math.min(index, total - 1)];
+  const currentRated = !!state.ratings[current.name.id]?.verdict;
+  const isLast = index >= total - 1;
 
-  const revealNext = () => {
-    const index = revealed;
-    setAnimateFrom(Math.min(animateFrom, index));
-    setRevealed(index + 1);
+  const goTo = (i: number) => {
+    setIndex(i);
     requestAnimationFrame(() => {
-      const el = revealedRefs.current[index];
+      const el = cardRef.current;
       el?.focus({ preventScroll: true });
-      el?.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      el?.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     });
   };
 
@@ -190,58 +196,51 @@ export function Rounds() {
       </div>
       <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
 
-      <div className="space-y-4">
-        {round.suggestions.map((s, i) =>
-          i < revealed ? (
-            <div
-              key={s.name.id}
-              ref={(el) => {
-                revealedRefs.current[i] = el;
-              }}
-              tabIndex={-1}
-              aria-label={`שם ${i + 1} מתוך ${total}`}
-              className={`rounded-3xl focus:outline-none ${i >= animateFrom ? "animate-name-reveal" : ""}`}
-            >
-              <NameCard
-                suggestion={s}
-                rating={state.ratings[s.name.id]}
-                showSex={state.babySex === "unknown"}
-                allowNotes={allowNotes}
-                onRate={(verdict) => rate(s.name.id, verdict)}
-                onNote={(note) => setNote(s.name.id, note)}
-                onMisread={(requirement, on) =>
-                  setMisreads((m) =>
-                    on ? [...m, { nameId: s.name.id, requirement }] : m.filter((x) => !(x.nameId === s.name.id && x.requirement === requirement)),
-                  )
-                }
-                onUndoTaken={() => undoTaken(s.name.id, s.name.nameHe)}
-              />
-            </div>
-          ) : i === revealed ? (
-            <button
-              key={s.name.id}
-              onClick={revealNext}
-              aria-label={`חשיפת שם ${i + 1} מתוך ${total}`}
-              className="animate-sealed-pulse flex min-h-32 w-full flex-col items-center justify-center gap-1 rounded-3xl border-2 border-dashed border-rose bg-white p-5 text-center shadow-sm"
-            >
-              <span aria-hidden className="font-display text-4xl font-semibold text-rose-dark">?</span>
-              <span className="text-sm text-ink-soft">
-                שם {i + 1} מתוך {total}
-              </span>
-            </button>
-          ) : (
-            <div
-              key={s.name.id}
-              aria-hidden
-              className="flex min-h-20 items-center justify-center rounded-3xl border-2 border-dashed border-line text-2xl text-ink-soft/40"
-            >
-              ?
-            </div>
-          ),
-        )}
+      <div className="mb-3 flex items-center justify-center gap-2" aria-label={`שם ${index + 1} מתוך ${total}`}>
+        {round.suggestions.map((s, i) => (
+          <span
+            key={s.name.id}
+            aria-hidden
+            className={`h-2 rounded-full transition-all ${i === index ? "w-6 bg-rose-dark" : state.ratings[s.name.id]?.verdict ? "w-2 bg-rose" : "w-2 bg-line"}`}
+          />
+        ))}
+        <span className="ms-1 text-xs text-ink-soft">
+          שם {index + 1} מתוך {total}
+        </span>
       </div>
 
-      {allowNotes && allRevealed && (
+      {!opened ? (
+        <button
+          onClick={() => {
+            setOpened(true);
+            goTo(index);
+          }}
+          className="animate-sealed-pulse flex min-h-64 w-full flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-rose bg-white p-6 text-center shadow-sm"
+        >
+          <span aria-hidden className="font-display text-6xl font-semibold text-rose-dark">?</span>
+          <span className="rounded-full bg-rose-dark px-5 py-2.5 font-medium text-white">לחשיפת השם הראשון</span>
+        </button>
+      ) : (
+        <div key={current.name.id} ref={cardRef} tabIndex={-1} className="animate-name-reveal rounded-3xl focus:outline-none">
+          <NameCard
+            large
+            suggestion={current}
+            rating={state.ratings[current.name.id]}
+            showSex={state.babySex === "unknown"}
+            allowNotes={allowNotes}
+            onRate={(verdict) => rate(current.name.id, verdict)}
+            onNote={(note) => setNote(current.name.id, note)}
+            onMisread={(requirement, on) =>
+              setMisreads((m) =>
+                on ? [...m, { nameId: current.name.id, requirement }] : m.filter((x) => !(x.nameId === current.name.id && x.requirement === requirement)),
+              )
+            }
+            onUndoTaken={() => undoTaken(current.name.id, current.name.nameHe)}
+          />
+        </div>
+      )}
+
+      {opened && isLast && allRated && allowNotes && (
         <input
           className={`${inputClass} mt-4 text-sm`}
           maxLength={200}
@@ -252,9 +251,22 @@ export function Rounds() {
         />
       )}
 
-      <Button className="mt-6 w-full" disabled={!allRevealed || !allRated} onClick={next}>
-        {roundNumber >= ROUNDS_PER_PASS ? "לסיכום" : "לסבב הבא"}
-      </Button>
+      {opened &&
+        (isLast ? (
+          <Button className="mt-6 w-full py-4 text-lg" disabled={!allRated} onClick={next}>
+            {roundNumber >= ROUNDS_PER_PASS ? "לסיכום" : "לסבב הבא"}
+          </Button>
+        ) : (
+          <Button className="mt-6 w-full py-4 text-lg" disabled={!currentRated} onClick={() => goTo(index + 1)}>
+            לשם הבא
+          </Button>
+        ))}
+
+      {opened && index > 0 && (
+        <button className="mx-auto mt-2 block min-h-11 text-sm text-ink-soft underline" onClick={() => goTo(index - 1)}>
+          חזרה לשם הקודם
+        </button>
+      )}
     </div>
   );
 }

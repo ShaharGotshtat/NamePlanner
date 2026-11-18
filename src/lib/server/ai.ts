@@ -87,7 +87,7 @@ function describeCandidate(c: Candidate): string {
 const SEX_INSTRUCTION: Record<BabySex, string> = {
   boy: "The baby is a boy.",
   girl: "The baby is a girl.",
-  unknown: "The baby's sex is not known yet: pick exactly one boy name, one girl name and one unisex name.",
+  unknown: "The baby's sex is not known yet: pick at least one boy name, one girl name and one unisex name; the fourth name may be of any sex.",
 };
 
 /** Lets the model choose among the ranked candidates. Ids outside the list are dropped. */

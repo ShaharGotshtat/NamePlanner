@@ -74,12 +74,12 @@ A single user goes through four steps and a summary. In couple mode both users d
 flowchart TD
     W["Welcome<br/>Just me or with partner, baby's sex"] --> F["Family names<br/>Taken names, sibling taste"]
     F --> P["Preferences<br/>Chips plus free-text chat"]
-    P --> R["Round of 3 names<br/>Rate: No, Not sure, Interesting"]
+    P --> R["Round of 4 names, one at a time<br/>Rate: No, Not sure, Interesting"]
     R -- "next round, up to 5" --> R
-    R -- "after round 5 or early finish" --> S["Summary<br/>No match, top 3, or first choice"]
+    R -- "after round 3 or early finish" --> S["Summary<br/>No match, top 3, or first choice"]
     J["Partner joins by link<br/>WhatsApp invite, skips Welcome"] -- "enters at Family" --> F
     S -- "couple mode, both done" --> M["Match<br/>Likes, maybes, and No votes"]
-    M --> JR["Joint rounds<br/>Up to 2, both rate each name"]
+    M --> JR["Joint round<br/>1, both rate each name"]
     JR --> CS["Couple summary<br/>Same outcomes, mutual list"]
 ```
 
@@ -95,7 +95,7 @@ There are six screens: Welcome, Family, Preferences, Suggestion rounds, Summary,
 
 - One-line value proposition and a Start button. No sign-up.
 - Choice of **Just me** or **With my partner (v2)**. In v1 only Just me is shown. With my partner creates a shared session and an invite link (WhatsApp share button first, copy link second).
-- Baby's sex: Boy, Girl, Not known yet. Next to it, an optional due date: the full date (day, month and year) in the Gregorian calendar. The app works out the Hebrew month, a nearby holiday and the zodiac sign on the device and sends only those to the server, never the date itself. If it is left empty, the holiday, season, or zodiac chip is not offered. "Not known yet" suggests one boy, one girl, and one unisex name per round unless the parent asks otherwise.
+- Baby's sex: Boy, Girl, Not known yet. Next to it, an optional due date: the full date (day, month and year) in the Gregorian calendar. The app works out the Hebrew month, a nearby holiday and the zodiac sign on the device and sends only those to the server, never the date itself. If it is left empty, the holiday, season, or zodiac chip is not offered. "Not known yet" suggests at least one boy, one girl, and one unisex name per round (the fourth name can be any sex) unless the parent asks otherwise.
 - Terms line: under the Start button, one line of text in Hebrew with a link to the terms of use, for example: "By continuing you accept the terms of use and understand that the suggestions are AI-generated and may be wrong." The words "terms of use" are the link. There is no checkbox: tapping Start counts as acceptance. The final Hebrew wording, and whether a line without a checkbox is enough, are confirmed in the lawyer review. See Disclaimer and terms of use in Technical.
 
 ### 2. Family names
@@ -131,11 +131,11 @@ An optional "Names we like" field takes a few reference names; the app learns th
 
 ### 4. Suggestion rounds
 
-- Three name cards per round. Each card: the name with niqqud and its Latin spelling, meaning, origin, how common it is (babies given the name last year, its rank, and whether it is rising or falling, from CBS data; a "Full data" button opens a chart of the name's yearly count since 1949, split by sex), and one line on why it fits this family. A "Why this name?" button opens the full explanation (below).
+- Four names per round, shown one big card at a time. The first name of each round starts sealed behind a "?" card with an explicit reveal button; after a vote, a big "Next name" button opens the next one, and a "Back to the previous name" link allows changing a vote. Each card: the name with niqqud and its Latin spelling, meaning, origin, how common it is (babies given the name last year, its rank, and whether it is rising or falling, from CBS data; a "Full data" button opens a chart of the name's yearly count since 1949, split by sex), and one line on why it fits this family. A "Why this name?" button opens the full explanation (below).
 - Per card, three buttons: **No**, **Not sure**, **Interesting**, plus an optional free-text note ("too similar to my cousin Noa"). A smaller fourth action, "Taken in our family", removes the name and adds it to the family list.
 - An optional round-level note ("all too old-fashioned").
-- A Next round button, enabled once all three cards are rated.
-- A visible counter: Round 2 of 5.
+- A Next round button, shown on the fourth name, enabled once all four names are rated.
+- A visible counter: Round 2 of 3.
 - An "I found it" button on every round, which jumps to Summary.
 
 ### Why this name?
@@ -150,7 +150,7 @@ Every suggestion explains itself against the parent's own requirements, so the p
 
 ### 5. Summary
 
-See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (v2, below), Go again (another 5 rounds with the same or edited preferences, never repeating a name already shown), and, from v2 in single mode, invite my partner to do the same.
+See the outcome rules in the next section. Every outcome screen offers: an Export my list button (below), an "I feel adventurous, make up a new name for me" button (v2, below), Go again (another 3 rounds with the same or edited preferences, never repeating a name already shown), and, from v2 in single mode, invite my partner to do the same.
 
 **Export my list** opens a sheet with two formats (v1 has text only):
 
@@ -177,8 +177,8 @@ Shown when both parents have finished their rounds. Described under Couple mode 
 
 The Match screen opens with a **match score** from 0 to 100%:
 
-- **Before joint rounds:** how far the two preference profiles overlap: shared chips, compatible Musts, and free-text wishes that point the same way. Each parent sees different names in their own rounds, so few names are rated by both at this stage.
-- **After joint rounds:** the score is recomputed from verdicts on the names both parents rated. Both Interesting counts fully, Interesting plus Not sure counts half, and a No against an Interesting counts zero.
+- **Before the joint round:** how far the two preference profiles overlap: shared chips, compatible Musts, and free-text wishes that point the same way. Each parent sees different names in their own rounds, so few names are rated by both at this stage.
+- **After the joint round:** the score is recomputed from verdicts on the names both parents rated. Both Interesting counts fully, Interesting plus Not sure counts half, and a No against an Interesting counts zero.
 - The score shows on the couple summary and in the WhatsApp share, with the countdown before it is revealed.
 
 ### Send feedback
@@ -197,20 +197,20 @@ A Send feedback link sits in the footer of every screen, next to the terms link.
 
 ## Suggestion logic and outcomes
 
-Each round learns from the last: hard constraints filter the candidate pool, and feedback reshapes what the next three names look like.
+Each round learns from the last: hard constraints filter the candidate pool, and feedback reshapes what the next four names look like.
 
 ### How a round is built
 
 1. **Filter.** Remove names that break a hard rule: wrong sex, a close family name, a name already shown, any chip marked Must.
 2. **Score.** Rank the rest against chips marked Want, the parsed free-text preferences, and feedback so far (a No on a name pushes down similar names by sound, origin, length, and style; an Interesting pushes them up).
-3. **Pick three.** Take three strong candidates that differ from each other (not three variations of the same name), so each round also tests a direction.
+3. **Pick four.** Take four strong candidates that differ from each other (not four variations of the same name), so each round also tests a direction.
 4. **Explain.** Write the one-line "why it fits" and the full per-requirement explanation for each card.
 
 Free-text feedback ("too biblical", "I like names ending in -el") is parsed into the same preference profile, so it affects every later round, not only the next one.
 
 ### Ending the flow
 
-The flow ends after round 5, or earlier when the parent taps "I found it".
+The flow ends after round 3, or earlier when the parent taps "I found it".
 
 | What the parent marked | Summary shown |
 | --- | --- |
@@ -218,7 +218,7 @@ The flow ends after round 5, or earlier when the parent taps "I found it".
 | Exactly one Interesting | "\<Name> is your first choice! Share it with your partner." |
 | Two or more Interesting | "The top names you liked are X, Y, Z." Ranked by the parent with a quick "pick your favorite" step, which then leads to the first-choice screen. |
 
-**Our pick.** When the outcome is "no match", the same screen ends with one name chosen by the app and the reason for it. This covers a parent with no Interesting name, and a couple with no name both marked Interesting after the joint rounds. The pick sits under the message and the Go again button, labelled "Our pick, which you didn't mark", so it is not mistaken for a choice the parent made.
+**Our pick.** When the outcome is "no match", the same screen ends with one name chosen by the app and the reason for it. This covers a parent with no Interesting name, and a couple with no name both marked Interesting after the joint round. The pick sits under the message and the Go again button, labelled "Our pick, which you didn't mark", so it is not mistaken for a choice the parent made.
 
 - **Choice:** one name already shown in the session. A Not sure name comes first; if there is none, the shown name that fits the saved preferences best. In couple mode, the name that best fits both profiles, preferring one marked Interesting by one parent and Not sure by the other. Musts and family-name checks always apply, and a name either parent marked No is never picked.
 - **Reason:** two or three sentences from stored data: which preferences the name meets, its meaning, and how common it is. In couple mode the reason says what it meets for each parent.
@@ -229,14 +229,14 @@ With more than three Interesting names, the top three are those the parent ranks
 
 ### Couple mode (v2)
 
-Both parents go through Preferences and rounds on their own phones, against the shared Family screen. Each parent has at most 3 own rounds. Then:
+Both parents go through Preferences and rounds on their own phones, against the shared Family screen. Each parent has at most 2 own rounds. Then:
 
-1. **Match screen.** Names both marked Interesting appear first as mutual matches. Names one parent marked Interesting and the other Not sure appear as "worth discussing". Each parent also sees the other's No votes and notes, so the couple knows what is off the table before joint rounds. No votes stay hidden until both have finished their own rounds, so neither parent is anchored by the other.
-2. **Joint rounds.** Up to two rounds of new suggestions that count toward each parent's 5-round limit (each parent has at most 3 own rounds, and joint rounds use the 2 that remain), built from both profiles: hard rules from both parents apply (family-name checks plus both parents' Musts), Want preferences are blended. Both rate each card; a name lands in the mutual list only when both mark it Interesting.
+1. **Match screen.** Names both marked Interesting appear first as mutual matches. Names one parent marked Interesting and the other Not sure appear as "worth discussing". Each parent also sees the other's No votes and notes, so the couple knows what is off the table before the joint round. No votes stay hidden until both have finished their own rounds, so neither parent is anchored by the other.
+2. **Joint round.** One round of new suggestions that counts toward each parent's 3-round limit (each parent has at most 2 own rounds, and the joint round uses the one that remains), built from both profiles: hard rules from both parents apply (family-name checks plus both parents' Musts), Want preferences are blended. Both rate each card; a name lands in the mutual list only when both mark it Interesting.
 3. **Conflicts.** When the two profiles cannot both be satisfied (one parent Must "Unisex", the other Must "Grandparent-friendly"), the app says so plainly and asks each parent which rule they would relax, rather than returning nothing.
 4. **Couple summary.** Same three outcomes as above, applied to the mutual list.
 
-**No mutual match.** If no name is marked Interesting by both parents after their own rounds, the Match screen still shows the "worth discussing" names and each parent's No votes, and sends the couple straight to the 2 joint rounds. If there is still no mutual name after the joint rounds, both parents see: "Sorry, we couldn't find a name you both like." The screen shows the "worth discussing" names, an Our pick chosen for the couple (see Our pick above), a Go again button for both (a new set of up to 3 own rounds each and 2 joint rounds, never repeating a name already shown), and the optional field "Names you like, even if they're taken" for each parent.
+**No mutual match.** If no name is marked Interesting by both parents after their own rounds, the Match screen still shows the "worth discussing" names and each parent's No votes, and sends the couple straight to the joint round. If there is still no mutual name after the joint round, both parents see: "Sorry, we couldn't find a name you both like." The screen shows the "worth discussing" names, an Our pick chosen for the couple (see Our pick above), a Go again button for both (a new set of up to 2 own rounds each and 1 joint round, never repeating a name already shown), and the optional field "Names you like, even if they're taken" for each parent.
 
 The partner who joins by link skips Welcome and goes straight to Family (prefilled) and Preferences.
 
@@ -293,10 +293,10 @@ The core decision: names and their facts come from a curated database, and the L
 
 1. SQL filters `names` by the hard rules (sex, family-name duplicates, already shown, Must chips that map to features). The app sends the family names, the names already shown and the chips with each request.
 2. A heuristic score orders the remainder; the top 50 to 100 go to the model. It is plain code, no model call: points for each Want chip the name's features meet, plus similarity to names marked Interesting, sibling names and reference names, A No removes that name only; its note, if any, is parsed into an avoid wish. From 3 No votes, traits that at least 75% of the No names share and no Interesting name has (ending, syllables, length, origin, style, theme, popularity band) lower the score of names that have them. Popularity adds no points by itself: it counts only when the parent asks for it. Common and rare split at the median rank of the latest CBS year (half of the babies got a name at or above it: 47 for girls, 38 for boys in 2024); "very rare" or "special" means below rank 150. Similarity compares stored features: length, syllables, ending sound, origin, meaning category, popularity band.
-3. The model receives the profile, family list, and feedback history, and returns JSON: three name ids, a one-line reason for each, and a per-requirement explanation (requirement id, met / partly / not met, one sentence). The server rejects any id not in the candidate list.
+3. The model receives the profile, family list, and feedback history, and returns JSON: four name ids, a one-line reason for each, and a per-requirement explanation (requirement id, met / partly / not met, one sentence). The server rejects any id not in the candidate list.
 4. Free text (preferences, card notes, round notes) goes through a small parsing call that returns an updated `parsed_profile`, which the app keeps on the device.
 
-That is about two model calls per round, so roughly 12 per single-parent session.
+That is about two model calls per round, so roughly 8 per single-parent session.
 
 ### API
 
@@ -472,8 +472,8 @@ Targets to set after the first 100 real sessions; I have no baseline to propose 
 ### Open questions
 
 - [ ] Is v1 Jewish sector only, or all sectors?
-- [x] Does "Not known yet" mix boy, girl, and unisex in each round, or ask the parent to pick a direction? Decided: mix, one boy, one girl, and one unisex name per round.
-- [x] Should joint rounds count toward the 5-round limit or be extra? Decided: they count.
+- [x] Does "Not known yet" mix boy, girl, and unisex in each round, or ask the parent to pick a direction? Decided: mix, at least one boy, one girl, and one unisex name per round, with the fourth name of any sex.
+- [x] Should joint rounds count toward the round limit or be extra? Decided: they count (3 rounds per parent: 2 own, 1 joint, since issue #57).
 - [x] Who reviews generated name meanings, and at what view count does a name enter the review queue?
 - [x] Do cards also show a Latin spelling, for parents who care how the name reads abroad? Decided: yes, on every card.
 - [ ] The daily LLM budget starts at $3 (global cap). Update it after the first test, once the real cost per session is known, and confirm the 80% warning level.
