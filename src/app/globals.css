@@ -17,6 +17,11 @@
   --font-body: "Rubik", system-ui, sans-serif;
 }
 
+/* iOS: no double-tap zoom on fast repeated taps (vote, next). Pinch zoom stays. */
+html {
+  touch-action: manipulation;
+}
+
 body {
   background: var(--color-cream);
   color: var(--color-ink);

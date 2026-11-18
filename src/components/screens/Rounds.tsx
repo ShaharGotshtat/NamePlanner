@@ -242,7 +242,7 @@ export function Rounds() {
 
       {opened && isLast && allRated && allowNotes && (
         <input
-          className={`${inputClass} mt-4 text-sm`}
+          className={`${inputClass} mt-4 text-base sm:text-sm`}
           maxLength={200}
           value={roundNote}
           onChange={(e) => setRoundNote(e.target.value)}
