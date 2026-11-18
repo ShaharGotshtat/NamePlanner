@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackEvent } from "@/lib/client/analytics";
 import { fetchOurPick } from "@/lib/client/api";
 import { displayMeaning } from "@/lib/names/catalog";
 import { roundRequest, shownSuggestions, useApp } from "@/lib/client/state";
@@ -23,7 +24,10 @@ export function Summary() {
   const unsure = shown.filter((s) => verdictOf(s) === "unsure");
   const favorite = interesting.find((s) => s.name.id === state.favoriteId) ?? (interesting.length === 1 ? interesting[0] : null);
 
-  const goAgain = () => update((s) => ({ pass: s.pass + 1, step: "preferences", favoriteId: null }));
+  const goAgain = () => {
+    trackEvent({ name: "go_again", props: { pass: state.pass } });
+    update((s) => ({ pass: s.pass + 1, step: "preferences", favoriteId: null }));
+  };
 
   return (
     <div>
@@ -99,8 +103,10 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
       .finally(() => setLoading(false));
   }, [pick, state, update]);
 
-  const markInteresting = (s: Suggestion) =>
+  const markInteresting = (s: Suggestion) => {
+    trackEvent({ name: "our_pick", props: { action: "accepted" } });
     update((st) => ({ ratings: { ...st.ratings, [s.name.id]: { nameId: s.name.id, verdict: "interesting" } }, favoriteId: s.name.id }));
+  };
 
   return (
     <>
@@ -126,7 +132,10 @@ function NoMatch({ unsure }: { unsure: Suggestion[] }) {
           <p className="mt-2 text-sm">{pick.suggestion.reason}</p>
           <div className="mt-4 flex gap-2">
             <Button onClick={() => markInteresting(pick.suggestion!)}>מעניין</Button>
-            <Button variant="secondary" onClick={() => update({ ourPick: { ...pick, dismissed: true } })}>
+            <Button variant="secondary" onClick={() => {
+              trackEvent({ name: "our_pick", props: { action: "dismissed" } });
+              update({ ourPick: { ...pick, dismissed: true } });
+            }}>
               לא תודה
             </Button>
           </div>

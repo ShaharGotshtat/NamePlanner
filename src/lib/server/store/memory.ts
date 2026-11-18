@@ -1,5 +1,6 @@
 import names from "../../../../data/names.sample.json";
 import type { NameEntry } from "@/lib/types";
+import type { StoredEvent } from "@/lib/analytics/events";
 import type { Report, Store } from "./types";
 
 /** Local development store, used only without DATABASE_URL: a 56-name sample and counters that reset on restart. Production reads names from the database. */
@@ -7,6 +8,7 @@ export function memoryStore(): Store {
   const spend = new Map<string, number>();
   const alerts = new Set<string>();
   let reports: Report[] = [];
+  const events: StoredEvent[] = [];
 
   return {
     loadNames: async () => names as NameEntry[],
@@ -30,5 +32,11 @@ export function memoryStore(): Store {
       reports = [];
       return taken;
     },
+    addEvent: async ({ daily, run, event }) => {
+      events.push({ at: new Date(), daily, run, name: event.name, props: event.props });
+    },
+    listEvents: async (since) => events.filter((e) => !since || e.at >= since),
+    listSpend: async (sinceDay) =>
+      [...spend].filter(([date]) => !sinceDay || date >= sinceDay).map(([date, usd]) => ({ date, usd })),
   };
 }

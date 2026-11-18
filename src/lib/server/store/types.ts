@@ -1,3 +1,5 @@
+import type { RecordedEvent, StoredEvent } from "@/lib/analytics/events";
+import type { SpendDay } from "@/lib/analytics/stats";
 import type { NameEntry } from "@/lib/types";
 
 export type ReportType = "error" | "suggestion" | "other";
@@ -18,7 +20,7 @@ export interface Report {
   createdAt: Date;
 }
 
-/** Everything the server keeps. None of it is about the parent. */
+/** Everything the server keeps. None of it identifies the parent. */
 export interface Store {
   loadNames(): Promise<NameEntry[]>;
   getSetting(key: string): Promise<string | null>;
@@ -29,4 +31,9 @@ export interface Store {
   addReport(report: Report): Promise<void>;
   /** Returns all held reports and deletes them. */
   takeReports(): Promise<Report[]>;
+  addEvent(event: RecordedEvent): Promise<void>;
+  /** Events since the given time, or all of them for null. */
+  listEvents(since: Date | null): Promise<StoredEvent[]>;
+  /** Days on or after the given YYYY-MM-DD, or all of them for null. */
+  listSpend(sinceDay: string | null): Promise<SpendDay[]>;
 }

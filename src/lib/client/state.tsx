@@ -11,6 +11,7 @@ import type {
   RoundRequest,
   Suggestion,
 } from "@/lib/types";
+import { forgetAnalytics, newRun } from "./analytics";
 import { clearJourney, describeChange, track } from "./journey";
 
 export type Step = "welcome" | "family" | "preferences" | "rounds" | "summary";
@@ -118,13 +119,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const startOver = useCallback(() => update(restartPatch), [update]);
+  const startOver = useCallback(() => {
+    newRun();
+    update(restartPatch);
+  }, [update]);
 
   const deleteAll = useCallback(() => {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
     clearJourney();
+    forgetAnalytics();
     setState(initialState);
   }, []);
 

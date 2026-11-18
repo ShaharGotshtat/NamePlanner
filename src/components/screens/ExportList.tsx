@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/client/analytics";
 import { APP_NAME } from "@/lib/constants";
 import { displayMeaning } from "@/lib/names/catalog";
 import type { Suggestion } from "@/lib/types";
@@ -26,6 +27,7 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
   const share = async () => {
     try {
       await navigator.share({ text: buildMessage(names, favorite) });
+      trackEvent({ name: "share", props: { channel: "share" } });
     } catch {
       // Cancelled or blocked: the other options are right there.
     }
@@ -34,6 +36,7 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
   const copy = async () => {
     await navigator.clipboard.writeText(buildMessage(names, favorite));
     setCopied(true);
+    trackEvent({ name: "share", props: { channel: "copy" } });
   };
 
   return (
@@ -44,6 +47,7 @@ export function ExportList({ names, favorite }: { names: Suggestion[]; favorite:
         href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite))}`}
         target="_blank"
         rel="noreferrer"
+        onClick={() => trackEvent({ name: "share", props: { channel: "whatsapp" } })}
       >
         שליחה בוואטסאפ
       </a>
