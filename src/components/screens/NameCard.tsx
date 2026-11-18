@@ -195,7 +195,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
 
       {allowNotes && noteOpen && (
         <input
-          className={`${inputClass} mt-2 text-sm`}
+          className={`${inputClass} mt-2 text-base sm:text-sm`}
           maxLength={200}
           value={rating?.note ?? ""}
           placeholder="למשל: דומה מדי לבת הדודה"

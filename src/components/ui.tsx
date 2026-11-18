@@ -54,6 +54,7 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
   return <section className={`rounded-3xl bg-white p-5 shadow-sm ring-1 ring-line ${className}`}>{children}</section>;
 }
 
+// Inputs must stay at 16px or more on phones, or iOS zooms in on focus and stays zoomed (issue #29).
 export const inputClass =
   "min-h-11 w-full rounded-xl border-2 border-line bg-white px-3 text-ink placeholder:text-ink-soft/60 focus:border-lavender-dark focus:outline-none";
 
