@@ -10,8 +10,8 @@ const midFlow: Partial<AppState> = {
   family: [{ name: "נועה", relation: "sibling" } as AppState["family"][number]],
   chips: { englishFriendly: "must" },
   declined: ["רחל"],
-  pass: 2,
-  rounds: [{ pass: 2, suggestions: [], completed: false }],
+  pass: 1,
+  rounds: [{ pass: 1, suggestions: [], completed: false }],
   favoriteId: 7,
 };
 
@@ -56,5 +56,12 @@ describe("restore", () => {
 
   it("does not count a parent already on the welcome screen as restarted", () => {
     expect(restore({ ...initialState, savedAt: 0 }, NOW).restarted).toBe(false);
+  });
+
+  it("never resets a parent who already reached the summary", () => {
+    const old = NOW - 3 * IDLE_RESTART_MS;
+    expect(restore({ ...midFlow, step: "summary", savedAt: old }, NOW)).toMatchObject({ restarted: false, state: { step: "summary" } });
+    // Searching again after the summary: the earlier list is kept too.
+    expect(restore({ ...midFlow, pass: 2, savedAt: old }, NOW)).toMatchObject({ restarted: false, state: { step: "rounds", pass: 2 } });
   });
 });
