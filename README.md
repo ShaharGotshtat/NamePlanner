@@ -1,4 +1,4 @@
-# שֶׁמֶצ׳ · ShemMatch
+# שֵׁמֶאץ׳ · ShemMatch
 
 A Hebrew, RTL, mobile-first web app that takes Israeli parents from "no idea" to a short list of baby names in about ten minutes. The product spec is in [docs/PRD.md](docs/PRD.md). This repository holds the v1 single-parent flow.
 

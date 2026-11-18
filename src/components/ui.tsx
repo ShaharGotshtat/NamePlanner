@@ -4,7 +4,7 @@ import { Mascot, type MascotMood } from "./Mascot";
 type Variant = "primary" | "secondary" | "ghost";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-rose-dark text-white hover:bg-rose-deep disabled:bg-rose-dark/40",
+  primary: "bg-rose text-ink hover:bg-rose-hover disabled:bg-rose/40 disabled:text-ink/50",
   secondary: "border-2 border-ink/15 bg-white text-ink hover:border-ink/30 disabled:opacity-50",
   ghost: "text-ink-soft underline-offset-2 hover:underline disabled:opacity-50",
 };
@@ -31,7 +31,7 @@ export function Toggle({
     <button
       aria-pressed={selected}
       className={`min-h-11 rounded-full border-2 px-4 text-sm font-medium transition-colors ${
-        selected ? "border-lavender-dark bg-lavender-dark text-white" : "border-line bg-white text-ink hover:border-lavender-dark/50"
+        selected ? "border-lavender bg-lavender text-ink" : "border-line bg-white text-ink hover:border-lavender"
       } ${className}`}
       {...props}
     />

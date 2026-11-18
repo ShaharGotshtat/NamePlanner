@@ -9,12 +9,12 @@ import { Card, inputClass } from "../ui";
 
 const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
   { id: "no", label: "לא", selected: "border-ink bg-ink text-white" },
-  { id: "unsure", label: "אולי", selected: "border-lavender-dark bg-lavender-dark text-white" },
-  { id: "interesting", label: "מעניין!", selected: "border-rose-dark bg-rose-dark text-white" },
+  { id: "unsure", label: "אולי", selected: "border-lavender bg-lavender text-ink" },
+  { id: "interesting", label: "מעניין!", selected: "border-rose bg-rose text-ink" },
 ];
 
 const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }> = {
-  met: { icon: "✓", label: "מתקיים", className: "bg-lavender-dark text-white" },
+  met: { icon: "✓", label: "מתקיים", className: "bg-lavender text-ink" },
   partly: { icon: "~", label: "מתקיים חלקית", className: "bg-amber-400 text-ink" },
   not_met: { icon: "✗", label: "לא מתקיים", className: "bg-ink/15 text-ink" },
 };

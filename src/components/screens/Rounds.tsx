@@ -218,7 +218,7 @@ export function Rounds() {
           className="animate-sealed-pulse flex min-h-64 w-full flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-rose bg-white p-6 text-center shadow-sm"
         >
           <span aria-hidden className="font-display text-6xl font-semibold text-rose-dark">?</span>
-          <span className="rounded-full bg-rose-dark px-5 py-2.5 font-medium text-white">לחשיפת השם הראשון</span>
+          <span className="rounded-full bg-rose px-5 py-2.5 font-medium text-ink">לחשיפת השם הראשון</span>
         </button>
       ) : (
         <div key={current.name.id} ref={cardRef} tabIndex={-1} className="animate-name-reveal rounded-3xl focus:outline-none">
