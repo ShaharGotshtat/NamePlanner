@@ -2,7 +2,7 @@ import type { ChipLevel } from "@/lib/types";
 
 const LEVELS: { id: ChipLevel; label: string; selected: string }[] = [
   { id: "want", label: "רצוי", selected: "bg-white text-ink shadow" },
-  { id: "must", label: "חובה", selected: "bg-lavender text-ink shadow" },
+  { id: "must", label: "חובה", selected: "bg-lavender-dark text-white shadow" },
 ];
 
 /** Both levels stay visible, so the label never flips under the user's finger. */
