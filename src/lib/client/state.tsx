@@ -97,13 +97,16 @@ const AppContext = createContext<AppContextValue | null>(null);
  * Resumes where the parent left off, unless the app sat unused for a day or more. Then it opens on the
  * welcome screen with everything entered kept (sex, due date, family, preferences) and the names
  * voted "no" remembered, the same as Start over. Data saved before timestamps existed counts as old.
+ * A parent who already reached the summary (on it now, or searching again after it) is never reset,
+ * so a finished list is not lost.
  */
 export function restore(saved: Saved | null, now = Date.now()): { state: AppState; restarted: boolean } {
   if (!saved) return { state: initialState, restarted: false };
   const { savedAt, ...rest } = saved;
   const state: AppState = { ...initialState, ...rest };
   const idle = savedAt === undefined || now - savedAt >= IDLE_RESTART_MS;
-  if (!idle || state.step === "welcome") return { state, restarted: false };
+  const reachedSummary = state.step === "summary" || state.pass > 1;
+  if (!idle || state.step === "welcome" || reachedSummary) return { state, restarted: false };
   return { state: { ...state, ...restartPatch(state) }, restarted: true };
 }
 
