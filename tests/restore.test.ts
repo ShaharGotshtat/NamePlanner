@@ -8,7 +8,7 @@ const midFlow: Partial<AppState> = {
   babySex: "girl",
   dueDate: "2027-03-01",
   family: [{ name: "נועה", relation: "sibling" } as AppState["family"][number]],
-  chips: { short: "must" } as AppState["chips"],
+  chips: { englishFriendly: "must" },
   declined: ["רחל"],
   pass: 2,
   rounds: [{ pass: 2, suggestions: [], completed: false }],
@@ -18,6 +18,11 @@ const midFlow: Partial<AppState> = {
 describe("restore", () => {
   it("starts empty with nothing saved", () => {
     expect(restore(null, NOW)).toEqual({ state: initialState, restarted: false });
+  });
+
+  it("drops a chip saved by an older version", () => {
+    const saved = { ...midFlow, chips: { unisex: "want", noUnisex: "must" } as AppState["chips"], savedAt: NOW };
+    expect(restore(saved, NOW).state.chips).toEqual({ noUnisex: "must" });
   });
 
   it("resumes where the parent left off within a day", () => {

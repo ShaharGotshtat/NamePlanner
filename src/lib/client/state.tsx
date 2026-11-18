@@ -12,6 +12,7 @@ import type {
   Suggestion,
 } from "@/lib/types";
 import { forgetAnalytics, newRun } from "./analytics";
+import { CHIP_IDS } from "@/lib/engine/chips";
 import { clearJourney, describeChange, track } from "./journey";
 
 export type Step = "welcome" | "family" | "preferences" | "rounds" | "summary";
@@ -93,6 +94,11 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+/** Drops chips saved by an older version (the old "unisex" chip), which the server would reject. */
+function knownChips(chips: AppState["chips"] | undefined): AppState["chips"] {
+  return Object.fromEntries(Object.entries(chips ?? {}).filter(([id]) => (CHIP_IDS as string[]).includes(id)));
+}
+
 /**
  * Resumes where the parent left off, unless the app sat unused for a day or more. Then it opens on the
  * welcome screen with everything entered kept (sex, due date, family, preferences) and the names
@@ -101,7 +107,7 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function restore(saved: Saved | null, now = Date.now()): { state: AppState; restarted: boolean } {
   if (!saved) return { state: initialState, restarted: false };
   const { savedAt, ...rest } = saved;
-  const state: AppState = { ...initialState, ...rest };
+  const state: AppState = { ...initialState, ...rest, chips: knownChips(rest.chips) };
   const idle = savedAt === undefined || now - savedAt >= IDLE_RESTART_MS;
   if (!idle || state.step === "welcome") return { state, restarted: false };
   return { state: { ...state, ...restartPatch(state) }, restarted: true };

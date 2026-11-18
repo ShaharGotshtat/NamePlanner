@@ -12,7 +12,7 @@ const afterTwoSearches = (): AppState => {
     dueDate: "2027-03-15",
     surname: "כהן",
     family: [{ name: "דוד", relation: "grandparent" }],
-    chips: { unisex: "want" },
+    chips: { noUnisex: "must" },
     freeText: "שם קצר",
     rounds: [{ pass: 1, suggestions: [suggestion("תמר"), suggestion("נועה")], completed: true }],
     ratings: {
@@ -36,7 +36,7 @@ describe("restartPatch", () => {
     expect(s.dueDate).toBe("2027-03-15");
     expect(s.surname).toBe("כהן");
     expect(s.family).toEqual([{ name: "דוד", relation: "grandparent" }]);
-    expect(s.chips).toEqual({ unisex: "want" });
+    expect(s.chips).toEqual({ noUnisex: "must" });
     expect(s.freeText).toBe("שם קצר");
     expect(s.rounds).toEqual([]);
     expect(s.ratings).toEqual({});
