@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { errorIdOf, fetchRound, withErrorId } from "@/lib/client/api";
-import { runCheck } from "@/lib/client/preferences";
+import { Prefetch } from "@/lib/client/prefetch";
+import { inputKey, runCheck } from "@/lib/client/preferences";
 import { roundRequest, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
@@ -24,6 +25,14 @@ const currentRound = (s: AppState) => {
   return last && last.pass === s.pass && !last.completed ? last : null;
 };
 
+/** Names the round that comes after the rounds of this pass shown so far. */
+const nextRoundKey = (s: AppState) => `${s.pass}:${s.rounds.filter((r) => r.pass === s.pass).length + 1}`;
+
+/** The next round is fetched once every name but the last has a vote, so it misses only one vote. */
+const PREFETCH_VOTES_LEFT = 1;
+
+type RoundResult = Awaited<ReturnType<typeof fetchRound>>;
+
 export function Rounds() {
   const { state, update } = useApp();
   const [loading, setLoading] = useState(false);
@@ -33,6 +42,9 @@ export function Rounds() {
   const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
   const [lastVerdict, setLastVerdict] = useState<Verdict | null>(null);
   const requested = useRef(false);
+  const prefetch = useRef(new Prefetch<RoundResult>());
+  // Set while the notes from the last round are being checked, so no round is fetched with the old preferences.
+  const [notesPending, setNotesPending] = useState(false);
   // One name is shown at a time. The first name of a round starts sealed; the rest open with the
   // "next name" button. After a reload, resume at the first unrated name.
   const [index, setIndex] = useState(() => {
@@ -51,24 +63,51 @@ export function Rounds() {
   const roundNumber = state.rounds.filter((r) => r.pass === state.pass).length;
   const allowNotes = !state.freeTextDisabled;
 
+  const addRound = useCallback(
+    ({ suggestions, token }: RoundResult) =>
+      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false }] })),
+    [update],
+  );
+
+  /** Shows the prefetched round if there is one; otherwise, or if it failed, asks for the round now. */
   const loadRound = useCallback(async () => {
+    const prefetched = prefetch.current.take(nextRoundKey(state));
+    if (prefetched && "ready" in prefetched) return addRound(prefetched.ready);
     setLoading(true);
     setError(null);
     try {
-      const { suggestions, token } = await fetchRound(roundRequest(state), state.token);
-      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false }] }));
+      const result = (prefetched && (await prefetched.pending)) || (await fetchRound(roundRequest(state), state.token));
+      addRound(result);
     } catch (err) {
       setError({ errorId: errorIdOf(err) });
     } finally {
       setLoading(false);
     }
-  }, [state, update]);
+  }, [state, addRound]);
 
   useEffect(() => {
     if (round || requested.current) return;
+    if (notesPending && !prefetch.current.has(nextRoundKey(state))) return;
     requested.current = true;
     loadRound();
-  }, [round, loadRound]);
+  }, [round, loadRound, notesPending, state]);
+
+  const votes = round ? round.suggestions.filter((x) => state.ratings[x.name.id]?.verdict).length : 0;
+  const lastOfPass = roundNumber >= ROUNDS_PER_PASS;
+  useEffect(() => {
+    if (!round || lastOfPass || notesPending || votes < round.suggestions.length - PREFETCH_VOTES_LEFT) return;
+    const token = state.token;
+    prefetch.current.start(
+      nextRoundKey(state),
+      (signal) => fetchRound(roundRequest(state), token, signal),
+      (result) => update({ token: result.token }),
+    );
+  }, [round, lastOfPass, notesPending, votes, state, update]);
+
+  useEffect(() => {
+    const current = prefetch.current;
+    return () => current.cancel();
+  }, []);
 
   const rate = (nameId: number, verdict: Verdict) => {
     setLastVerdict(verdict);
@@ -110,15 +149,19 @@ export function Rounds() {
     let patch: Partial<AppState> = { ...completed, ...(finishedPass ? { step: "summary" as const } : {}) };
 
     if (newNotes.length && allowNotes) {
-      setLoading(true);
       // A round reopened with the back button sends its notes again, so drop repeats.
       const withNotes = { ...state, notes: [...new Set([...state.notes, ...newNotes])] };
-      try {
-        patch = { ...patch, notes: withNotes.notes, ...(await runCheck(withNotes)).patch };
-      } catch {
-        patch = { ...patch, notes: withNotes.notes };
+      patch = { ...patch, notes: withNotes.notes };
+      if (!finishedPass) {
+        checkNotesInBackground(withNotes);
+      } else {
+        // The summary's pick uses the preferences, so the last round's notes are checked before it opens.
+        setLoading(true);
+        try {
+          patch = { ...patch, ...(await runCheck(withNotes)).patch };
+        } catch {}
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     setRoundNote("");
@@ -128,6 +171,19 @@ export function Rounds() {
     setOpened(false);
     requested.current = false;
     update(patch);
+  };
+
+  /**
+   * The next round does not wait for the notes: they shape the round after it. The result is applied
+   * only if the parent's input is still what was sent (not restarted with other input, edited or deleted).
+   */
+  const checkNotesInBackground = (withNotes: AppState) => {
+    const key = inputKey(withNotes);
+    setNotesPending(true);
+    runCheck(withNotes)
+      .then(({ patch }) => update((s) => (inputKey(s) === key ? patch : {})))
+      .catch(() => {})
+      .finally(() => setNotesPending(false));
   };
 
   if (error) {

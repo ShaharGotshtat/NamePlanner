@@ -10,7 +10,7 @@ export function preferenceInput(s: AppState): PreferencesInput {
   };
 }
 
-const inputKey = (s: AppState) => {
+export const inputKey = (s: AppState) => {
   const { texts, namesWeLike, family } = preferenceInput(s);
   return JSON.stringify({ texts, namesWeLike, family });
 };
