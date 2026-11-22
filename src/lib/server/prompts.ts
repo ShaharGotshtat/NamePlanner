@@ -11,6 +11,12 @@ export function asData(text: string, max = 500): string {
     .slice(0, max);
 }
 
+/**
+ * A family name that reaches the round model. The preferences check screens family names, but the round request
+ * comes from the browser, so a name there could be anything: only up to three words of letters pass.
+ */
+export const looksLikeName = (text: string) => /^[\p{L}\p{M}'"׳״-]{1,15}( [\p{L}\p{M}'"׳״-]{1,15}){0,2}$/u.test(text.trim());
+
 /** Model text shown to the parent: plain, one paragraph, capped. */
 export const asOutput = (text: string, max: number) => asData(text, max);
 

@@ -74,6 +74,11 @@ export function postgresStore(url: string): Store {
         values (${report.type}, ${report.message}, ${sql.json(report.context as unknown as postgres.JSONValue)}, ${report.createdAt})`;
     },
 
+    countReports: async () => {
+      const [row] = await sql<{ count: number }[]>`select count(*)::int as count from reports`;
+      return row.count;
+    },
+
     takeReports: async () => {
       const rows = await sql<{ type: ReportType; message: string; context: ReportContext; created_at: Date }[]>`
         delete from reports returning type, message, context, created_at`;

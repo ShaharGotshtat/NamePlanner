@@ -1,22 +1,7 @@
 import { NextResponse } from "next/server";
-import { APP_NAME_EN } from "@/lib/constants";
 import { sendOwnerEmail } from "@/lib/server/email";
-import { getStore, type Report } from "@/lib/server/store";
-
-const TYPE_LABELS: Record<Report["type"], string> = { error: "דיווח על טעות", suggestion: "הצעה", other: "משוב אחר" };
-
-function formatReport(r: Report, index: number): string {
-  const c = r.context;
-  return [
-    `${index + 1}. ${TYPE_LABELS[r.type]}${c.hasLinks ? " (מכיל קישור)" : ""}`,
-    `מסך: ${c.screen} | גרסה: ${c.appVersion} | מכשיר: ${c.device}`,
-    c.nameHe ? `שם: ${c.nameHe} (${c.nameId})` : null,
-    `נשלח: ${r.createdAt.toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}`,
-    r.message,
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
+import { digestBody, digestSubject } from "@/lib/server/feedback-digest";
+import { getStore } from "@/lib/server/store";
 
 /** Daily batch: emails all held reports to the owners, then they are gone from the server. */
 export async function GET(request: Request) {
@@ -31,7 +16,7 @@ export async function GET(request: Request) {
 
   const restore = () => Promise.all(reports.map((r) => store.addReport(r)));
   try {
-    const sent = await sendOwnerEmail(`${APP_NAME_EN}: ${reports.length} דיווחים חדשים`, reports.map(formatReport).join("\n\n---\n\n"));
+    const sent = await sendOwnerEmail(digestSubject(reports), digestBody(reports));
     if (!sent) await restore();
     return NextResponse.json({ sent: sent ? reports.length : 0 });
   } catch (error) {

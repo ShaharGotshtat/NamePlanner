@@ -11,4 +11,4 @@ export function getStore(): Store {
   return holder.nameplannerStore;
 }
 
-export type { Report, ReportContext, ReportType } from "./types";
+export type { FeedbackFlag, Report, ReportContext, ReportType } from "./types";

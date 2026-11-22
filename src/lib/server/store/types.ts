@@ -4,6 +4,9 @@ import type { NameEntry } from "@/lib/types";
 
 export type ReportType = "error" | "suggestion" | "other";
 
+/** Why the feedback check marked a report. Marked reports are still kept and emailed, in their own section. */
+export type FeedbackFlag = "offensive" | "attack" | "spam";
+
 export interface ReportContext {
   screen: string;
   appVersion: string;
@@ -11,6 +14,10 @@ export interface ReportContext {
   nameId?: number;
   nameHe?: string;
   hasLinks: boolean;
+  /** Missing on reports stored before the feedback check existed. */
+  flag?: FeedbackFlag | null;
+  /** False when only the rules ran, without the model. */
+  checked?: boolean;
 }
 
 export interface Report {
@@ -29,6 +36,8 @@ export interface Store {
   /** True only for the call that first marks the day's alert as sent. */
   claimSpendAlert(day: string): Promise<boolean>;
   addReport(report: Report): Promise<void>;
+  /** How many reports wait for the next daily email. */
+  countReports(): Promise<number>;
   /** Returns all held reports and deletes them. */
   takeReports(): Promise<Report[]>;
   addEvent(event: RecordedEvent): Promise<void>;
