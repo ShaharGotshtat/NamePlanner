@@ -42,7 +42,7 @@ export function ScreenTitle({ children, subtitle, mood }: { children: ReactNode;
   return (
     <header className="mb-6 flex items-start gap-3">
       <div className="flex-1">
-        <h1 className="font-display text-2xl font-semibold leading-tight">{children}</h1>
+        <h1 className="font-display text-2xl font-semibold leading-tight focus:outline-none">{children}</h1>
         {subtitle && <p className="mt-2 text-ink-soft">{subtitle}</p>}
       </div>
       {mood && <Mascot key={mood} mood={mood} size={72} className="animate-mascot-pop" />}

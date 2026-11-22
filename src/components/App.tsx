@@ -51,6 +51,21 @@ function Shell() {
   useAnalytics(state);
   useEffect(() => setScreen(state.step), [state.step]);
 
+  // A new screen or round opens at the top, with focus on its heading for screen readers.
+  const view = `${state.step}:${state.rounds.length}`;
+  const firstView = useRef(true);
+  useEffect(() => {
+    if (firstView.current) {
+      firstView.current = false;
+      return;
+    }
+    scrollTo({ top: 0 });
+    const heading = document.querySelector<HTMLElement>("main h1");
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+  }, [view]);
+
   useEffect(() => {
     if (fromHistory.current) {
       fromHistory.current = false;

@@ -226,9 +226,8 @@ export function Rounds() {
   const goTo = (i: number) => {
     setIndex(i);
     requestAnimationFrame(() => {
-      const el = cardRef.current;
-      el?.focus({ preventScroll: true });
-      el?.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      scrollTo({ top: 0 });
+      cardRef.current?.focus({ preventScroll: true });
     });
   };
 
@@ -237,9 +236,9 @@ export function Rounds() {
       <div className="mb-4 flex min-h-11 items-center justify-between">
         <div className="flex items-center gap-2">
           <Mascot key={lastVerdict ?? "start"} mood={HEADER_MOOD[lastVerdict ?? "start"]} size={44} className="animate-mascot-pop" />
-          <p className="font-display text-lg font-semibold">
+          <h1 className="font-display text-lg font-semibold focus:outline-none">
             סבב {roundNumber} מתוך {ROUNDS_PER_PASS}
-          </p>
+          </h1>
         </div>
         {anyInteresting && (
           <Button variant="secondary" className="animate-name-reveal text-sm" onClick={() => update({ step: "summary" })}>
