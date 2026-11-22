@@ -17,7 +17,7 @@ export function backPatch(s: AppState): Partial<AppState> | null {
       // The open round stays as it is and resumes when the parent continues.
       return { step: "preferences" };
     case "summary": {
-      // Reopen the last round of this pass, so its votes can be changed, unless one is still open ("Found it!" mid-round).
+      // Reopen the last round of this pass, so its votes can be changed, unless one is still open ("לסיכום" mid-round).
       const lastIndex = s.rounds.findLastIndex((r) => r.pass === s.pass);
       if (lastIndex < 0) return { step: "preferences" };
       return {
