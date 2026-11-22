@@ -102,7 +102,7 @@ export interface DueDerived {
   season: string;
 }
 
-export type Facet = "meaningCategory" | "origin" | "style" | "length" | "ending" | "popularity";
+export type Facet = "meaningCategory" | "origin" | "style" | "length" | "starting" | "ending" | "popularity";
 
 /** One free-text wish, parsed into something the ranking can check against the name data. */
 export interface TextRequirement {
@@ -111,6 +111,8 @@ export interface TextRequirement {
   kind: "want" | "avoid";
   facet: Facet;
   values: string[];
+  /** "must" when the wording is strict ("only", "רק"): names that miss it are dropped. Missing means "want". */
+  level?: "must" | "want";
 }
 
 export interface ParsedProfile {

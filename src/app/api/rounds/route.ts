@@ -1,4 +1,4 @@
-import { MODEL_CANDIDATES, pickDiverse, rankCandidates, ROUND_SIZE, standardReason, toSuggestion } from "@/lib/engine/round";
+import { MODEL_CANDIDATES, pickDiverse, rankCandidates, roundSizeFor, standardReason, toSuggestion } from "@/lib/engine/round";
 import { SERVER_ID } from "@/lib/analytics/events";
 import { pickWithModel } from "@/lib/server/ai";
 import { handler, readBody, readSession } from "@/lib/server/http";
@@ -14,16 +14,17 @@ export const POST = handler(async (request) => {
   const req = { ...body, profile: verifiedProfile(body.profile) };
   const names = await getNames();
   const ranked = rankCandidates(names, req);
+  const size = roundSizeFor(names, req);
 
   let reasons: Map<number, string> | null = null;
   if (ranked.length && canCallModel(session)) {
     session.calls++;
-    reasons = await pickWithModel(ranked.slice(0, MODEL_CANDIDATES), req, names);
+    reasons = await pickWithModel(ranked.slice(0, MODEL_CANDIDATES), req, names, size);
   }
 
-  const chosen = ranked.filter((c) => reasons?.has(c.entry.id));
-  for (const c of pickDiverse(ranked, req.babySex)) {
-    if (chosen.length < ROUND_SIZE && !chosen.includes(c)) chosen.push(c);
+  const chosen = ranked.filter((c) => reasons?.has(c.entry.id)).slice(0, size);
+  for (const c of pickDiverse(ranked, req.babySex, size)) {
+    if (chosen.length < size && !chosen.includes(c)) chosen.push(c);
   }
 
   // Counts rounds served without the model (budget, session limit or model failure) for the dashboard.

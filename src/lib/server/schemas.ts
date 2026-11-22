@@ -17,7 +17,7 @@ export const ORIGINS = ["hebrew", "aramaic", "arabic", "greek", "latin", "persia
 export const STYLES = ["traditional", "classic", "modern"] as const;
 export const LENGTHS = ["short", "long"] as const;
 export const POPULARITY = ["common", "rare", "veryRare"] as const;
-export const FACETS = ["meaningCategory", "origin", "style", "length", "ending", "popularity"] as const;
+export const FACETS = ["meaningCategory", "origin", "style", "length", "starting", "ending", "popularity"] as const;
 
 const textRequirement = z.object({
   id: z.string().max(40),
@@ -25,6 +25,7 @@ const textRequirement = z.object({
   kind: z.enum(["want", "avoid"]),
   facet: z.enum(FACETS),
   values: z.array(z.string().max(20)).max(12),
+  level: z.enum(["must", "want"]).optional(),
 });
 
 const profile = z.object({

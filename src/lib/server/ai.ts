@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
 import { chipLabel } from "@/lib/engine/chips";
-import { normalizeThemeRequirement } from "@/lib/engine/requirements";
+import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
 import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
@@ -13,6 +13,7 @@ const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null>
   origin: ORIGINS,
   style: STYLES,
   length: LENGTHS,
+  starting: null,
   ending: null,
   popularity: POPULARITY,
 };
@@ -26,6 +27,7 @@ const preferencesOutput = z.object({
       kind: z.enum(["want", "avoid"]),
       facet: z.enum(FACETS),
       values: z.array(z.string()),
+      level: z.enum(["must", "want"]),
     }),
   ),
 });
@@ -65,8 +67,10 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
     .map(normalizeThemeRequirement)
     .map((r, i) => {
       const allowed = ALLOWED_VALUES[r.facet];
-      const values = r.values.filter((v) => !allowed || allowed.includes(v)).slice(0, 12);
-      return { ...r, id: `text-${i}`, label: asOutput(r.label, 120), values: values.map((v) => asData(v, 20)) };
+      const kept = isLetterFacet(r.facet)
+        ? [...new Set(r.values.map(normalizeLetters).filter(Boolean))]
+        : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
+      return { ...r, id: `text-${i}`, label: asOutput(r.label, 120), values: kept.slice(0, 12) };
     })
     .filter((r) => r.values.length > 0)
     .slice(0, 20);
@@ -81,7 +85,7 @@ const roundOutput = z.object({
 function describeCandidate(c: Candidate): string {
   const { latest, trend } = popularity(c.entry);
   const fits = c.evaluation.lines.map((l) => `${asData(l.requirement, 120)}: ${l.fit}`).join("; ");
-  return `id=${c.entry.id} | ${c.entry.nameHe} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
+  return `id=${c.entry.id} | ${c.evaluation.spelling} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
 }
 
 function sexInstruction(babySex: BabySex, noUnisex: boolean): string {
@@ -97,6 +101,7 @@ export async function pickWithModel(
   candidates: Candidate[],
   req: RoundRequest,
   names: NameEntry[],
+  size = ROUND_SIZE,
 ): Promise<Map<number, string> | null> {
   const nameById = new Map(names.map((n) => [n.id, n.nameHe]));
   const ratedNames = req.ratings
@@ -106,7 +111,7 @@ export async function pickWithModel(
 
   const chips = Object.entries(req.chips).map(([id, level]) => `${chipLabel(id as ChipId)} (${level})`);
   const prompt = `${sexInstruction(req.babySex, !!req.chips.noUnisex)}
-Pick ${ROUND_SIZE} names.
+Pick ${size} names.
 
 Parent's chips: ${chips.join(", ") || "none"}
 <parent_input>
@@ -122,7 +127,7 @@ ${candidates.map(describeCandidate).join("\n")}`;
   const output = await structuredCall({ model: MODELS.pick, system: ROUND_SYSTEM, prompt, schema: roundOutput, maxTokens: 4000 });
   if (!output) return null;
   const candidateIds = new Set(candidates.map((c) => c.entry.id));
-  const valid = output.picks.filter((p) => candidateIds.has(p.id)).slice(0, ROUND_SIZE);
+  const valid = output.picks.filter((p) => candidateIds.has(p.id)).slice(0, size);
   return new Map(valid.map((p) => [p.id, asOutput(p.reason, 200)]));
 }
 
