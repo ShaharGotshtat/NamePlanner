@@ -100,6 +100,8 @@ export interface DueDerived {
   holiday: string | null;
   zodiac: string;
   season: string;
+  /** Link codes for the holidays and months within two weeks of the date, its season and its sign. */
+  links?: string[];
 }
 
 export type Facet = "meaningCategory" | "origin" | "style" | "length" | "starting" | "ending" | "popularity";

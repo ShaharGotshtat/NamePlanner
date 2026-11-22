@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { CHIPS, type ChipDefinition } from "@/lib/engine/chips";
 import { errorIdOf, withErrorId } from "@/lib/client/api";
 import { MANY_MUSTS, missingData, nextLevel } from "@/lib/client/chip-levels";
+import { dueChipLabel } from "@/lib/links";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp, type AppState } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
@@ -72,7 +73,13 @@ export function Preferences() {
 
       <div role="group" aria-label="מה חשוב לכם" className="flex flex-wrap gap-2">
         {CHIPS.map((chip) => (
-          <ChipButton key={chip.id} chip={chip} level={state.chips[chip.id]} hint={missingData(chip, state)} onClick={() => cycle(chip.id)} />
+          <ChipButton
+            key={chip.id}
+            chip={chip.id === "dueDateLink" && state.dueDerived ? { ...chip, label: dueChipLabel(state.dueDerived) } : chip}
+            level={state.chips[chip.id]}
+            hint={missingData(chip, state)}
+            onClick={() => cycle(chip.id)}
+          />
         ))}
       </div>
 

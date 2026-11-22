@@ -1,4 +1,5 @@
 import { MODEL_CANDIDATES, pickDiverse, rankCandidates, roundSizeFor, standardReason, toSuggestion } from "@/lib/engine/round";
+import { dueDateNotice } from "@/lib/engine/requirements";
 import { SERVER_ID } from "@/lib/analytics/events";
 import { pickWithModel } from "@/lib/server/ai";
 import { handler, readBody, readSession } from "@/lib/server/http";
@@ -33,5 +34,5 @@ export const POST = handler(async (request) => {
     .catch((error) => log.error("Recording a round failed", error));
 
   const suggestions = chosen.map((c) => toSuggestion(c, reasons?.get(c.entry.id) ?? standardReason(c)));
-  return { body: { suggestions }, session };
+  return { body: { suggestions, notice: dueDateNotice(names, req) }, session };
 });

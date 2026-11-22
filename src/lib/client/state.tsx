@@ -23,6 +23,8 @@ export interface RoundState {
   completed: boolean;
   /** How many names of this round were shown, counted from the first. */
   seen?: number;
+  /** A line from the server about this round, such as few names fitting the due date. */
+  notice?: string | null;
 }
 
 /** Everything the parent enters. It lives only in this browser's local storage. */

@@ -42,6 +42,7 @@ export const roundRequestSchema = z.object({
       holiday: shortText.nullable(),
       zodiac: shortText,
       season: shortText,
+      links: z.array(z.string().max(20)).max(40).optional(),
     })
     .nullable(),
   surname: shortText,

@@ -65,8 +65,8 @@ export function Rounds() {
   const allowNotes = !state.freeTextDisabled;
 
   const addRound = useCallback(
-    ({ suggestions, token }: RoundResult) =>
-      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false }] })),
+    ({ suggestions, token, notice }: RoundResult) =>
+      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false, notice }] })),
     [update],
   );
 
@@ -269,6 +269,7 @@ export function Rounds() {
       {roundNumber === 1 && state.profile?.summary && (
         <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{state.profile.summary}</p>
       )}
+      {roundNumber === 1 && round.notice && <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{round.notice}</p>}
 
       <div className="mb-3 flex items-center justify-center gap-2" aria-label={`שם ${index + 1} מתוך ${total}`}>
         {round.suggestions.map((s, i) => (
