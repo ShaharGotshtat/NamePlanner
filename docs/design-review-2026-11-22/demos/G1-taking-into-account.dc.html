@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<title>G1 · מה אנחנו לוקחים בחשבון</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Rubik:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff8f4}
+button{font-family:inherit}
+a{color:#4f5fb0}a:hover{color:#3a3560}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: 920px; box-sizing: border-box; background: #8f8aa6; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div aria-hidden="true" style="height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #ffffff; opacity: 0.7; font-family: Fredoka, Rubik, sans-serif; font-size: 16px">
+<span>סבב 2 מתוך 3</span>
+<span style="font-family: Rubik, sans-serif; font-size: 13px">מה למדנו · 8</span>
+</div>
+
+<section role="dialog" aria-modal="true" aria-labelledby="g1-title" style="flex: 1; background: #ffffff; border-radius: 24px 24px 0 0; padding: 12px 20px 20px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 40px; height: 4px; border-radius: 999px; background: #f0e2dc"></div>
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div>
+<h1 id="g1-title" style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600">מה אנחנו לוקחים בחשבון</h1>
+<p style="margin: 0; font-size: 13px; line-height: 18px; color: #625d86">כל מה שמשפיע על ההצעות הבאות. אפשר לערוך או להסיר כל דבר.</p>
+</div>
+<button aria-label="סגירה" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהטופס</h2>
+<a href="#" style="font-size: 13px; min-height: 32px; display: inline-flex; align-items: center">עריכה</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; background: #4f5fb0; color: #ffffff; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>משמעות עברית ברורה</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">מתאים לאיתי</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">זורם עם כהן</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">קשור לפסח או לאביב</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהמילים שלכם</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #fff8f4">
+<span style="font-size: 14px">„שם קצר, עד 2 הברות”</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; font-size: 12px; font-weight: 500; color: #4f5fb0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>מסננים</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #fff8f4">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-size: 14px">„אולי על שם סבתא רחל”</span>
+<span style="{{ rachelStatusStyle }}">{{ rachelStatus }}</span>
+</div>
+<sc-if value="{{ rachelOpen }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-size: 13px; line-height: 18px; color: #625d86">אי אפשר לסנן לפי „על שם” ישירות. להציע רק שמות שמתחילים ב־ר׳?</p>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ rachelOnly }}" style="flex: 1; min-height: 44px; border-radius: 14px; border: 0; background: #4f5fb0; color: #ffffff; font-size: 14px; font-weight: 500">כן, רק ר׳</button>
+<button onClick="{{ rachelIdea }}" style="flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">רק כרעיון</button>
+</div>
+</sc-if>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהסבבים</h2>
+<sc-for list="{{ roundNotes }}" as="n" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 8px; padding: 8px 4px 8px 12px; border-radius: 14px; border: 1px solid #f0e2dc">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; color: #625d86">{{ n.source }}</span>
+<span style="font-size: 14px; line-height: 19px">{{ n.rule }}</span>
+</div>
+<button onClick="{{ n.remove }}" aria-label="{{ n.removeLabel }}" style="width: 44px; height: 44px; flex-shrink: 0; border: 0; background: none; color: #625d86; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{ noRoundNotes }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 13px; color: #625d86">אין הערות מהסבבים.</p>
+</sc-if>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">לא נציע שוב</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ skipped }}" as="s" hint-placeholder-count="5">
+<span style="display: inline-flex; align-items: center; gap: 2px; padding: 0 4px 0 10px; border-radius: 999px; background: #f6f1ee; font-size: 13px">{{ s.label }}<button onClick="{{ s.remove }}" aria-label="{{ s.removeLabel }}" style="width: 32px; height: 32px; border: 0; background: none; color: #625d86; font-size: 15px">×</button></span>
+</sc-for>
+</div>
+</div>
+
+<p style="margin: auto 0 0; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #625d86"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>הכול נשמר רק במכשיר הזה.</p>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":920}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const rachel = st.rachel || 'open';
+    const removedNotes = st.removedNotes || {};
+    const removedSkips = st.removedSkips || {};
+    const notes = [
+      { id: 'peleg', source: 'על פלג: „נשמע לי שם של בן”', rule: 'בלי שמות שרוב הנושאים בהם בנים' },
+      { id: 'spring', source: 'הערה על סבב 2', rule: 'עדיפות גבוהה יותר לשמות של פסח ואביב' },
+      { id: 'hadas', source: 'תיקון בהדס: „לא לזה התכוונתי”', rule: 'בודקים חג מול תאריך הלידה, לא כל חג' }
+    ];
+    const skips = [
+      { id: 'noga', label: 'נגה' }, { id: 'chali', label: 'חלי' }, { id: 'peleg', label: 'פלג' },
+      { id: 'eden', label: 'עדן' }, { id: 'tamar', label: 'תמר · תפוס במשפחה' }
+    ];
+    const roundNotes = notes.filter((n) => !removedNotes[n.id]).map((n) => ({
+      source: n.source, rule: n.rule, removeLabel: 'הסרה: ' + n.rule,
+      remove: () => { const r = Object.assign({}, removedNotes); r[n.id] = true; this.setState({ removedNotes: r }); }
+    }));
+    const skipped = skips.filter((s) => !removedSkips[s.id]).map((s) => ({
+      label: s.label, removeLabel: 'להחזיר את ' + s.label,
+      remove: () => { const r = Object.assign({}, removedSkips); r[s.id] = true; this.setState({ removedSkips: r }); }
+    }));
+    const pill = 'display: inline-flex; align-items: center; flex-shrink: 0; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; ';
+    const status = {
+      open: { text: 'עוד לא מסננים', style: pill + 'background: #fff4e0; color: #8a5a00' },
+      only: { text: 'מסננים: מתחיל ב־ר׳', style: pill + 'background: #eaeefc; color: #4f5fb0' },
+      idea: { text: 'רק להשראה', style: pill + 'background: #f6f1ee; color: #625d86' }
+    }[rachel];
+    return {
+      rachelStatus: status.text,
+      rachelStatusStyle: status.style,
+      rachelOpen: rachel === 'open',
+      rachelOnly: () => this.setState({ rachel: 'only' }),
+      rachelIdea: () => this.setState({ rachel: 'idea' }),
+      roundNotes: roundNotes,
+      noRoundNotes: roundNotes.length === 0,
+      skipped: skipped
+    };
+  }
+}
+</script>
+</body>
+</html>

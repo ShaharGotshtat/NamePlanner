@@ -1,0 +1,209 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-22T11:20:00Z"
+  },
+  "title": "ShemMatch – design samples & round logic",
+  "launch": {
+    "view": "canvas",
+    "page": "screens"
+  },
+  "pages": [
+    {
+      "id": "screens",
+      "name": "D–I · Screens"
+    },
+    {
+      "id": "rounds",
+      "name": "J · Round logic"
+    }
+  ],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D · One-line reason under every name",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "E-why-no.dc.html": {
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E · Ask why after a No",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "F-preferences.dc.html": {
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "F · One preference section (tap to cycle)",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "G1-taking-into-account.dc.html": {
+      "x": 2350,
+      "y": 0,
+      "w": 390,
+      "h": 920,
+      "title": "G1 · After ② — the panel it opens",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "G2-start-over.dc.html": {
+      "x": 0,
+      "y": 1264,
+      "w": 390,
+      "h": 844,
+      "title": "G2 · Start over: choose what to keep",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "H1-finish-check.dc.html": {
+      "x": 470,
+      "y": 1264,
+      "w": 390,
+      "h": 844,
+      "title": "H1 · Finish check (replaces מצאתי!)",
+      "page": "screens",
+      "radius": 32
+    },
+    "H2-summary.dc.html": {
+      "x": 1880,
+      "y": 1264,
+      "w": 390,
+      "h": 844,
+      "title": "H2 · After — pick and change the favourite in place",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "I-step-urls.dc.html": {
+      "x": 2350,
+      "y": 1264,
+      "w": 1440,
+      "h": 844,
+      "title": "I · A URL per step + scroll to top",
+      "page": "screens"
+    },
+    "J-flow.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 660,
+      "title": "J · Round logic map",
+      "page": "rounds"
+    },
+    "J-prototype.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "J · Round simulation — press Play",
+      "page": "rounds",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "G1-before.dc.html": {
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "G1 · Before — today: notes disappear once typed",
+      "page": "screens",
+      "radius": 32
+    },
+    "G1-entry.dc.html": {
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "G1 · After ① — “מה למדנו” in the round header",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "H2-before.dc.html": {
+      "x": 940,
+      "y": 1264,
+      "w": 390,
+      "h": 844,
+      "title": "H2 · Before — today’s summary",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    },
+    "H2-before-picked.dc.html": {
+      "x": 1410,
+      "y": 1264,
+      "w": 390,
+      "h": 844,
+      "title": "H2 · Before — after tapping a name",
+      "page": "screens",
+      "is_interactive": true,
+      "radius": 32
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "E-why-no.dc.html",
+    "F-preferences.dc.html",
+    "G1-before.dc.html",
+    "G1-entry.dc.html",
+    "G1-taking-into-account.dc.html",
+    "G2-start-over.dc.html",
+    "H1-finish-check.dc.html",
+    "H2-before.dc.html",
+    "H2-before-picked.dc.html",
+    "H2-summary.dc.html",
+    "I-step-urls.dc.html",
+    "J-flow.dc.html",
+    "J-prototype.dc.html"
+  ],
+  "notes": {
+    "row1": {
+      "x": 0,
+      "y": -300,
+      "text": "D · E · F · G1 (before → after)",
+      "kind": "title1",
+      "maxW": 2740,
+      "page": "screens"
+    },
+    "row2": {
+      "x": 0,
+      "y": 964,
+      "text": "G2 · H1 · H2 (before → after) · I",
+      "kind": "title1",
+      "maxW": 3790,
+      "page": "screens"
+    },
+    "jtitle": {
+      "x": 0,
+      "y": -300,
+      "text": "J · Explore → Learn → Narrow → Decide",
+      "kind": "title1",
+      "maxW": 1910,
+      "page": "rounds"
+    },
+    "jplay": {
+      "x": 1990,
+      "y": 0,
+      "w": 300,
+      "text": "Press Play on the phone. Rate the 6 names any way you like — round 2 is picked from your ratings and the rules you accept, round 3 runs maybes + head-to-head.",
+      "fill": "teal",
+      "page": "rounds"
+    }
+  },
+  "designSystems": []
+}

@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<title>J · סימולציית סבבים</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Rubik:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff8f4}
+button{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 10px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<span style="padding: 6px 12px; border-radius: 999px; background: #fff4e0; color: #8a5a00; font-size: 12px; font-weight: 500; border: 1px dashed #d9a441">סימולציה</span>
+</div>
+
+<sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 26px; font-weight: 600; line-height: 1.25">בואו ננסה את הסבבים החדשים</h1>
+<div style="background: #ffffff; border-radius: 20px; border: 1px solid #f0e2dc; padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 20px">
+<b style="font-weight: 600; font-size: 13px; color: #625d86">התרחיש</b>
+<span>בת, צפויה בניסן (פסח, אביב)</span>
+<span>אח: איתי · שם משפחה: כהן</span>
+<span>חובה: משמעות עברית ברורה</span>
+<span>רצוי: קשור לפסח · אהובים: מאיה, אלה</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #3a3560; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">1</span><span style="font-size: 15px"><b style="font-weight: 600">גילוי:</b> 6 שמות שונים מאוד</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #4f5fb0; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">2</span><span style="font-size: 15px"><b style="font-weight: 600">מה למדנו:</b> אתם מאשרים כללים</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #b84a57; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">3</span><span style="font-size: 15px"><b style="font-weight: 600">מיקוד והכרעה:</b> 4 שמות, אוליים, ראש בראש</span></div>
+</div>
+<p style="margin: 0; font-size: 13px; line-height: 19px; color: #625d86">הסבב השני נבחר מתוך הדירוגים שלכם. נסו לדרג אחרת בכל ריצה ותראו מה משתנה.</p>
+<button onClick="{{ start }}" style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">להתחיל</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRate }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">{{ roundTitle }}</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">{{ roundSub }}</p>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px">
+<sc-for list="{{ dots }}" as="d" hint-placeholder-count="6"><span style="{{ d.style }}"></span></sc-for>
+<span style="font-size: 12px; color: #625d86; margin-inline-start: 4px">{{ counter }}</span>
+</div>
+<section style="background: #ffffff; border-radius: 24px; padding: 18px 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 12px">
+<span style="{{ tagStyle }}">{{ tagText }}</span>
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 46px; font-weight: 600; line-height: 1.15">{{ cur.he }}</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">{{ cur.tr }}</p>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ cur.reason }}</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{ rateNo }}" aria-pressed="{{ noOn }}" style="{{ noStyle }}">לא</button>
+<button onClick="{{ rateMaybe }}" aria-pressed="{{ maybeOn }}" style="{{ maybeStyle }}">אולי</button>
+<button onClick="{{ rateLike }}" aria-pressed="{{ likeOn }}" style="{{ likeStyle }}">מעניין!</button>
+</div>
+<sc-if value="{{ showWhy }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 500">מה לא הסתדר? <span style="font-weight: 400; color: #625d86">(לא חובה)</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ whyChips }}" as="w" hint-placeholder-count="6"><button onClick="{{ w.toggle }}" aria-pressed="{{ w.on }}" style="{{ w.style }}">{{ w.label }}</button></sc-for>
+</div>
+</div>
+</sc-if>
+<button onClick="{{ skip }}" style="align-self: flex-start; min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 13px; text-decoration: underline; cursor: pointer">דילוג על השם</button>
+</section>
+<button onClick="{{ next }}" disabled="{{ nextDisabled }}" style="{{ nextStyle }}">{{ nextLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLearned }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg viewBox="0 0 160 170" width="56" height="60" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">מה למדנו</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">אתם מחליטים מה נכנס לסבב 2.</p>
+</div>
+</div>
+<div style="background: #ffffff; border-radius: 18px; border: 1px solid #f0e2dc; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px">
+<sc-for list="{{ learnedLines }}" as="l" hint-placeholder-count="3"><span>{{ l.t }}</span></sc-for>
+</div>
+<sc-if value="{{ hasRules }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ rules }}" as="r" hint-placeholder-count="2">
+<div style="background: #ffffff; border-radius: 18px; border: 1px solid #f0e2dc; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: flex-start; gap: 10px"><span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 999px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center; font-weight: 600">{{ r.icon }}</span><span style="font-size: 15px; line-height: 21px">{{ r.text }}</span></div>
+<div style="display: flex; gap: 8px"><button onClick="{{ r.yes }}" style="{{ r.yesStyle }}">כן</button><button onClick="{{ r.no }}" style="{{ r.noStyle }}">לא</button></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ noRules }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #eaeefc; font-size: 14px; line-height: 20px">עוד לא ברור מה אתם אוהבים, אז סבב 2 ימשיך לגוון.</p>
+</sc-if>
+<button onClick="{{ toRound2 }}" style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">לסבב 2</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRevisit }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 12px">
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">סבב 3 · הכרעה</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">קודם עוד מבט על ה„אולי”. {{ rvCounter }}</p>
+</div>
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 46px; font-weight: 600; line-height: 1.15">{{ rv.he }}</h2>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ rv.reason }}</p>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ rvYes }}" style="flex: 1; min-height: 52px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 16px; font-weight: 500; cursor: pointer">לגמר</button>
+<button onClick="{{ rvNo }}" style="flex: 1; min-height: 52px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 16px; font-weight: 500; cursor: pointer">לא הפעם</button>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDuel }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 12px">
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">סבב 3 · ראש בראש</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">מה עדיף לכם? {{ duelCounter }}</p>
+</div>
+<button onClick="{{ pickA }}" style="min-height: 210px; border-radius: 24px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15">{{ duelA.he }}</span><span style="font-size: 14px; line-height: 20px; color: #625d86">{{ duelA.reason }}</span></button>
+<span style="align-self: center; width: 40px; height: 40px; border-radius: 999px; background: #3a3560; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">או</span>
+<button onClick="{{ pickB }}" style="min-height: 210px; border-radius: 24px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15">{{ duelB.he }}</span><span style="font-size: 14px; line-height: 20px; color: #625d86">{{ duelB.reason }}</span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWinner }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding-top: 24px">
+<svg viewBox="0 0 160 170" width="110" height="117" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"><path d="M55 90 Q62 82 69 90"></path><path d="M91 90 Q98 82 105 90"></path></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+<span style="font-size: 14px; color: #625d86">השם שבחרתם</span>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.2; color: #9c3846">{{ win.full }}</h1>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ win.reason }}</p>
+<sc-if value="{{ hasOthers }}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 13px; color: #625d86">{{ others }}</p></sc-if>
+<div style="margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{ shareNote }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 10px 12px; border-radius: 14px; background: #eaeefc; font-size: 13px; line-height: 19px; text-align: right">בגרסה הזוגית (v2): בן או בת הזוג מדרגים את אותם שמות, ורואים איפה אתם מסכימים.</p></sc-if>
+<button onClick="{{ share }}" style="width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #1a7f4b; color: #ffffff; font-size: 17px; font-weight: 500; cursor: pointer">שליחה לבן/בת הזוג לדירוג</button>
+<button onClick="{{ restart }}" style="width: 100%; min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500; cursor: pointer">להריץ את הסימולציה שוב</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNoWinner }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding-top: 40px">
+<svg viewBox="0 0 160 170" width="96" height="102" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M68 112 Q80 102 92 112" fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"></path></svg>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">{{ noWinTitle }}</h1>
+<p style="margin: 0; font-size: 15px; line-height: 22px; color: #625d86">{{ noWinText }}</p>
+<div style="margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{ canExploreAgain }}" hint-placeholder-val="{{ true }}"><button onClick="{{ exploreAgain }}" style="width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">סבב גילוי נוסף</button></sc-if>
+<button onClick="{{ restart }}" style="width: 100%; min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500; cursor: pointer">להתחיל מחדש</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  db() {
+    const N = {
+      agam: { he: 'אֲגַם', tr: 'Agam', reason: 'מקווה מים גדול. קצר וטבעי, ונשמע טוב ב„אגם כהן”.', f: ['nature', 'popular', 'short', 'modern'], probe: 'טבע · פופולרי' },
+      avigail: { he: 'אֲבִיגַיִל', tr: 'Avigail', reason: '„אבי גילה”. שם תנ״כי מלא, שמתקצר לאבי או לגילי.', f: ['biblical', 'long', 'classic', 'common'], probe: 'תנ״כי · ארוך' },
+      nitzan: { he: 'נִיצָן', tr: 'Nitzan', reason: 'הפריחה הראשונה של האביב, ממש בזמן ללידה בניסן.', f: ['nature', 'pesach', 'unisex', 'short', 'modern', 'common'], probe: 'אביב · יוניסקס' },
+      noga: { he: 'נֹגַהּ', tr: 'Noga', reason: 'אור וזוהר, וגם שם כוכב הלכת. קצר וקל לאיות.', f: ['light', 'popular', 'short', 'modern'], probe: 'פופולרי מאוד' },
+      sheli: { he: 'שֶׁלִּי', tr: 'Sheli', reason: '„שייכת לי”. רך, קצר ופחות נפוץ היום.', f: ['love', 'rare', 'short', 'modern'], probe: 'נדיר' },
+      shira: { he: 'שִׁירָה', tr: 'Shira', reason: 'שירת הים נקראת בשביעי של פסח. שם מוזיקלי וקלאסי.', f: ['music', 'pesach', 'classic', 'common', 'short'], probe: 'פסח · קלאסי' },
+      hadas: { he: 'הֲדַס', tr: 'Hadas', reason: 'שיח ריחני מארבעת המינים. קצר ושורשי.', f: ['nature', 'classic', 'common', 'short'], probe: 'טבע · קלאסי' },
+      tamar: { he: 'תָּמָר', tr: 'Tamar', reason: 'עץ התמר. קלאסי, קצר ואהוב מאוד.', f: ['nature', 'biblical', 'classic', 'popular', 'short'], probe: 'פופולרי מאוד' },
+      keshet: { he: 'קֶשֶׁת', tr: 'Keshet', reason: 'קשת בענן. צבעוני, קצר ולא נפוץ.', f: ['nature', 'modern', 'rare', 'short'], probe: 'נדיר · טבע' },
+      shir: { he: 'שִׁיר', tr: 'Shir', reason: 'זמר ומנגינה. קצר ושמח.', f: ['music', 'modern', 'common', 'short'], probe: 'מוזיקה' },
+      meshi: { he: 'מֶשִׁי', tr: 'Meshi', reason: 'בד רך ויקר. עדין ופחות נפוץ.', f: ['beauty', 'modern', 'common', 'short'], probe: 'יופי' },
+      yael: { he: 'יָעֵל', tr: 'Yael', reason: '„יעלת חן” מספר משלי. תנ״כי, קצר ופופולרי.', f: ['nature', 'biblical', 'classic', 'popular', 'short'], probe: 'תנ״כי · פופולרי' },
+      aviva: { he: 'אֲבִיבָה', tr: 'Aviva', reason: 'מלשון אביב. שם קלאסי שמתאים ללידה בניסן.', f: ['pesach', 'nature', 'classic', 'rare', 'long'], probe: 'אביב · ארוך' },
+      tal: { he: 'טַל', tr: 'Tal', reason: 'תפילת טל נאמרת בפסח. קצר ונקי.', f: ['nature', 'pesach', 'unisex', 'modern', 'common', 'short'], probe: 'פסח · יוניסקס' },
+      miriam: { he: 'מִרְיָם', tr: 'Miriam', reason: 'מרים הנביאה, מסיפור יציאת מצרים. קלאסי ותנ״כי.', f: ['biblical', 'pesach', 'classic', 'common', 'short'], probe: 'פסח · תנ״כי' },
+      nufar: { he: 'נוּפָר', tr: 'Nufar', reason: 'פרח מים. רך וטבעי.', f: ['nature', 'modern', 'common', 'short'], probe: 'טבע · עכשווי' },
+      orya: { he: 'אוֹרְיָה', tr: 'Orya', reason: '„אורה של יה”. אור עם משמעות.', f: ['light', 'modern', 'common', 'short'], probe: 'אור' },
+      nehora: { he: 'נְהוֹרָה', tr: 'Nehora', reason: '„אור” בארמית. מיוחד וארוך.', f: ['light', 'rare', 'long', 'classic'], probe: 'נדיר · ארוך' },
+      geula: { he: 'גְּאוּלָה', tr: 'Geula', reason: 'מסיפור פסח. שם קלאסי של פעם.', f: ['pesach', 'classic', 'rare', 'long'], probe: 'פסח · קלאסי' }
+    };
+    const L = {
+      popular: 'שמות פופולריים', rare: 'שמות נדירים', short: 'שמות קצרים', long: 'שמות ארוכים',
+      modern: 'שמות עכשוויים', classic: 'שמות קלאסיים', nature: 'שמות מהטבע', light: 'שמות של אור',
+      biblical: 'שמות תנ״כיים', beauty: 'שמות של יופי', music: 'שמות של שיר ומוזיקה', love: 'שמות של אהבה',
+      pesach: 'שמות של פסח ואביב', unisex: 'שמות יוניסקס'
+    };
+    const R = [
+      { id: 'popular', label: 'נפוץ מדי', w: { popular: -3 } },
+      { id: 'long', label: 'ארוך מדי', w: { long: -3 } },
+      { id: 'dated', label: 'מיושן', w: { classic: -3 } },
+      { id: 'boyish', label: 'נשמע כמו שם של בן', w: { unisex: -3 } },
+      { id: 'meaning', label: 'המשמעות', w: {} },
+      { id: 'sound', label: 'הצליל', w: {} }
+    ];
+    const CATS = ['nature', 'light', 'biblical', 'beauty', 'music', 'love', 'pesach'];
+    return { N: N, L: L, R: R, CATS: CATS, EXPLORE: [['agam', 'avigail', 'nitzan', 'noga', 'sheli', 'shira'], ['nufar', 'yael', 'geula', 'orya', 'keshet', 'nehora']] };
+  }
+
+  weights(ratings, reasons) {
+    const D = this.db();
+    const w = {};
+    const add = (f, v) => { if (f === 'common') return; w[f] = (w[f] || 0) + v; };
+    Object.keys(ratings).forEach((id) => {
+      const r = ratings[id];
+      const n = D.N[id];
+      if (!n) return;
+      const base = r === 'like' ? 2 : r === 'maybe' ? 1 : r === 'no' ? -2 : 0;
+      n.f.forEach((f) => add(f, base));
+      if (r === 'no') {
+        const rs = reasons[id] || {};
+        D.R.forEach((rd) => {
+          if (!rs[rd.id]) return;
+          Object.keys(rd.w).forEach((f) => add(f, rd.w[f]));
+          if (rd.id === 'meaning') n.f.filter((f) => D.CATS.indexOf(f) >= 0).forEach((f) => add(f, -2));
+        });
+      }
+    });
+    return w;
+  }
+
+  proposals(w, ratings) {
+    const D = this.db();
+    const liked = Object.keys(ratings || {}).filter((id) => ratings[id] === 'like');
+    const inLiked = (f) => liked.some((id) => D.N[id].f.indexOf(f) >= 0);
+    const keys = Object.keys(w).filter((f) => D.L[f]);
+    const avoid = keys.filter((f) => w[f] <= -3 && !inLiked(f)).sort((a, b) => w[a] - w[b]).map((f) => ({ key: 'avoid:' + f, f: f, kind: 'avoid' }));
+    const favor = keys.filter((f) => w[f] >= 3).sort((a, b) => w[b] - w[a]).map((f) => ({ key: 'favor:' + f, f: f, kind: 'favor' }));
+    return avoid.slice(0, 2).concat(favor).slice(0, 3);
+  }
+
+  pickRound2(st) {
+    const D = this.db();
+    const ratings = st.ratings || {};
+    const w = this.weights(ratings, st.reasons || {});
+    const acc = st.accepted || {};
+    const avoid = Object.keys(acc).filter((k) => acc[k] === true && k.indexOf('avoid:') === 0).map((k) => k.slice(6));
+    const favor = Object.keys(acc).filter((k) => acc[k] === true && k.indexOf('favor:') === 0).map((k) => k.slice(6));
+    const seen = Object.keys(ratings);
+    const pool = Object.keys(D.N).filter((id) => seen.indexOf(id) < 0 && !D.N[id].f.some((f) => avoid.indexOf(f) >= 0));
+    const score = (id) => D.N[id].f.reduce((s, f) => s + (w[f] || 0) + (favor.indexOf(f) >= 0 ? 3 : 0), 0);
+    const ranked = pool.slice().sort((a, b) => score(b) - score(a));
+    const picks = ranked.slice(0, 3);
+    const rest = ranked.filter((id) => picks.indexOf(id) < 0);
+    const liked = seen.filter((id) => ratings[id] === 'like');
+    const pesachMet = liked.some((id) => D.N[id].f.indexOf('pesach') >= 0);
+    let wild = null;
+    let wildTag = '';
+    if (!pesachMet && avoid.indexOf('pesach') < 0) {
+      wild = rest.find((id) => D.N[id].f.indexOf('pesach') >= 0) || null;
+      if (wild) wildTag = 'כרטיס פרא · רצוי שעוד לא התקיים: פסח';
+    }
+    if (!wild && rest.length) {
+      const fresh = (id) => D.N[id].f.filter((f) => f !== 'common' && !w[f]).length;
+      wild = rest.slice().sort((a, b) => fresh(b) - fresh(a))[0];
+      wildTag = 'כרטיס פרא · משהו אחר לגמרי';
+    }
+    const tags = {};
+    picks.forEach((id) => {
+      const twin = liked.map((l) => ({ l: l, n: D.N[l].f.filter((f) => f !== 'common' && D.N[id].f.indexOf(f) >= 0).length })).sort((a, b) => b.n - a.n)[0];
+      tags[id] = twin && twin.n >= 2 ? 'כי אהבתם את ' + D.N[twin.l].he.replace(/[֑-ׇ]/g, '') : 'לפי מה שלמדנו';
+    });
+    const set = picks.slice();
+    if (wild) { set.push(wild); tags[wild] = wildTag; }
+    return { set: set, tags: tags, wild: wild };
+  }
+
+  renderVals() {
+    const D = this.db();
+    const st = this.state || {};
+    const screen = st.screen || 'intro';
+    const ratings = st.ratings || {};
+    const reasons = st.reasons || {};
+    const set = st.set || [];
+    const idx = st.idx || 0;
+    const round = st.round || 1;
+    const plain = (he) => he.replace(/[֑-ׇ]/g, '');
+    const self = this;
+
+    const startExplore = (pass) => {
+      self.setState({ screen: 'rate', round: 1, pass: pass, set: D.EXPLORE[pass].slice(), idx: 0, tags: {}, wild: null, promoted: [], revisitIdx: 0, accepted: {}, tooStrict: false, ratings: pass === 0 ? {} : ratings, reasons: pass === 0 ? {} : reasons });
+    };
+
+    const vals = {
+      isIntro: screen === 'intro', isRate: screen === 'rate', isLearned: screen === 'learned',
+      isRevisit: screen === 'revisit', isDuel: screen === 'duel', isWinner: screen === 'winner', isNoWinner: screen === 'nowinner',
+      start: () => startExplore(0)
+    };
+
+    // ---------- rate ----------
+    const curId = set[idx];
+    const cur = curId ? D.N[curId] : null;
+    const myRating = curId ? ratings[curId] : null;
+    const btn = 'min-height: 44px; border-radius: 16px; border: 2px solid; font-size: 14px; font-weight: 500; cursor: pointer; ';
+    const styleFor = (kind, bg) => btn + (myRating === kind ? 'border-color: ' + bg + '; background: ' + bg + '; color: #ffffff' : 'border-color: #f0e2dc; background: #ffffff; color: #3a3560');
+    const rate = (kind) => () => {
+      if (!curId) return;
+      const r = Object.assign({}, ratings); r[curId] = kind;
+      self.setState({ ratings: r });
+    };
+    const lastInSet = idx >= set.length - 1;
+    const goNext = () => {
+      if (!curId) return;
+      if (!lastInSet) { self.setState({ idx: idx + 1 }); return; }
+      if (round === 1) { self.setState({ screen: 'learned' }); return; }
+      const maybes = Object.keys(ratings).filter((id) => ratings[id] === 'maybe');
+      if (maybes.length) { self.setState({ screen: 'revisit', revisitList: maybes, revisitIdx: 0, promoted: [] }); return; }
+      self.toDuel(ratings, []);
+    };
+    const skip = () => {
+      if (!curId) return;
+      const r = Object.assign({}, ratings); r[curId] = 'skip';
+      self.setState({ ratings: r });
+      if (!lastInSet) { self.setState({ idx: idx + 1 }); return; }
+      if (round === 1) { self.setState({ screen: 'learned' }); return; }
+      const maybes = Object.keys(r).filter((id) => r[id] === 'maybe');
+      if (maybes.length) { self.setState({ screen: 'revisit', revisitList: maybes, revisitIdx: 0, promoted: [] }); return; }
+      self.toDuel(r, []);
+    };
+    const myReasons = (curId && reasons[curId]) || {};
+    const chipOn = 'min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-size: 13px; font-weight: 500; cursor: pointer';
+    const chipOff = 'min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 13px; font-weight: 500; cursor: pointer';
+    const tags = st.tags || {};
+    const isWild = !!(st.wild && curId === st.wild);
+    Object.assign(vals, {
+      roundTitle: round === 1 ? ((st.pass || 0) === 0 ? 'סבב 1 · גילוי' : 'סבב גילוי נוסף') : 'סבב 2 · מיקוד',
+      roundSub: round === 1 ? '6 שמות שונים מאוד, כדי ללמוד מה אתם אוהבים.' : '3 לפי מה שלמדנו, ועוד כרטיס פרא אחד.',
+      dots: set.map((id, i) => ({ style: 'height: 8px; border-radius: 999px; background: ' + (i < idx ? '#f7a9a8; width: 8px' : i === idx ? '#b84a57; width: 24px' : '#f0e2dc; width: 8px') })),
+      counter: 'שם ' + (idx + 1) + ' מתוך ' + set.length,
+      cur: cur ? { he: cur.he, tr: cur.tr, reason: cur.reason } : { he: '', tr: '', reason: '' },
+      tagText: round === 1 ? ('בודק: ' + (cur ? cur.probe : '')) : (tags[curId] || ''),
+      tagStyle: 'align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; ' + (isWild ? 'background: #fff4e0; color: #8a5a00; border: 1px dashed #d9a441' : round === 1 ? 'background: #f6f1ee; color: #625d86' : 'background: #eaeefc; color: #4f5fb0'),
+      noStyle: styleFor('no', '#3a3560'), maybeStyle: styleFor('maybe', '#4f5fb0'), likeStyle: styleFor('like', '#b84a57'),
+      noOn: myRating === 'no', maybeOn: myRating === 'maybe', likeOn: myRating === 'like',
+      rateNo: rate('no'), rateMaybe: rate('maybe'), rateLike: rate('like'),
+      showWhy: myRating === 'no',
+      whyChips: D.R.map((rd) => ({
+        label: rd.label, on: !!myReasons[rd.id], style: myReasons[rd.id] ? chipOn : chipOff,
+        toggle: () => {
+          const all = Object.assign({}, reasons); const mine = Object.assign({}, all[curId] || {});
+          mine[rd.id] = !mine[rd.id]; all[curId] = mine; self.setState({ reasons: all });
+        }
+      })),
+      nextDisabled: !myRating || myRating === 'skip',
+      nextStyle: 'width: 100%; min-height: 56px; border-radius: 16px; border: 0; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer; background: ' + (myRating && myRating !== 'skip' ? '#b84a57' : 'rgba(184,74,87,0.4)'),
+      nextLabel: !lastInSet ? 'לשם הבא' : round === 1 ? 'מה למדנו?' : 'לסבב ההכרעה',
+      next: goNext,
+      skip: skip
+    });
+
+    // ---------- learned ----------
+    const w = this.weights(ratings, reasons);
+    const props = this.proposals(w, ratings);
+    const acc = st.accepted || {};
+    const yesOn = 'flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-size: 14px; font-weight: 500; cursor: pointer';
+    const yesOff = 'flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500; cursor: pointer';
+    const byKind = (k) => Object.keys(ratings).filter((id) => D.N[id] && ratings[id] === k).map((id) => plain(D.N[id].he));
+    const lines = [];
+    if (byKind('like').length) lines.push('מעניין: ' + byKind('like').join(', '));
+    if (byKind('maybe').length) lines.push('אולי: ' + byKind('maybe').join(', '));
+    if (byKind('no').length) lines.push('לא: ' + byKind('no').join(', '));
+    Object.assign(vals, {
+      learnedLines: lines.map((t) => ({ t: t })),
+      rules: props.map((p) => ({
+        text: p.kind === 'avoid' ? 'נראה שפחות מתחברים ל' + D.L[p.f] + '. להפסיק להציע אותם?' : 'אהבתם ' + D.L[p.f] + '. לתת להם עדיפות?',
+        icon: p.kind === 'avoid' ? '−' : '+',
+        yesStyle: acc[p.key] === true ? yesOn : yesOff,
+        noStyle: acc[p.key] === false ? yesOn : yesOff,
+        yes: () => { const a = Object.assign({}, acc); a[p.key] = true; self.setState({ accepted: a }); },
+        no: () => { const a = Object.assign({}, acc); a[p.key] = false; self.setState({ accepted: a }); }
+      })),
+      hasRules: props.length > 0,
+      noRules: props.length === 0,
+      toRound2: () => {
+        const pick = self.pickRound2(Object.assign({}, st, { accepted: acc }));
+        if (!pick.set.length) { self.setState({ screen: 'nowinner', tooStrict: true }); return; }
+        self.setState({ screen: 'rate', round: 2, set: pick.set, tags: pick.tags, wild: pick.wild, idx: 0, tooStrict: false });
+      }
+    });
+
+    // ---------- revisit ----------
+    const rl = st.revisitList || [];
+    const ri = st.revisitIdx || 0;
+    const rid = rl[ri];
+    const promoted = st.promoted || [];
+    const advanceRevisit = (prom) => {
+      if (ri + 1 < rl.length) { self.setState({ revisitIdx: ri + 1, promoted: prom }); return; }
+      self.toDuel(ratings, prom);
+    };
+    Object.assign(vals, {
+      rv: rid ? { he: D.N[rid].he, reason: D.N[rid].reason } : { he: '', reason: '' },
+      rvCounter: 'אולי ' + (ri + 1) + ' מתוך ' + rl.length,
+      rvYes: () => { if (rid) advanceRevisit(promoted.concat([rid])); },
+      rvNo: () => { if (rid) advanceRevisit(promoted); }
+    });
+
+    // ---------- duel ----------
+    const champ = st.champ;
+    const queue = st.queue || [];
+    const di = st.duelIdx || 0;
+    const chal = queue[di];
+    const pickDuel = (winnerId) => () => {
+      if (!winnerId) return;
+      if (di + 1 < queue.length) { self.setState({ champ: winnerId, duelIdx: di + 1 }); return; }
+      self.setState({ champ: winnerId, screen: 'winner' });
+    };
+    Object.assign(vals, {
+      duelA: champ ? { he: D.N[champ].he, reason: D.N[champ].reason } : { he: '', reason: '' },
+      duelB: chal ? { he: D.N[chal].he, reason: D.N[chal].reason } : { he: '', reason: '' },
+      pickA: pickDuel(champ), pickB: pickDuel(chal),
+      duelCounter: 'השוואה ' + (di + 1) + ' מתוך ' + queue.length
+    });
+
+    // ---------- winner / no winner ----------
+    const finalists = (st.finalists || []).filter((id) => id !== champ).map((id) => plain(D.N[id].he));
+    Object.assign(vals, {
+      win: champ ? { he: D.N[champ].he, full: D.N[champ].he + ' כֹּהֵן', reason: D.N[champ].reason } : { he: '', full: '', reason: '' },
+      others: finalists.length ? 'בגמר היו גם: ' + finalists.join(', ') : '',
+      hasOthers: finalists.length > 0,
+      shareNote: !!st.shareNote,
+      share: () => self.setState({ shareNote: true }),
+      restart: () => self.setState({ screen: 'intro', ratings: {}, reasons: {}, accepted: {}, set: [], idx: 0, champ: null, queue: [], duelIdx: 0, finalists: [], shareNote: false, pass: 0, round: 1 }),
+      canExploreAgain: (st.pass || 0) === 0,
+      cannotExploreAgain: (st.pass || 0) !== 0,
+      noWinTitle: st.tooStrict ? 'הכללים סיננו הכול' : 'עוד לא מצאנו את השם',
+      noWinText: st.tooStrict ? 'הכללים שאישרתם סיננו את כל השמות שנשארו. במוצר האמיתי נציע לבטל כלל אחד.' : 'אף שם לא קיבל „מעניין!”. זה בסדר, גם זה מלמד אותנו משהו.',
+      exploreAgain: () => { startExplore(1); }
+    });
+    return vals;
+  }
+
+  toDuel(ratings, promoted) {
+    const st = this.state || {};
+    const w = this.weights(ratings, st.reasons || {});
+    const D = this.db();
+    const score = (id) => D.N[id].f.reduce((s, f) => s + (w[f] || 0), 0);
+    const likes = Object.keys(ratings).filter((id) => ratings[id] === 'like').concat(promoted || [])
+      .sort((a, b) => score(b) - score(a)).slice(0, 4);
+    if (likes.length === 0) { this.setState({ screen: 'nowinner' }); return; }
+    if (likes.length === 1) { this.setState({ screen: 'winner', champ: likes[0], finalists: likes }); return; }
+    this.setState({ screen: 'duel', champ: likes[0], queue: likes.slice(1), duelIdx: 0, finalists: likes });
+  }
+}
+
+</script>
+</body>
+</html>

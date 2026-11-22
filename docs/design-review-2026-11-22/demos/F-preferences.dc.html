@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<title>F · מה חשוב לכם בשם</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Rubik:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff8f4}
+button,input{font-family:inherit}
+a{color:#4f5fb0}a:hover{color:#3a3560}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 8px">
+<a href="#" style="display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 14px; color: #3a3560; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>חזרה</a>
+<span style="font-size: 12px; color: #625d86">שלב 3 מתוך 4</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px">
+<div>
+<h1 style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">מה חשוב לכם בשם?</h1>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #625d86">לחיצה אחת: רצוי. שנייה: חובה. שלישית: מבטלת.</p>
+</div>
+<svg viewBox="0 0 160 170" width="52" height="55" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+</div>
+
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 12px; color: #625d86">
+<span style="display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560">לא חשוב</span>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+<span style="display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>רצוי</span>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+<span style="display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>חובה</span>
+</div>
+
+<div role="group" aria-label="מה חשוב לכם" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px">
+<sc-for list="{{ chips }}" as="c" hint-placeholder-count="9">
+<button onClick="{{ c.cycle }}" disabled="{{ c.disabled }}" aria-label="{{ c.aria }}" style="{{ c.style }}"><sc-if value="{{ c.isMust }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></sc-if><sc-if value="{{ c.isWant }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if><span>{{ c.label }}</span><sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 400">· {{ c.hint }}</span></sc-if></button>
+</sc-for>
+</div>
+
+<p style="margin: 0 0 6px; font-size: 13px; color: #625d86">{{ counter }}</p>
+<sc-if value="{{ tooMany }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0 0 6px; padding: 8px 12px; border-radius: 12px; background: #fdeceb; color: #9c3846; font-size: 13px; line-height: 18px">{{ mustCount }} דרישות חובה עלולות לצמצם מאוד את ההצעות. אפשר להפוך חלק ל„רצוי”.</p>
+</sc-if>
+
+<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px">
+<label for="loved" style="font-size: 14px; font-weight: 600">שמות אהובים <span style="font-weight: 400; color: #625d86; font-size: 12px">(נלמד מהסגנון, לא נציע אותם)</span></label>
+<div style="display: flex; gap: 8px">
+<input id="loved" type="text" placeholder="למשל: תמר" style="flex: 1; min-width: 0; min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">הוספה</button>
+</div>
+<div style="display: flex; gap: 8px">
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 12px; border-radius: 999px; background: #eaeefc; font-size: 14px">מאיה<button aria-label="הסרת מאיה" style="width: 28px; height: 28px; border: 0; background: none; color: #625d86; font-size: 16px">×</button></span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 12px; border-radius: 999px; background: #eaeefc; font-size: 14px">אלה<button aria-label="הסרת אלה" style="width: 28px; height: 28px; border: 0; background: none; color: #625d86; font-size: 16px">×</button></span>
+</div>
+</div>
+
+<button style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">המשך</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["with-date-and-sibling","no-date-no-siblings"],"default":"with-date-and-sibling"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const noFamily = (this.props.scenario ?? 'with-date-and-sibling') === 'no-date-no-siblings';
+    const levels = st.levels || { clearMeaning: 'must', fitsSiblings: 'want', flowsWithSurname: 'want', dueDateLink: 'want' };
+    const defs = [
+      { id: 'englishFriendly', label: 'קל באנגלית' },
+      { id: 'singleSpelling', label: 'כתיב אחד ברור' },
+      { id: 'clearMeaning', label: 'משמעות עברית ברורה' },
+      { id: 'notTop20', label: 'לא בטופ 20' },
+      { id: 'fitsSiblings', label: noFamily ? 'מתאים לאחים' : 'מתאים לאיתי', needs: noFamily ? 'אין אחים ברשימה' : '' },
+      { id: 'flowsWithSurname', label: 'זורם עם „כהן”' },
+      { id: 'grandparents', label: 'יתקבל יפה אצל סבא וסבתא' },
+      { id: 'dueDateLink', label: noFamily ? 'קשור לחג או לעונה של הלידה' : 'קשור לפסח או לאביב', needs: noFamily ? 'צריך תאריך לידה' : '' },
+      { id: 'noUnisex', label: 'ללא שמות יוניסקס', binary: true }
+    ];
+    const base = 'min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; ';
+    const S = {
+      off: base + 'border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560',
+      want: base + 'border: 2px solid #4f5fb0; background: #eaeefc; color: #4f5fb0',
+      must: base + 'border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff',
+      disabled: base + 'border: 2px dashed #d9cfe0; background: transparent; color: #625d86; cursor: not-allowed'
+    };
+    const word = { off: 'לא חשוב', want: 'רצוי', must: 'חובה' };
+    let mustCount = 0;
+    let wantCount = 0;
+    const chips = defs.map((d) => {
+      const disabled = !!d.needs;
+      const lv = disabled ? 'off' : (levels[d.id] || 'off');
+      if (lv === 'must') mustCount += 1;
+      if (lv === 'want') wantCount += 1;
+      return {
+        label: d.label,
+        hint: d.needs || '',
+        hasHint: !!d.needs,
+        disabled: disabled,
+        isMust: lv === 'must',
+        isWant: lv === 'want',
+        style: disabled ? S.disabled : S[lv],
+        aria: d.label + ': ' + (disabled ? d.needs : word[lv]) + '. לחיצה משנה',
+        cycle: () => {
+          if (disabled) return;
+          const order = d.binary ? ['off', 'must'] : ['off', 'want', 'must'];
+          const nextLv = order[(order.indexOf(lv) + 1) % order.length];
+          const next = Object.assign({}, levels);
+          next[d.id] = nextLv;
+          this.setState({ levels: next });
+        }
+      };
+    });
+    return {
+      chips: chips,
+      mustCount: mustCount,
+      tooMany: mustCount >= 3,
+      counter: mustCount + ' חובה · ' + wantCount + ' רצוי'
+    };
+  }
+}
+</script>
+</body>
+</html>
