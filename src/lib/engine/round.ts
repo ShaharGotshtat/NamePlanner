@@ -1,4 +1,5 @@
 import type { NameEntry, NameSex, RoundRequest, Suggestion } from "@/lib/types";
+import { ROUNDS_PER_PASS } from "@/lib/constants";
 import { findByName, fitsBabySex, nameSex } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
 import { evaluate, matchContext, type Evaluation, type MatchContext } from "./requirements";
@@ -87,14 +88,20 @@ function score(entry: NameEntry, req: RoundRequest, signals: Signals): Candidate
 
 const byScore = (a: Candidate, b: Candidate) => b.score - a.score;
 
+/** Family names, names we like and names declined in an earlier search, in any spelling. */
+function blockedByName(req: RoundRequest): (n: NameEntry) => boolean {
+  const blocked = new Set([...req.family.map((f) => f.name), ...req.namesWeLike, ...req.declined].map(normalizeHebrew));
+  return (n) => [n.nameHe, ...(n.variants ?? [])].some((s) => blocked.has(normalizeHebrew(s)));
+}
+
 /** Hard rules first (sex, family names, names already shown or declined, Musts), then the heuristic score. */
 export function rankCandidates(names: NameEntry[], req: RoundRequest): Candidate[] {
   const blockedIds = new Set([...req.shownIds, ...req.ratings.map((r) => r.nameId)]);
-  const blockedNames = new Set([...req.family.map((f) => f.name), ...req.namesWeLike, ...req.declined].map(normalizeHebrew));
+  const isBlocked = blockedByName(req);
   const signals = signalsFor(names, req);
 
   const passing = names
-    .filter((n) => fitsBabySex(n, req.babySex) && !blockedIds.has(n.id) && !blockedNames.has(normalizeHebrew(n.nameHe)))
+    .filter((n) => fitsBabySex(n, req.babySex) && !blockedIds.has(n.id) && !isBlocked(n))
     .map((n) => score(n, req, signals))
     .filter((c): c is Candidate => c !== null)
     .sort(byScore);
@@ -103,13 +110,29 @@ export function rankCandidates(names: NameEntry[], req: RoundRequest): Candidate
   return mostWants.length >= ROUND_SIZE ? mostWants : passing;
 }
 
+/**
+ * Names per round. When the Musts (chips and strict free-text wishes) leave fewer names than a
+ * full search shows, they are spread over the rounds: 7 names make rounds of 3, 3 and 1.
+ * Counted before anything was shown, so the size stays the same through the search.
+ */
+export function roundSizeFor(names: NameEntry[], req: RoundRequest): number {
+  const isBlocked = blockedByName(req);
+  const ctx = matchContext(req, names);
+  let pool = 0;
+  for (const n of names) {
+    if (!fitsBabySex(n, req.babySex) || isBlocked(n) || !evaluate(n, req, ctx).mustsMet) continue;
+    if (++pool >= ROUND_SIZE * ROUNDS_PER_PASS) return ROUND_SIZE;
+  }
+  return Math.max(1, Math.ceil(pool / ROUNDS_PER_PASS));
+}
+
 /** Unknown sex: one of each, plus a fourth slot open to any sex. */
 const SLOTS_FOR_UNKNOWN: (NameSex | null)[] = ["boy", "girl", "unisex", null];
 
 /** Picks strong names that differ from each other, so each round also tests a direction. */
-export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["babySex"]): Candidate[] {
+export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["babySex"], size = ROUND_SIZE): Candidate[] {
   const picked: Candidate[] = [];
-  const slots: (NameSex | null)[] = babySex === "unknown" ? SLOTS_FOR_UNKNOWN : Array(ROUND_SIZE).fill(null);
+  const slots: (NameSex | null)[] = (babySex === "unknown" ? SLOTS_FOR_UNKNOWN : Array(ROUND_SIZE).fill(null)).slice(0, size);
 
   // Only strong names: the same shortlist the model chooses from. A slot with no name of its sex
   // on the shortlist takes the best one further down.
@@ -139,7 +162,10 @@ export function standardReason(c: Candidate): string {
 }
 
 export function toSuggestion(c: Candidate, reason: string): Suggestion {
-  return { name: c.entry, sex: c.sex, reason, explanation: c.evaluation.lines };
+  // A letter wish can make another spelling the one to show (טום for תום); it has no niqqud of its own.
+  const { spelling } = c.evaluation;
+  const name = spelling === c.entry.nameHe ? c.entry : { ...c.entry, nameHe: spelling, niqqud: spelling };
+  return { name, sex: c.sex, reason, explanation: c.evaluation.lines };
 }
 
 /**

@@ -112,7 +112,7 @@ export function normalizeThemeRequirement<T extends Omit<TextRequirement, "id">>
   return { ...req, facet: "meaningCategory", values: ["biblical"] };
 }
 
-/** Letter wishes (starts with, ends with) are explicit, so they filter like a Must instead of adding to the score. */
+/** Letter wishes (starts with, ends with) are checked on every spelling of the name, see spellingFor. */
 export const isLetterFacet = (facet: TextRequirement["facet"]) => facet === "starting" || facet === "ending";
 
 const GERESH = /['׳`’]/g;
@@ -131,14 +131,35 @@ export function normalizeLetters(value: string): string {
     .slice(0, 4);
 }
 
-const nameLetters = (nameHe: string) => normalizeHebrew(nameHe).replace(GERESH, "׳").replace(/[^א-ת׳]/g, "");
+const spellingLetters = (spelling: string) => normalizeHebrew(spelling).replace(GERESH, "׳").replace(/[^א-ת׳]/g, "");
 
-/** "ג" matches גל but not ג׳וליה: a letter with a geresh is a different sound. */
-function startsWithLetters(name: string, value: string): boolean {
-  return name.startsWith(value) && (value.endsWith("׳") || name[value.length] !== "׳");
+/** A plain letter covers its geresh sound too ("ג" matches ג׳וליה); "ג׳" matches only ג׳ names. */
+function matchesLetters(req: TextRequirement, spelling: string): boolean {
+  const letters = spellingLetters(spelling);
+  return req.values.some((v) => {
+    const value = normalizeLetters(v);
+    if (!value) return false;
+    const name = value.includes("׳") ? letters : letters.replace(/׳/g, "");
+    return req.facet === "starting" ? name.startsWith(value) : name.endsWith(value);
+  });
 }
 
-function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
+const letterFit = (req: TextRequirement, spelling: string) => matchesLetters(req, spelling) === (req.kind === "want");
+
+/**
+ * The spelling to show: the main one, unless only another spelling parents use meets the letter
+ * wishes (a ט wish shows טום for תום). Musts decide first, then as many wants as possible.
+ */
+export function spellingFor(entry: NameEntry, requirements: TextRequirement[]): string {
+  const letterReqs = requirements.filter((r) => isLetterFacet(r.facet));
+  const spellings = [entry.nameHe, ...(entry.variants ?? [])];
+  if (!letterReqs.length || spellings.length === 1) return entry.nameHe;
+  const rank = (spelling: string) =>
+    letterReqs.reduce((sum, r) => sum + (letterFit(r, spelling) ? (r.level === "must" ? 100 : 1) : 0), 0);
+  return spellings.reduce((best, s) => (rank(s) > rank(best) ? s : best), entry.nameHe);
+}
+
+function matchesFacet(req: TextRequirement, entry: NameEntry, spelling: string): boolean {
   const features = featuresOf(entry);
   switch (req.facet) {
     case "meaningCategory":
@@ -151,27 +172,16 @@ function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
       return req.values.some((v) =>
         v === "short" ? features.syllables <= 2 && features.letters <= 3 : features.syllables >= 3 || features.letters >= 5,
       );
-    case "starting": {
-      const letters = nameLetters(entry.nameHe);
-      return req.values.some((v) => {
-        const value = normalizeLetters(v);
-        return !!value && startsWithLetters(letters, value);
-      });
-    }
-    case "ending": {
-      const letters = nameLetters(entry.nameHe);
-      return req.values.some((v) => {
-        const value = normalizeLetters(v);
-        return !!value && letters.endsWith(value);
-      });
-    }
+    case "starting":
+    case "ending":
+      return matchesLetters(req, spelling);
     case "popularity":
       return req.values.some((v) => matchesPopularity(v, entry));
   }
 }
 
-export function checkText(req: TextRequirement, entry: NameEntry): Check {
-  const matches = matchesFacet(req, entry);
+export function checkText(req: TextRequirement, entry: NameEntry, spelling = entry.nameHe): Check {
+  const matches = matchesFacet(req, entry, spelling);
   const ok = req.kind === "want" ? matches : !matches;
   return { fit: ok ? "met" : "not_met", detail: ok ? "מתאים" : "לא מתאים לבקשה הזו" };
 }
@@ -181,6 +191,8 @@ export interface Evaluation {
   mustsMet: boolean;
   wantsMet: number;
   wantsTotal: number;
+  /** The spelling the letter wishes were checked on, and the one to show. */
+  spelling: string;
 }
 
 export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "profile">, ctx: MatchContext): Evaluation {
@@ -205,12 +217,14 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
     }
   }
 
-  for (const text of req.profile?.requirements ?? []) {
-    const check = checkText(text, entry);
-    if (isLetterFacet(text.facet)) {
-      // Too few names that match means a shorter round, never a name with other letters.
+  const texts = req.profile?.requirements ?? [];
+  const spelling = spellingFor(entry, texts);
+  for (const text of texts) {
+    const check = checkText(text, entry, spelling);
+    if (text.level === "must") {
+      // Too few names that pass means shorter rounds, never a name that misses the wish.
       mustsMet &&= check.fit === "met";
-      lines.push({ requirement: text.label, ...check });
+      lines.push({ requirement: `${text.label} (חובה)`, ...check });
       continue;
     }
     lines.push({ requirement: text.label, ...check });
@@ -225,5 +239,5 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
     }
   }
 
-  return { lines, mustsMet, wantsMet, wantsTotal };
+  return { lines, mustsMet, wantsMet, wantsTotal, spelling };
 }

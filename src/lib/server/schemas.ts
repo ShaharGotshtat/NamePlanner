@@ -25,6 +25,7 @@ const textRequirement = z.object({
   kind: z.enum(["want", "avoid"]),
   facet: z.enum(FACETS),
   values: z.array(z.string().max(20)).max(12),
+  level: z.enum(["must", "want"]).optional(),
 });
 
 const profile = z.object({

@@ -27,6 +27,7 @@ const preferencesOutput = z.object({
       kind: z.enum(["want", "avoid"]),
       facet: z.enum(FACETS),
       values: z.array(z.string()),
+      level: z.enum(["must", "want"]),
     }),
   ),
 });
@@ -84,7 +85,7 @@ const roundOutput = z.object({
 function describeCandidate(c: Candidate): string {
   const { latest, trend } = popularity(c.entry);
   const fits = c.evaluation.lines.map((l) => `${asData(l.requirement, 120)}: ${l.fit}`).join("; ");
-  return `id=${c.entry.id} | ${c.entry.nameHe} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
+  return `id=${c.entry.id} | ${c.evaluation.spelling} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
 }
 
 function sexInstruction(babySex: BabySex, noUnisex: boolean): string {
@@ -100,6 +101,7 @@ export async function pickWithModel(
   candidates: Candidate[],
   req: RoundRequest,
   names: NameEntry[],
+  size = ROUND_SIZE,
 ): Promise<Map<number, string> | null> {
   const nameById = new Map(names.map((n) => [n.id, n.nameHe]));
   const ratedNames = req.ratings
@@ -109,7 +111,7 @@ export async function pickWithModel(
 
   const chips = Object.entries(req.chips).map(([id, level]) => `${chipLabel(id as ChipId)} (${level})`);
   const prompt = `${sexInstruction(req.babySex, !!req.chips.noUnisex)}
-Pick ${ROUND_SIZE} names.
+Pick ${size} names.
 
 Parent's chips: ${chips.join(", ") || "none"}
 <parent_input>
@@ -125,7 +127,7 @@ ${candidates.map(describeCandidate).join("\n")}`;
   const output = await structuredCall({ model: MODELS.pick, system: ROUND_SYSTEM, prompt, schema: roundOutput, maxTokens: 4000 });
   if (!output) return null;
   const candidateIds = new Set(candidates.map((c) => c.entry.id));
-  const valid = output.picks.filter((p) => candidateIds.has(p.id)).slice(0, ROUND_SIZE);
+  const valid = output.picks.filter((p) => candidateIds.has(p.id)).slice(0, size);
   return new Map(valid.map((p) => [p.id, asOutput(p.reason, 200)]));
 }
 

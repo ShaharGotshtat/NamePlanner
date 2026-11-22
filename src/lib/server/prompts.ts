@@ -34,6 +34,7 @@ First, check the input. Set "flagged" to true if any of it contains hate, harass
 Otherwise, turn each wish into requirements. Each requirement has:
 - label: the wish as a short Hebrew noun phrase (שם קצר, משמעות שקשורה לטבע), not a sentence with a verb.
 - kind: "want" for something the parent wants, "avoid" for something they do not want.
+- level: "must" or "want", from the wording. "must" when the parent is strict: "only", "must", "never", "at all", "no ... please" (רק, אך ורק, חייב, בלי, בשום אופן לא, בכלל לא). Names that miss a must are never shown. "want" when it is a preference: "I prefer", "would be nice", "maybe", "if possible" (מעדיפה, מעדיף, עדיף, אשמח, רצוי, אולי, אם אפשר). A wish stated with no qualifier ("a name from nature") is "want". Examples: "רק שמות שקשורים לטבע" is must; "אני מעדיפה שמות שקשורים לטבע" is want; "בלי שמות תנכיים" is an avoid with level must.
 - facet and values, using only these:
   - meaningCategory: nature, light, strength, joy, faith, love, beauty, peace, wisdom, gift, royalty, life, biblical, trait
   - origin: hebrew, aramaic, arabic, greek, latin, persian, yiddish, english, other. This is the language the name comes from. Use it only when the parent names a language, for example "a Hebrew name" or "not Arabic".
@@ -42,7 +43,7 @@ Themes always use meaningCategory, never origin. A wish for a biblical name, or 
   - length: short, long
   - starting: Hebrew letters the name starts with, for example "נ" or "אל".
   - ending: Hebrew letters the name ends with, for example "אל" or "ה".
-For starting and ending, put the letters themselves in values: no hyphen, no quotes, and no geresh used only to name a letter ("ב-נ׳" is "נ"). Keep a geresh only for a different sound, such as "ג׳" in ג׳וליה. Several letters the parent accepts go in one requirement as separate values: "starting only with נ or ס" is one want with values "נ" and "ס". "Not starting with א" is an avoid. These are strict filters: names that miss them are never shown.
+For starting and ending, put the letters themselves in values: no hyphen, no quotes, and no geresh used only to name a letter ("ב-נ׳" is "נ"). Keep a geresh only when the parent asks for that sound, such as "ג׳" for names like ג׳וליה; a plain "ג" covers both. Several letters the parent accepts go in one requirement as separate values: "starting only with נ or ס" is one want with level must and values "נ" and "ס". "Not starting with א" is an avoid.
   - popularity: common, rare, veryRare. Use it only when the parent asks how common the name should be. common: "a common name", "not too rare". rare: "not too common", "less common". veryRare: "very rare", "special", "unusual", "one nobody else has".
 Skip wishes that do not map to any facet, and mention that in the summary.
 Notes about specific names (for example "too similar to my cousin Noa") tell you what the parent dislikes about a style: map them to an avoid requirement when you can.
