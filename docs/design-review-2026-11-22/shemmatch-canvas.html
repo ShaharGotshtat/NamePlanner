@@ -1,0 +1,1569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShemMatch · design review canvas · 22 Nov 2026</title>
+<!--
+  How to read this file (for people and for Claude Code):
+  - It holds every screen from the design canvas (https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE) and works in any browser, offline except for fonts.
+  - Each screen's markup is in a <template id="tpl-NAME"> near the end; its logic is in the matching
+    <script type="text/x-dc-logic" data-for="NAME">. Read the markup as the spec: exact Hebrew copy, colours, sizes, spacing.
+  - {{ hole }} = a value from the logic's renderVals(); <sc-if> = shown when true; <sc-for> = repeated per item.
+  - Statuses: Change = approved for v1; Later = p3 issue; No change / Today = reference only. HANDOFF.md wins where they differ.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#efe9e5;color:#3a3560;font-family:Rubik,system-ui,sans-serif}
+button,input{font-family:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+header{padding:40px 48px 8px;max-width:1100px}
+header h1{margin:0 0 8px;font-family:Fredoka,Rubik,sans-serif;font-size:34px}
+header p{margin:0 0 10px;font-size:16px;line-height:24px;color:#625d86}
+header a{color:#4f5fb0}
+nav{display:flex;flex-wrap:wrap;gap:8px;padding:8px 48px 0}
+nav a{padding:6px 12px;border-radius:999px;background:#fff;color:#3a3560;text-decoration:none;font-size:14px;border:1px solid #e3d5cf}
+h2.group{margin:48px 48px 0;font-family:Fredoka,Rubik,sans-serif;font-size:26px}
+section{padding:8px 0 8px}
+section h3{margin:24px 48px 12px;font-size:18px;font-weight:600}
+.row{display:flex;gap:48px;align-items:flex-start;overflow-x:auto;padding:4px 48px 24px}
+.frame{margin:0;flex-shrink:0}
+figcaption{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:13px;max-width:100%}
+.ftitle{font-weight:600}
+.chip{padding:2px 8px;border-radius:999px;font-size:12px;font-weight:500}
+.open{color:#4f5fb0;font-size:12px}
+.device{position:relative;overflow:hidden;background:#fff8f4;box-shadow:0 10px 30px rgba(58,53,96,.16),0 0 0 1px rgba(58,53,96,.08)}
+.note{margin:16px 48px;padding:12px 16px;border-radius:14px;background:#fff;max-width:900px;font-size:15px;line-height:22px}
+</style>
+</head>
+<body>
+<header>
+<h1>ShemMatch · design review canvas</h1>
+<p>Every screen from the 22 Nov 2026 design review, grouped by decision. Screens marked <b>Interactive</b> respond to clicks, as on the canvas. The live canvas is at <a href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE">https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE</a> (claude.ai sign-in, private to its owner until shared).</p>
+<p>Read together with <b>HANDOFF.md</b>, which has the decisions and a spec for each change; where they differ, the handoff wins.</p>
+</header>
+<nav><a href="#D">D · One-line reason under each name</a><a href="#F">F · One preference section</a><a href="#H1">H1 · “לסיכום” + finish check</a><a href="#H2">H2 · Summary screen: today → new</a><a href="#G1">G1 · “מה למדנו” (issue #80)</a><a href="#G2">G2 · Start over: choose what to keep (issue #78)</a><a href="#E">E · Ask why after “No”</a><a href="#I">I · A URL per step</a><a href="#J">J · Round logic</a></nav>
+<h2 class="group">Approved changes</h2><section id="D"><h3>D · One-line reason under each name</h3><div class="row"><figure class="frame" id="ab-Main"><figcaption><span class="ftitle">D · One-line reason under every name</span><span class="chip" style="background:#b84a57;color:#fff">Change</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-Main" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-Main" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><section id="F"><h3>F · One preference section</h3><div class="row"><figure class="frame" id="ab-F-preferences"><figcaption><span class="ftitle">F · One preference section (tap to cycle)</span><span class="chip" style="background:#b84a57;color:#fff">Change</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-F-preferences" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-F-preferences" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><section id="H1"><h3>H1 · “לסיכום” + finish check</h3><div class="row"><figure class="frame" id="ab-H1-finish-check"><figcaption><span class="ftitle">H1 · Finish check (replaces מצאתי!)</span><span class="chip" style="background:#b84a57;color:#fff">Change</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-H1-finish-check" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-H1-finish-check" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><section id="H2"><h3>H2 · Summary screen: today → new</h3><div class="row"><figure class="frame" id="ab-H2-before"><figcaption><span class="ftitle">H2 · Before — today’s summary</span><span class="chip" style="background:#ffffff;color:#3a3560;border:1px solid #d9cfe0">Today (reference)</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-H2-before" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-H2-before" style="width:390px;height:844px;border-radius:32px"></div></figure><figure class="frame" id="ab-H2-before-picked"><figcaption><span class="ftitle">H2 · Before — after tapping a name</span><span class="chip" style="background:#ffffff;color:#3a3560;border:1px solid #d9cfe0">Today (reference)</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-H2-before-picked" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-H2-before-picked" style="width:390px;height:844px;border-radius:32px"></div></figure><figure class="frame" id="ab-H2-summary"><figcaption><span class="ftitle">H2 · After — pick and change the favourite in place</span><span class="chip" style="background:#b84a57;color:#fff">Change</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-H2-summary" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-H2-summary" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><h2 class="group">Later (p3 issues)</h2><section id="G1"><h3>G1 · “מה למדנו” (issue #80)</h3><div class="row"><figure class="frame" id="ab-G1-before"><figcaption><span class="ftitle">G1 · Before — today: notes disappear once typed</span><span class="chip" style="background:#ffffff;color:#3a3560;border:1px solid #d9cfe0">Today (reference)</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-G1-before" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-G1-before" style="width:390px;height:844px;border-radius:32px"></div></figure><figure class="frame" id="ab-G1-entry"><figcaption><span class="ftitle">G1 · After ① — “מה למדנו” in the round header</span><span class="chip" style="background:#fff4e0;color:#8a5a00;border:1px dashed #d9a441">Later</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-G1-entry" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-G1-entry" style="width:390px;height:844px;border-radius:32px"></div></figure><figure class="frame" id="ab-G1-taking-into-account"><figcaption><span class="ftitle">G1 · After ② — the panel it opens</span><span class="chip" style="background:#fff4e0;color:#8a5a00;border:1px dashed #d9a441">Later</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-G1-taking-into-account" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-G1-taking-into-account" style="width:390px;height:920px;border-radius:32px"></div></figure></div></section><section id="G2"><h3>G2 · Start over: choose what to keep (issue #78)</h3><div class="row"><figure class="frame" id="ab-G2-start-over"><figcaption><span class="ftitle">G2 · Start over: choose what to keep</span><span class="chip" style="background:#fff4e0;color:#8a5a00;border:1px dashed #d9a441">Later</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-G2-start-over" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-G2-start-over" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><h2 class="group">Not changing (reference only)</h2><section id="E"><h3>E · Ask why after “No”</h3><div class="row"><figure class="frame" id="ab-E-why-no"><figcaption><span class="ftitle">E · Ask why after a No</span><span class="chip" style="background:#e9e5f1;color:#3a3560">No change</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-E-why-no" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-E-why-no" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section><section id="I"><h3>I · A URL per step</h3><div class="row"><figure class="frame" id="ab-I-step-urls"><figcaption><span class="ftitle">I · A URL per step + scroll to top</span><span class="chip" style="background:#e9e5f1;color:#3a3560">No change</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-I-step-urls" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-I-step-urls" style="width:1440px;height:844px;border-radius:16px"></div></figure></div></section><section id="J"><h3>J · Round logic</h3><div class="row"><figure class="frame" id="ab-J-flow"><figcaption><span class="ftitle">J · Round logic map</span><span class="chip" style="background:#e9e5f1;color:#3a3560">No change</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-J-flow" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-J-flow" style="width:1440px;height:660px;border-radius:16px"></div></figure><figure class="frame" id="ab-J-prototype"><figcaption><span class="ftitle">J · Round simulation — press Play</span><span class="chip" style="background:#e9e5f1;color:#3a3560">No change</span><span class="chip" style="background:#eaeefc;color:#4f5fb0">Interactive</span><a class="open" href="https://claude.ai/artifact/3wCdX9fZZs2Cbe9V6mXfpE#artboard-J-prototype" target="_blank" rel="noopener">open on canvas ↗</a></figcaption><div class="device" id="host-J-prototype" style="width:390px;height:844px;border-radius:32px"></div></figure></div></section>
+<p class="note"><b>B</b> (holiday/season request) and <b>C</b> (small bugs) are approved too, but have no screens: see HANDOFF.md.</p>
+<div hidden>
+<template id="tpl-Main">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 8px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 4px">
+<div style="display: flex; align-items: center; gap: 8px">
+<svg viewBox="0 0 160 170" width="32" height="34" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse><circle cx="64" cy="86" r="2.4" fill="#fff"></circle><circle cx="100" cy="86" r="2.4" fill="#fff"></circle></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560" stroke="#3a3560" stroke-width="2" stroke-linejoin="round"></path></svg>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600">סבב 1 מתוך 3</h1>
+</div>
+<button style="min-height: 44px; padding: 0 18px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">לסיכום</button>
+</div>
+
+<p style="margin: 0 0 12px; font-size: 12px; color: #625d86">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 24px; height: 8px; border-radius: 999px; background: #b84a57"></span>
+<span style="font-size: 12px; color: #625d86; margin-inline-start: 4px">שם 4 מתוך 4</span>
+</div>
+
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 14px">
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 48px; font-weight: 600; line-height: 1.15">הֲדַס</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">Hadas</p>
+</div>
+
+<p style="margin: 0; font-size: 16px; line-height: 24px; color: #3a3560; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">מארבעת המינים, וזורם עם <b style="font-weight: 600">„הדס כהן”</b></p>
+
+<button onClick="{{ toggle }}" aria-expanded="{{ open }}" style="align-self: flex-start; min-height: 36px; padding: 0; border: 0; background: none; color: #4f5fb0; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; cursor: pointer">{{ toggleLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{ chevronStyle }}"><path d="M6 9l6 6 6-6"></path></svg></button>
+
+<sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 16px; background: #fff8f4; font-size: 14px; line-height: 20px">
+<p style="margin: 0"><b style="font-weight: 600">משמעות:</b> שיח ריחני, אחד מארבעת המינים</p>
+<p style="margin: 0"><b style="font-weight: 600">מקור:</b> תנ״ך (נחמיה ח׳, ט״ו)</p>
+<p style="margin: 0"><b style="font-weight: 600">כמה נפוץ:</b> 296 בנות ב-2024, מקום 60 בין הבנות, בעלייה</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px" aria-label="התאמה לבקשות">
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg><span class="sr">מתקיים:</span>משמעות ברורה</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg><span class="sr">מתקיים:</span>עד 2 הברות</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg><span class="sr">מתקיים:</span>מתאים לאיתי</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg><span class="sr">מתקיים:</span>זורם עם כהן</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; background: #ffffff; border: 1px dashed #9a95b8; color: #625d86; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg><span class="sr">חלקית:</span>חג: סוכות, לא פסח</span>
+</div>
+</div>
+</sc-if>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">לא</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">אולי</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">מעניין!</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #625d86">
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">הוספת הערה</button>
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">תפוס אצלנו במשפחה</button>
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">דיווח על ההצעה</button>
+</div>
+</section>
+
+<button disabled="{{ true }}" style="margin-top: 20px; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: rgba(184,74,87,0.4); color: #ffffff; font-size: 18px; font-weight: 500">לסבב הבא</button>
+</div>
+</template>
+<template id="tpl-F-preferences">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 8px">
+<a href="#" style="display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 14px; color: #3a3560; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>חזרה</a>
+<span style="font-size: 12px; color: #625d86">שלב 3 מתוך 4</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px">
+<div>
+<h1 style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">מה חשוב לכם בשם?</h1>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #625d86">לחיצה אחת: רצוי. שנייה: חובה. שלישית: מבטלת.</p>
+</div>
+<svg viewBox="0 0 160 170" width="52" height="55" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+</div>
+
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 12px; color: #625d86">
+<span style="display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560">לא חשוב</span>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+<span style="display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>רצוי</span>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+<span style="display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>חובה</span>
+</div>
+
+<div role="group" aria-label="מה חשוב לכם" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px">
+<sc-for list="{{ chips }}" as="c" hint-placeholder-count="9">
+<button onClick="{{ c.cycle }}" disabled="{{ c.disabled }}" aria-label="{{ c.aria }}" style="{{ c.style }}"><sc-if value="{{ c.isMust }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></sc-if><sc-if value="{{ c.isWant }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if><span>{{ c.label }}</span><sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 400">· {{ c.hint }}</span></sc-if></button>
+</sc-for>
+</div>
+
+<p style="margin: 0 0 6px; font-size: 13px; color: #625d86">{{ counter }}</p>
+<sc-if value="{{ tooMany }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0 0 6px; padding: 8px 12px; border-radius: 12px; background: #fdeceb; color: #9c3846; font-size: 13px; line-height: 18px">{{ mustCount }} דרישות חובה עלולות לצמצם מאוד את ההצעות. אפשר להפוך חלק ל„רצוי”.</p>
+</sc-if>
+
+<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px">
+<label for="loved" style="font-size: 14px; font-weight: 600">שמות אהובים <span style="font-weight: 400; color: #625d86; font-size: 12px">(נלמד מהסגנון, לא נציע אותם)</span></label>
+<div style="display: flex; gap: 8px">
+<input id="loved" type="text" placeholder="למשל: תמר" style="flex: 1; min-width: 0; min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">הוספה</button>
+</div>
+<div style="display: flex; gap: 8px">
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 12px; border-radius: 999px; background: #eaeefc; font-size: 14px">מאיה<button aria-label="הסרת מאיה" style="width: 28px; height: 28px; border: 0; background: none; color: #625d86; font-size: 16px">×</button></span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 12px; border-radius: 999px; background: #eaeefc; font-size: 14px">אלה<button aria-label="הסרת אלה" style="width: 28px; height: 28px; border: 0; background: none; color: #625d86; font-size: 16px">×</button></span>
+</div>
+</div>
+
+<button style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">המשך</button>
+</div>
+</template>
+<template id="tpl-H1-finish-check">
+<div dir="rtl" style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; overflow: hidden">
+
+<div aria-hidden="true" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600">סבב 3 מתוך 3</span>
+<span style="min-height: 44px; padding: 0 18px; border-radius: 16px; border: 2px solid #3a3560; background: #ffffff; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center">לסיכום</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px">
+<span style="width: 24px; height: 8px; border-radius: 999px; background: #b84a57"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f0e2dc"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f0e2dc"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f0e2dc"></span>
+</div>
+<div style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 48px; font-weight: 600; line-height: 1.15">קֶשֶׁת</span>
+<span style="font-size: 16px">קשת בענן. קצר וצבעוני, ונשמע טוב ב„קשת כהן”.</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<span style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc"></span>
+<span style="min-height: 44px; border-radius: 16px; border: 2px solid #4f5fb0; background: #4f5fb0"></span>
+<span style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc"></span>
+</div>
+</div>
+</div>
+
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; background: rgba(58,53,96,0.45)"></div>
+
+<section role="dialog" aria-modal="true" aria-labelledby="h1-title" style="position: absolute; left: 0; bottom: 0; width: 390px; box-sizing: border-box; background: #ffffff; border-radius: 24px 24px 0 0; padding: 12px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: center; width: 40px; height: 4px; border-radius: 999px; background: #f0e2dc"></div>
+<div style="display: flex; align-items: center; gap: 12px">
+<svg viewBox="0 0 160 170" width="56" height="60" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse><circle cx="64" cy="86" r="2.4" fill="#fff"></circle><circle cx="100" cy="86" r="2.4" fill="#fff"></circle></g><circle cx="80" cy="110" r="7" fill="#3a3560"></circle></svg>
+<div>
+<h1 id="h1-title" style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600">רגע לפני הסיכום</h1>
+<p style="margin: 0; font-size: 15px; line-height: 21px">נשארו עוד <b style="font-weight: 600">3 שמות</b> בסבב הזה שעוד לא ראיתם.</p>
+</div>
+</div>
+
+<div aria-hidden="true" style="display: flex; gap: 8px">
+<span style="flex: 1; height: 56px; border-radius: 16px; border: 2px dashed #f7a9a8; background: #fff8f4; display: flex; align-items: center; justify-content: center; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600; color: #b84a57">?</span>
+<span style="flex: 1; height: 56px; border-radius: 16px; border: 2px dashed #f7a9a8; background: #fff8f4; display: flex; align-items: center; justify-content: center; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600; color: #b84a57">?</span>
+<span style="flex: 1; height: 56px; border-radius: 16px; border: 2px dashed #f7a9a8; background: #fff8f4; display: flex; align-items: center; justify-content: center; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600; color: #b84a57">?</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<button style="min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">להמשיך לראות</button>
+<button style="min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">לסיכום בכל זאת</button>
+</div>
+<p style="margin: 0; text-align: center; font-size: 12px; color: #625d86">השמות יחכו לכם בסיכום, תחת „עוד לא ראיתם”.</p>
+</section>
+</div>
+</template>
+<template id="tpl-H2-before">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; gap: 12px; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 14px">→ חזרה</span>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div>
+<h1 style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600; line-height: 1.3">השמות המובילים: אגם, הדס, שלי.</h1>
+<p style="margin: 0; font-size: 15px; color: #625d86">איזה מהם הכי אהבתם?</p>
+</div>
+<svg viewBox="0 0 160 170" width="60" height="64" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<a href="H2-before-picked.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; text-decoration: none"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">אֲגַם</span><span style="font-size: 13px; color: #625d86">מקווה מים גדול ביבשה</span></a>
+<a href="H2-before-picked.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; text-decoration: none"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">הֲדַס</span><span style="font-size: 13px; color: #625d86">שיח ריחני, אחד מארבעת המינים</span></a>
+<a href="H2-before-picked.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; text-decoration: none"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">שֶׁלִּי</span><span style="font-size: 13px; color: #625d86">שייך לי</span></a>
+<a href="H2-before-picked.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; text-decoration: none"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">שִׁיר</span><span style="font-size: 13px; color: #625d86">זמר ומנגינה</span></a>
+</div>
+
+<p style="margin: 0; font-size: 14px; color: #625d86">שמות שסומנו כ״אולי״: שני, משי, קשת</p>
+
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px">
+<p style="margin: 0; font-size: 14px; font-weight: 600">ייצוא הרשימה</p>
+<button style="min-height: 48px; border-radius: 16px; border: 0; background: #1a7f4b; color: #ffffff; font-size: 16px; font-weight: 500">שליחה בוואטסאפ</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">העתקת הטקסט</button>
+</div>
+<button style="margin-top: 8px; min-height: 44px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">עוד סבב של שמות חדשים</button>
+</div>
+</template>
+<template id="tpl-H2-before-picked">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; gap: 12px; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<a href="H2-before.dc.html" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; font-size: 14px; color: #3a3560; text-decoration: none">→ חזרה</a>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div>
+<h1 style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600; line-height: 1.3"><span style="color: #b84a57">אֲגַם</span> הוא הבחירה הראשונה!</h1>
+<p style="margin: 0; font-size: 15px; color: #625d86">אפשר לשתף עם בן או בת הזוג.</p>
+</div>
+<svg viewBox="0 0 160 170" width="60" height="64" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"><path d="M55 90 Q62 82 69 90"></path><path d="M91 90 Q98 82 105 90"></path></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+</div>
+
+<div style="padding: 16px; border-radius: 18px; border: 1px solid #f0e2dc; background: #ffffff; font-size: 15px"><b style="font-weight: 600">משמעות:</b> מקווה מים גדול ביבשה</div>
+
+<p style="margin: 0; font-size: 13px; color: #625d86">עוד שמות אהובים: הדס, שלי, שיר</p>
+<p style="margin: 0; font-size: 14px; color: #625d86">שמות שסומנו כ״אולי״: שני, משי, קשת</p>
+
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px">
+<p style="margin: 0; font-size: 14px; font-weight: 600">ייצוא הרשימה</p>
+<button style="min-height: 48px; border-radius: 16px; border: 0; background: #1a7f4b; color: #ffffff; font-size: 16px; font-weight: 500">שליחה בוואטסאפ</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">העתקת הטקסט</button>
+</div>
+<button style="margin-top: 8px; min-height: 44px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">עוד סבב של שמות חדשים</button>
+</div>
+</template>
+<template id="tpl-H2-summary">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-top: 8px">
+<div>
+<h1 style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">4 שמות שאהבתם</h1>
+<p style="margin: 0; font-size: 14px; color: #625d86">איזה הכי? אפשר לשנות בכל רגע.</p>
+</div>
+<svg viewBox="0 0 160 170" width="52" height="55" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+</div>
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">הבחירה הראשונה</legend>
+<sc-for list="{{ names }}" as="n" hint-placeholder-count="4">
+<label style="{{ n.rowStyle }}">
+<input type="radio" name="fav" checked="{{ n.on }}" onChange="{{ n.pick }}" style="width: 20px; height: 20px; margin: 0; accent-color: #b84a57; flex-shrink: 0">
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600; line-height: 1.2">{{ n.he }}</span>
+<span style="font-size: 13px; color: #625d86">{{ n.meaning }}</span>
+<sc-if value="{{ n.on }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; font-weight: 500; color: #9c3846">{{ n.full }}</span></sc-if>
+</span>
+<sc-if value="{{ n.on }}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; padding: 4px 10px; border-radius: 999px; background: #b84a57; color: #ffffff; font-size: 12px; font-weight: 500">הבחירה הראשונה</span></sc-if>
+</label>
+</sc-for>
+</fieldset>
+
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px">
+<p style="margin: 0"><b style="font-weight: 600">אולי:</b> שני, משי, קשת · <a href="#">עוד מבט</a></p>
+<p style="margin: 0"><b style="font-weight: 600">עוד לא ראיתם:</b> 3 שמות מסבב 3 · <a href="#">להציג</a></p>
+</div>
+
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; gap: 8px">
+<button style="flex: 2; min-height: 52px; border-radius: 16px; border: 0; background: #1a7f4b; color: #ffffff; font-size: 16px; font-weight: 500">שליחה בוואטסאפ</button>
+<button style="flex: 1; min-height: 52px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">העתקה</button>
+</div>
+<button style="min-height: 44px; border: 0; background: none; color: #3a3560; font-size: 14px; text-decoration: underline">עוד סבב של שמות חדשים</button>
+</div>
+</div>
+</template>
+<template id="tpl-G1-before">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 4px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 4px">
+<div style="display: flex; align-items: center; gap: 8px">
+<svg viewBox="0 0 160 170" width="32" height="34" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600">סבב 2 מתוך 3</h1>
+</div>
+<button style="min-height: 44px; padding: 0 18px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">מצאתי!</button>
+</div>
+
+<p style="margin: 0 0 10px; font-size: 12px; color: #625d86">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 24px; height: 8px; border-radius: 999px; background: #b84a57"></span>
+<span style="font-size: 12px; color: #625d86; margin-inline-start: 4px">שם 4 מתוך 4</span>
+</div>
+
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 12px">
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 48px; font-weight: 600; line-height: 1.15">שֶׁלִּי</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">Sheli</p>
+</div>
+<button style="align-self: flex-start; min-height: 36px; padding: 0; border: 0; background: none; color: #4f5fb0; font-size: 14px; font-weight: 500">למה השם הזה?</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">לא</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">אולי</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #b84a57; background: #b84a57; color: #ffffff; font-size: 14px; font-weight: 500">מעניין!</button>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+<p style="margin: 0; padding: 6px 12px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; font-size: 13px">יש! שמרתי אותו בצד.</p>
+</div>
+<label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">הערה על השם</span><input type="text" value="קצר ורך, כמו שרצינו" style="min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff"></label>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px">
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">תפוס אצלנו במשפחה</button>
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">דיווח על ההצעה</button>
+</div>
+</section>
+
+<label style="margin-top: 14px; display: block"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">הערה על הסבב</span><input type="text" value="רוצים שמות שקשורים לאביב או לפסח" style="width: 100%; min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff"></label>
+
+<button style="margin-top: 14px; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">לסבב הבא</button>
+</div>
+</template>
+<template id="tpl-G1-entry">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 4px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 4px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600">סבב 2 מתוך 3</h1>
+<div style="display: flex; align-items: center; gap: 8px">
+<a href="G1-taking-into-account.dc.html" style="position: relative; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #c9d2f3; background: #eaeefc; color: #4f5fb0; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; box-sizing: border-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"></path><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"></path></svg>מה למדנו · 8<span aria-hidden="true" style="position: absolute; top: -2px; left: -2px; width: 10px; height: 10px; border-radius: 999px; background: #b84a57; border: 2px solid #fff8f4"></span></a>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">לסיכום</button>
+</div>
+</div>
+
+<p style="margin: 0 0 10px; font-size: 12px; color: #625d86">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 24px; height: 8px; border-radius: 999px; background: #b84a57"></span>
+<span style="font-size: 12px; color: #625d86; margin-inline-start: 4px">שם 4 מתוך 4</span>
+</div>
+
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 12px">
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 48px; font-weight: 600; line-height: 1.15">שֶׁלִּי</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">Sheli</p>
+</div>
+<button style="align-self: flex-start; min-height: 36px; padding: 0; border: 0; background: none; color: #4f5fb0; font-size: 14px; font-weight: 500">למה השם הזה?</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">לא</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">אולי</button>
+<button style="min-height: 44px; border-radius: 16px; border: 2px solid #b84a57; background: #b84a57; color: #ffffff; font-size: 14px; font-weight: 500">מעניין!</button>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+<p style="margin: 0; padding: 6px 12px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; font-size: 13px">יש! שמרתי אותו בצד.</p>
+</div>
+<label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">הערה על השם</span><input type="text" value="קצר ורך, כמו שרצינו" style="min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff"></label>
+<a href="G1-taking-into-account.dc.html" style="display: inline-flex; align-items: center; gap: 6px; min-height: 28px; font-size: 13px; color: #4f5fb0; text-decoration: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>נשמר ב„מה למדנו”. אפשר להסיר שם בכל רגע.</a>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px">
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">תפוס אצלנו במשפחה</button>
+<button style="min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 12px; text-decoration: underline">דיווח על ההצעה</button>
+</div>
+</section>
+
+<label style="margin-top: 12px; display: block"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">הערה על הסבב</span><input type="text" value="רוצים שמות שקשורים לאביב או לפסח" style="width: 100%; min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff"></label>
+<p style="margin: 6px 0 0; font-size: 12px; color: #625d86">גם ההערה על הסבב תופיע ב„מה למדנו”.</p>
+
+<button style="margin-top: 12px; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">לסבב הבא</button>
+</div>
+</template>
+<template id="tpl-G1-taking-into-account">
+<div dir="rtl" style="width: 390px; height: 920px; box-sizing: border-box; background: #8f8aa6; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div aria-hidden="true" style="height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #ffffff; opacity: 0.7; font-family: Fredoka, Rubik, sans-serif; font-size: 16px">
+<span>סבב 2 מתוך 3</span>
+<span style="font-family: Rubik, sans-serif; font-size: 13px">מה למדנו · 8</span>
+</div>
+
+<section role="dialog" aria-modal="true" aria-labelledby="g1-title" style="flex: 1; background: #ffffff; border-radius: 24px 24px 0 0; padding: 12px 20px 20px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 40px; height: 4px; border-radius: 999px; background: #f0e2dc"></div>
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div>
+<h1 id="g1-title" style="margin: 0 0 4px; font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600">מה אנחנו לוקחים בחשבון</h1>
+<p style="margin: 0; font-size: 13px; line-height: 18px; color: #625d86">כל מה שמשפיע על ההצעות הבאות. אפשר לערוך או להסיר כל דבר.</p>
+</div>
+<button aria-label="סגירה" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהטופס</h2>
+<a href="#" style="font-size: 13px; min-height: 32px; display: inline-flex; align-items: center">עריכה</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; background: #4f5fb0; color: #ffffff; font-size: 12px; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>משמעות עברית ברורה</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">מתאים לאיתי</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">זורם עם כהן</span>
+<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid #4f5fb0; background: #eaeefc; color: #4f5fb0; font-size: 12px; font-weight: 500">קשור לפסח או לאביב</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהמילים שלכם</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #fff8f4">
+<span style="font-size: 14px">„שם קצר, עד 2 הברות”</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; font-size: 12px; font-weight: 500; color: #4f5fb0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>מסננים</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #fff8f4">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-size: 14px">„אולי על שם סבתא רחל”</span>
+<span style="{{ rachelStatusStyle }}">{{ rachelStatus }}</span>
+</div>
+<sc-if value="{{ rachelOpen }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-size: 13px; line-height: 18px; color: #625d86">אי אפשר לסנן לפי „על שם” ישירות. להציע רק שמות שמתחילים ב־ר׳?</p>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ rachelOnly }}" style="flex: 1; min-height: 44px; border-radius: 14px; border: 0; background: #4f5fb0; color: #ffffff; font-size: 14px; font-weight: 500">כן, רק ר׳</button>
+<button onClick="{{ rachelIdea }}" style="flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">רק כרעיון</button>
+</div>
+</sc-if>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">מהסבבים</h2>
+<sc-for list="{{ roundNotes }}" as="n" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 8px; padding: 8px 4px 8px 12px; border-radius: 14px; border: 1px solid #f0e2dc">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; color: #625d86">{{ n.source }}</span>
+<span style="font-size: 14px; line-height: 19px">{{ n.rule }}</span>
+</div>
+<button onClick="{{ n.remove }}" aria-label="{{ n.removeLabel }}" style="width: 44px; height: 44px; flex-shrink: 0; border: 0; background: none; color: #625d86; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{ noRoundNotes }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 13px; color: #625d86">אין הערות מהסבבים.</p>
+</sc-if>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600">לא נציע שוב</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ skipped }}" as="s" hint-placeholder-count="5">
+<span style="display: inline-flex; align-items: center; gap: 2px; padding: 0 4px 0 10px; border-radius: 999px; background: #f6f1ee; font-size: 13px">{{ s.label }}<button onClick="{{ s.remove }}" aria-label="{{ s.removeLabel }}" style="width: 32px; height: 32px; border: 0; background: none; color: #625d86; font-size: 15px">×</button></span>
+</sc-for>
+</div>
+</div>
+
+<p style="margin: auto 0 0; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #625d86"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>הכול נשמר רק במכשיר הזה.</p>
+</section>
+</div>
+</template>
+<template id="tpl-G2-start-over">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 20px 16px; background: #8f8aa6; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; align-items: center; justify-content: center; overflow: hidden">
+
+<section role="dialog" aria-modal="true" aria-labelledby="g2-title" style="width: 100%; background: #ffffff; border-radius: 24px; padding: 22px 20px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 12px 40px rgba(58,53,96,0.25)">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 40px; height: 40px; border-radius: 12px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg></span>
+<div>
+<h1 id="g2-title" style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600">התחלה מחדש</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">מה לשמור לסבבים החדשים?</p>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="5">
+<label style="{{ it.rowStyle }}">
+<input type="checkbox" checked="{{ it.on }}" onChange="{{ it.toggle }}" style="width: 22px; height: 22px; margin: 2px 0 0; accent-color: #4f5fb0; flex-shrink: 0">
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-size: 15px; font-weight: 500">{{ it.title }}</span>
+<span style="font-size: 12px; line-height: 17px; color: #625d86">{{ it.detail }}</span>
+</span>
+</label>
+</sc-for>
+</div>
+
+<p style="margin: 0; display: flex; align-items: center; gap: 6px; font-size: 13px; color: #625d86"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>הדירוגים מתאפסים תמיד. {{ summary }}</p>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<button style="min-height: 52px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 17px; font-weight: 500">התחלה מחדש</button>
+<button style="min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500">ביטול</button>
+</div>
+<p style="margin: 0; text-align: center; font-size: 12px; color: #625d86">למחוק הכול מהמכשיר? <a href="#">מחיקת כל הנתונים</a></p>
+</section>
+</div>
+</template>
+<template id="tpl-E-why-no">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 8px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; display: flex; align-items: center; gap: 6px">אפשרויות<svg width="16" height="16" viewBox="0 0 24 24" fill="#3a3560" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 8px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600">סבב 1 מתוך 3</h1>
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f7a9a8"></span>
+<span style="width: 24px; height: 8px; border-radius: 999px; background: #b84a57"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f0e2dc"></span>
+<span style="width: 8px; height: 8px; border-radius: 999px; background: #f0e2dc"></span>
+<span style="font-size: 12px; color: #625d86">שם 2 מתוך 4</span>
+</div>
+</div>
+
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 14px">
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 48px; font-weight: 600; line-height: 1.15">נֹגַהּ</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">Noga · מקום 38 בין הבנות</p>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 24px">אור וזוהר, וגם שם כוכב הלכת. קצר וקל לאיות.</p>
+
+<div role="radiogroup" aria-label="הדירוג של נגה" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button role="radio" aria-checked="true" style="min-height: 44px; border-radius: 16px; border: 2px solid #3a3560; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500">לא</button>
+<button role="radio" aria-checked="false" style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">אולי</button>
+<button role="radio" aria-checked="false" style="min-height: 44px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500">מעניין!</button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 8px">
+<svg viewBox="0 0 160 170" width="30" height="32" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M70 110 Q80 102 90 110" fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"></path></svg>
+<p style="margin: 0; padding: 8px 14px; border-radius: 999px; border: 1px solid #f0e2dc; background: #ffffff; font-size: 14px">הבנתי. מה לא הסתדר?</p>
+</div>
+
+<div role="group" aria-label="סיבות" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ reasons }}" as="r" hint-placeholder-count="7">
+<button onClick="{{ r.toggle }}" aria-pressed="{{ r.on }}" style="{{ r.style }}">{{ r.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ showOther }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="why-other" style="font-size: 12px; color: #625d86">במילים שלכם</label>
+<input id="why-other" type="text" placeholder="למשל: דומה מדי לנועה מהגן" style="min-height: 44px; box-sizing: border-box; border-radius: 14px; border: 2px solid #f0e2dc; padding: 0 12px; font-size: 14px; color: #3a3560; background: #ffffff">
+</div>
+</sc-if>
+
+<sc-if value="{{ hasLearned }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #eaeefc; color: #3a3560; font-size: 13px; line-height: 19px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f5fb0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M12 3v3M18.4 5.6l-2.1 2.1M21 12h-3M5.6 5.6l2.1 2.1M3 12h3"></path><path d="M9 17a3 3 0 1 1 6 0v1H9z"></path></svg>
+<span><b style="font-weight: 600">בסבב הבא:</b> {{ learned }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ noLearned }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 13px; color: #625d86">בחירה אחת מספיקה. אפשר גם לדלג.</p>
+</sc-if>
+</section>
+
+<button style="margin-top: 16px; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500">לשם הבא</button>
+</div>
+</template>
+<template id="tpl-I-step-urls">
+<div dir="rtl" style="width: 1440px; height: 844px; box-sizing: border-box; padding: 56px 64px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; gap: 36px">
+
+<div>
+<h1 style="margin: 0 0 6px; font-family: Fredoka, Rubik, sans-serif; font-size: 34px; font-weight: 600">כתובת לכל שלב, ומתחילים מלמעלה</h1>
+<p style="margin: 0; font-size: 17px; color: #625d86">היום הכתובת נשארת „/” בכל המסכים, וכל מסך חדש נפתח גלול באמצע.</p>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px">
+
+<div style="display: flex; flex-direction: column; gap: 10px; width: 208px">
+<span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500"><span dir="ltr">/start</span></span>
+<div style="height: 320px; box-sizing: border-box; border-radius: 24px; border: 2px solid #e3d5cf; background: #ffffff; padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; position: relative">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px"><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span></div>
+<span style="font-size: 11px; color: #625d86">שלב 1 · פרטים</span>
+<span style="align-self: flex-start; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600; outline: 2px dashed #4f5fb0; outline-offset: 3px; border-radius: 4px">מי בדרך?</span>
+<span style="height: 36px; border-radius: 999px; background: #f6f1ee"></span>
+<span style="height: 36px; border-radius: 12px; background: #f6f1ee"></span>
+<span style="margin-top: auto; height: 40px; border-radius: 12px; background: #b84a57"></span>
+<span style="position: absolute; left: 4px; top: 16px; width: 3px; height: 70px; border-radius: 999px; background: #a6b8f0"></span>
+</div>
+</div>
+
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M15 6l-6 6 6 6"></path></svg>
+
+<div style="display: flex; flex-direction: column; gap: 10px; width: 208px">
+<span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500"><span dir="ltr">/family</span></span>
+<div style="height: 320px; box-sizing: border-box; border-radius: 24px; border: 2px solid #e3d5cf; background: #ffffff; padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; position: relative">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px"><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span></div>
+<span style="font-size: 11px; color: #625d86">שלב 2 · משפחה</span>
+<span style="align-self: flex-start; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600; outline: 2px dashed #4f5fb0; outline-offset: 3px; border-radius: 4px">אילו שמות תפוסים?</span>
+<span style="height: 52px; border-radius: 12px; background: #f6f1ee"></span>
+<span style="height: 52px; border-radius: 12px; background: #f6f1ee"></span>
+<span style="margin-top: auto; height: 40px; border-radius: 12px; background: #b84a57"></span>
+<span style="position: absolute; left: 4px; top: 16px; width: 3px; height: 70px; border-radius: 999px; background: #a6b8f0"></span>
+</div>
+</div>
+
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M15 6l-6 6 6 6"></path></svg>
+
+<div style="display: flex; flex-direction: column; gap: 10px; width: 208px">
+<span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500"><span dir="ltr">/priorities</span></span>
+<div style="height: 320px; box-sizing: border-box; border-radius: 24px; border: 2px solid #e3d5cf; background: #ffffff; padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; position: relative">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px"><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #f0e2dc"></span></div>
+<span style="font-size: 11px; color: #625d86">שלב 3 · מה חשוב</span>
+<span style="align-self: flex-start; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600; outline: 2px dashed #4f5fb0; outline-offset: 3px; border-radius: 4px">מה חשוב לכם בשם?</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><span style="width: 70px; height: 26px; border-radius: 999px; background: #4f5fb0"></span><span style="width: 90px; height: 26px; border-radius: 999px; background: #f6f1ee"></span><span style="width: 100px; height: 26px; border-radius: 999px; background: #eaeefc"></span><span style="width: 60px; height: 26px; border-radius: 999px; background: #f6f1ee"></span></div>
+<span style="margin-top: auto; height: 40px; border-radius: 12px; background: #b84a57"></span>
+<span style="position: absolute; left: 4px; top: 16px; width: 3px; height: 70px; border-radius: 999px; background: #a6b8f0"></span>
+</div>
+</div>
+
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M15 6l-6 6 6 6"></path></svg>
+
+<div style="display: flex; flex-direction: column; gap: 10px; width: 208px">
+<span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500"><span dir="ltr">/round/2/3</span></span>
+<div style="height: 320px; box-sizing: border-box; border-radius: 24px; border: 2px solid #e3d5cf; background: #ffffff; padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; position: relative">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px"><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span><span style="height: 4px; border-radius: 999px; background: #b84a57"></span></div>
+<span style="font-size: 11px; color: #625d86">שלב 4 · הצעות</span>
+<span style="align-self: flex-start; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600; outline: 2px dashed #4f5fb0; outline-offset: 3px; border-radius: 4px">סבב 2 · שם 3 מתוך 4</span>
+<span style="height: 120px; border-radius: 16px; border: 1px solid #f0e2dc; background: #ffffff; display: flex; align-items: center; justify-content: center; font-family: Fredoka, Rubik, sans-serif; font-size: 30px; font-weight: 600">מֶשִׁי</span>
+<span style="margin-top: auto; height: 40px; border-radius: 12px; background: #b84a57"></span>
+<span style="position: absolute; left: 4px; top: 16px; width: 3px; height: 70px; border-radius: 999px; background: #a6b8f0"></span>
+</div>
+</div>
+
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9a95b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M15 6l-6 6 6 6"></path></svg>
+
+<div style="display: flex; flex-direction: column; gap: 10px; width: 208px">
+<span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3a3560; color: #ffffff; font-size: 14px; font-weight: 500"><span dir="ltr">/summary</span></span>
+<div style="height: 320px; box-sizing: border-box; border-radius: 24px; border: 2px solid #e3d5cf; background: #ffffff; padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; position: relative">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px"><span style="height: 4px; border-radius: 999px; background: #1a7f4b"></span><span style="height: 4px; border-radius: 999px; background: #1a7f4b"></span><span style="height: 4px; border-radius: 999px; background: #1a7f4b"></span><span style="height: 4px; border-radius: 999px; background: #1a7f4b"></span></div>
+<span style="font-size: 11px; color: #625d86">סיכום</span>
+<span style="align-self: flex-start; font-family: Fredoka, Rubik, sans-serif; font-size: 18px; font-weight: 600; outline: 2px dashed #4f5fb0; outline-offset: 3px; border-radius: 4px">4 שמות שאהבתם</span>
+<span style="height: 40px; border-radius: 14px; border: 2px solid #b84a57"></span>
+<span style="height: 40px; border-radius: 14px; border: 2px solid #f0e2dc"></span>
+<span style="margin-top: auto; height: 40px; border-radius: 12px; background: #1a7f4b"></span>
+<span style="position: absolute; left: 4px; top: 16px; width: 3px; height: 70px; border-radius: 999px; background: #a6b8f0"></span>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<div style="display: flex; gap: 14px; padding: 20px; border-radius: 20px; background: #ffffff; border: 1px solid #f0e2dc">
+<span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span>
+<div><h2 style="margin: 0 0 4px; font-size: 17px; font-weight: 600">כתובת לכל שלב</h2><p style="margin: 0; font-size: 14px; line-height: 21px; color: #625d86">כל מעבר שלב יוצר כתובת חדשה בהיסטוריה. רענון פותח בדיוק באותו מקום.</p></div>
+</div>
+<div style="display: flex; gap: 14px; padding: 20px; border-radius: 20px; background: #ffffff; border: 1px solid #f0e2dc">
+<span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></span>
+<div><h2 style="margin: 0 0 4px; font-size: 17px; font-weight: 600">גלילה לראש ופוקוס לכותרת</h2><p style="margin: 0; font-size: 14px; line-height: 21px; color: #625d86">כל מסך חדש מתחיל למעלה. הפוקוס עובר לכותרת (המסגרת המקווקוות), כך שקורא מסך מכריז עליה.</p></div>
+</div>
+<div style="display: flex; gap: 14px; padding: 20px; border-radius: 20px; background: #ffffff; border: 1px solid #f0e2dc">
+<span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+<div><h2 style="margin: 0 0 4px; font-size: 17px; font-weight: 600">„אחורה” בטלפון = שלב אחורה</h2><p style="margin: 0; font-size: 14px; line-height: 21px; color: #625d86">מחוות החזרה חוזרת שלב ולא יוצאת מהאתר. מה שמילאתם נשאר.</p></div>
+</div>
+</div>
+</div>
+</template>
+<template id="tpl-J-flow">
+<div dir="rtl" style="position: relative; width: 1440px; height: 660px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif">
+
+<svg role="img" aria-label="מסבב 1 גילוי אל מה למדנו" width="67" height="8" viewBox="0 0 67 8" preserveAspectRatio="none" style="position: absolute; left: 1101px; top: 256px; width: 67px; height: 8px; overflow: visible; fill: none; stroke: #625d86; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-1" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#625d86" stroke="none" style="stroke: none; fill: #625d86; fill: context-stroke"/></marker></defs><path d="M 67 4 L 4 4" marker-end="url(#dc-arrow-head-filled-1)"></path></svg>
+<svg role="img" aria-label="ממה למדנו אל סבב 2 מיקוד" width="67" height="8" viewBox="0 0 67 8" preserveAspectRatio="none" style="position: absolute; left: 825px; top: 256px; width: 67px; height: 8px; overflow: visible; fill: none; stroke: #625d86; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-2" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#625d86" stroke="none" style="stroke: none; fill: #625d86; fill: context-stroke"/></marker></defs><path d="M 67 4 L 4 4" marker-end="url(#dc-arrow-head-filled-2)"></path></svg>
+<svg role="img" aria-label="מסבב 2 מיקוד אל סבב 3 הכרעה" width="67" height="8" viewBox="0 0 67 8" preserveAspectRatio="none" style="position: absolute; left: 549px; top: 256px; width: 67px; height: 8px; overflow: visible; fill: none; stroke: #625d86; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-3" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#625d86" stroke="none" style="stroke: none; fill: #625d86; fill: context-stroke"/></marker></defs><path d="M 67 4 L 4 4" marker-end="url(#dc-arrow-head-filled-3)"></path></svg>
+<svg role="img" aria-label="מסבב 3 הכרעה אל השם שלכם" width="67" height="8" viewBox="0 0 67 8" preserveAspectRatio="none" style="position: absolute; left: 273px; top: 256px; width: 67px; height: 8px; overflow: visible; fill: none; stroke: #625d86; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-4" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#625d86" stroke="none" style="stroke: none; fill: #625d86; fill: context-stroke"/></marker></defs><path d="M 67 4 L 4 4" marker-end="url(#dc-arrow-head-filled-4)"></path></svg>
+
+<svg aria-hidden="true" width="8" height="48" viewBox="0 0 8 48" preserveAspectRatio="none" style="position: absolute; left: 440px; top: 152px; width: 8px; height: 48px; overflow: visible; fill: none; stroke: #b84a57; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 6"><path d="M 4 0 L 4 48"></path></svg>
+<svg aria-hidden="true" width="828" height="8" viewBox="0 0 828 8" preserveAspectRatio="none" style="position: absolute; left: 444px; top: 148px; width: 828px; height: 8px; overflow: visible; fill: none; stroke: #b84a57; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 6"><path d="M 0 4 L 828 4"></path></svg>
+<svg role="img" aria-label="מסבב 3 הכרעה חזרה לסבב 1 גילוי, אם אין עדיין מנצח" width="8" height="47" viewBox="0 0 8 47" preserveAspectRatio="none" style="position: absolute; left: 1268px; top: 152px; width: 8px; height: 47px; overflow: visible; fill: none; stroke: #b84a57; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 6"><defs><marker id="dc-arrow-head-filled-5" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#b84a57" stroke="none" style="stroke: none; fill: #b84a57; fill: context-stroke"/></marker></defs><path d="M 4 0 L 4 43" marker-end="url(#dc-arrow-head-filled-5)"></path></svg>
+
+<div style="position: absolute; left: 1168px; top: 200px; width: 208px; height: 120px; box-sizing: border-box; padding: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: #ffffff; border: 2px solid #e3d5cf; border-radius: 18px; font-size: 15px; line-height: 22px"><span><b style="font-family: Fredoka, Rubik, sans-serif; font-size: 19px; font-weight: 600">סבב 1 · גילוי</b><br>6 שמות מגוונים</span></div>
+<div style="position: absolute; left: 892px; top: 200px; width: 208px; height: 120px; box-sizing: border-box; padding: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: #eaeefc; border: 2px solid #c9d2f3; border-radius: 18px; font-size: 15px; line-height: 22px"><span><b style="font-family: Fredoka, Rubik, sans-serif; font-size: 19px; font-weight: 600">מה למדנו</b><br>כללים לאישור שלכם</span></div>
+<div style="position: absolute; left: 616px; top: 200px; width: 208px; height: 120px; box-sizing: border-box; padding: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: #ffffff; border: 2px solid #e3d5cf; border-radius: 18px; font-size: 15px; line-height: 22px"><span><b style="font-family: Fredoka, Rubik, sans-serif; font-size: 19px; font-weight: 600">סבב 2 · מיקוד</b><br>3 מותאמים + כרטיס פרא</span></div>
+<div style="position: absolute; left: 340px; top: 200px; width: 208px; height: 120px; box-sizing: border-box; padding: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: #ffffff; border: 2px solid #e3d5cf; border-radius: 18px; font-size: 15px; line-height: 22px"><span><b style="font-family: Fredoka, Rubik, sans-serif; font-size: 19px; font-weight: 600">סבב 3 · הכרעה</b><br>אוליים + ראש בראש</span></div>
+<div style="position: absolute; left: 64px; top: 200px; width: 208px; height: 120px; box-sizing: border-box; padding: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: #b84a57; border: 2px solid #b84a57; border-radius: 18px; color: #ffffff; font-size: 15px; line-height: 22px"><span><b style="font-family: Fredoka, Rubik, sans-serif; font-size: 19px; font-weight: 600">השם שלכם</b><br>שם מלא + שיתוף</span></div>
+
+<div style="position: absolute; left: 976px; top: 516px; width: 400px; height: 72px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center; text-align: center; background: #3a3560; border-radius: 16px; color: #ffffff; font-size: 14px; line-height: 21px"><span><b style="font-weight: 600">חובה ← מסנן בקוד</b><br>שם שלא עומד בחובה לא מגיע לשום סבב</span></div>
+<div style="position: absolute; left: 520px; top: 516px; width: 400px; height: 72px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center; text-align: center; background: #ffffff; border: 2px solid #e3d5cf; border-radius: 16px; font-size: 14px; line-height: 21px"><span><b style="font-weight: 600">רצוי + דירוגים ← ניקוד</b><br>קובעים את הסדר ואת כרטיס הפרא</span></div>
+<div style="position: absolute; left: 64px; top: 516px; width: 400px; height: 72px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center; text-align: center; background: #ffffff; border: 2px dashed #a6b8f0; border-radius: 16px; font-size: 14px; line-height: 21px"><span><b style="font-weight: 600">בינה מלאכותית ← ניסוח</b><br>כותבת את שורת הסיבה, לא מחליטה מי עובר</span></div>
+
+<div style="position: absolute; left: 776px; top: 56px; width: 600px; text-align: right; font-family: Fredoka, Rubik, sans-serif; font-size: 30px; font-weight: 600; line-height: 40px">לוגיקת הסבבים החדשה</div>
+<div style="position: absolute; left: 733px; top: 124px; width: 250px; text-align: center; font-size: 13px; line-height: 16px; color: #9c3846">אין עדיין מנצח? עוד סבב גילוי</div>
+<div style="position: absolute; left: 1168px; top: 344px; width: 208px; text-align: right; font-size: 14px; line-height: 21px; color: #625d86">כל שם בודק משהו אחר: פופולריות, אורך, סגנון, משמעות, חג. אפשר לדלג.</div>
+<div style="position: absolute; left: 892px; top: 344px; width: 208px; text-align: right; font-size: 14px; line-height: 21px; color: #625d86">כל דירוג וכל סיבת „לא” נותנים ניקוד לתכונות. תכונה שחוזרת הופכת להצעה, למשל „להימנע משמות נפוצים?”</div>
+<div style="position: absolute; left: 616px; top: 344px; width: 208px; text-align: right; font-size: 14px; line-height: 21px; color: #625d86">3 השמות עם הניקוד הגבוה, ועוד כרטיס פרא לרצוי שעוד לא התקיים (למשל פסח).</div>
+<div style="position: absolute; left: 340px; top: 344px; width: 208px; text-align: right; font-size: 14px; line-height: 21px; color: #625d86">קודם מבט נוסף על ה„אולי”, ואז זוגות מתוך ה„מעניין!” עד שנשאר שם אחד.</div>
+<div style="position: absolute; left: 64px; top: 344px; width: 208px; text-align: right; font-size: 14px; line-height: 21px; color: #625d86">השם המלא עם שם המשפחה, ושיתוף לדירוג של בן או בת הזוג.</div>
+</div>
+</template>
+<template id="tpl-J-prototype">
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 24px; background: #fff8f4; color: #3a3560; font-family: Rubik, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-bottom: 10px">
+<div style="display: flex; align-items: center; gap: 6px">
+<svg viewBox="0 0 160 170" width="28" height="30" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<span style="font-family: Fredoka, Rubik, sans-serif; font-size: 22px; font-weight: 600"><span style="color: #e8807f">שֵׁמְ</span><span style="color: #7a92e2">אץ׳</span></span>
+</div>
+<span style="padding: 6px 12px; border-radius: 999px; background: #fff4e0; color: #8a5a00; font-size: 12px; font-weight: 500; border: 1px dashed #d9a441">סימולציה</span>
+</div>
+
+<sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 26px; font-weight: 600; line-height: 1.25">בואו ננסה את הסבבים החדשים</h1>
+<div style="background: #ffffff; border-radius: 20px; border: 1px solid #f0e2dc; padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 20px">
+<b style="font-weight: 600; font-size: 13px; color: #625d86">התרחיש</b>
+<span>בת, צפויה בניסן (פסח, אביב)</span>
+<span>אח: איתי · שם משפחה: כהן</span>
+<span>חובה: משמעות עברית ברורה</span>
+<span>רצוי: קשור לפסח · אהובים: מאיה, אלה</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #3a3560; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">1</span><span style="font-size: 15px"><b style="font-weight: 600">גילוי:</b> 6 שמות שונים מאוד</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #4f5fb0; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">2</span><span style="font-size: 15px"><b style="font-weight: 600">מה למדנו:</b> אתם מאשרים כללים</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 999px; background: #b84a57; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 600">3</span><span style="font-size: 15px"><b style="font-weight: 600">מיקוד והכרעה:</b> 4 שמות, אוליים, ראש בראש</span></div>
+</div>
+<p style="margin: 0; font-size: 13px; line-height: 19px; color: #625d86">הסבב השני נבחר מתוך הדירוגים שלכם. נסו לדרג אחרת בכל ריצה ותראו מה משתנה.</p>
+<button onClick="{{ start }}" style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">להתחיל</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRate }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">{{ roundTitle }}</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">{{ roundSub }}</p>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px">
+<sc-for list="{{ dots }}" as="d" hint-placeholder-count="6"><span style="{{ d.style }}"></span></sc-for>
+<span style="font-size: 12px; color: #625d86; margin-inline-start: 4px">{{ counter }}</span>
+</div>
+<section style="background: #ffffff; border-radius: 24px; padding: 18px 20px; border: 1px solid #f0e2dc; box-shadow: 0 1px 2px rgba(58,53,96,0.06); display: flex; flex-direction: column; gap: 12px">
+<span style="{{ tagStyle }}">{{ tagText }}</span>
+<div>
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 46px; font-weight: 600; line-height: 1.15">{{ cur.he }}</h2>
+<p style="margin: 0; font-size: 14px; color: #625d86">{{ cur.tr }}</p>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ cur.reason }}</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{ rateNo }}" aria-pressed="{{ noOn }}" style="{{ noStyle }}">לא</button>
+<button onClick="{{ rateMaybe }}" aria-pressed="{{ maybeOn }}" style="{{ maybeStyle }}">אולי</button>
+<button onClick="{{ rateLike }}" aria-pressed="{{ likeOn }}" style="{{ likeStyle }}">מעניין!</button>
+</div>
+<sc-if value="{{ showWhy }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 500">מה לא הסתדר? <span style="font-weight: 400; color: #625d86">(לא חובה)</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ whyChips }}" as="w" hint-placeholder-count="6"><button onClick="{{ w.toggle }}" aria-pressed="{{ w.on }}" style="{{ w.style }}">{{ w.label }}</button></sc-for>
+</div>
+</div>
+</sc-if>
+<button onClick="{{ skip }}" style="align-self: flex-start; min-height: 36px; padding: 0; border: 0; background: none; color: #625d86; font-size: 13px; text-decoration: underline; cursor: pointer">דילוג על השם</button>
+</section>
+<button onClick="{{ next }}" disabled="{{ nextDisabled }}" style="{{ nextStyle }}">{{ nextLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLearned }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg viewBox="0 0 160 170" width="56" height="60" aria-hidden="true" style="flex-shrink: 0"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M71 104 Q80 115 89 104 Z" fill="#3a3560"></path></svg>
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">מה למדנו</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">אתם מחליטים מה נכנס לסבב 2.</p>
+</div>
+</div>
+<div style="background: #ffffff; border-radius: 18px; border: 1px solid #f0e2dc; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px">
+<sc-for list="{{ learnedLines }}" as="l" hint-placeholder-count="3"><span>{{ l.t }}</span></sc-for>
+</div>
+<sc-if value="{{ hasRules }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ rules }}" as="r" hint-placeholder-count="2">
+<div style="background: #ffffff; border-radius: 18px; border: 1px solid #f0e2dc; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: flex-start; gap: 10px"><span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 999px; background: #eaeefc; color: #4f5fb0; display: flex; align-items: center; justify-content: center; font-weight: 600">{{ r.icon }}</span><span style="font-size: 15px; line-height: 21px">{{ r.text }}</span></div>
+<div style="display: flex; gap: 8px"><button onClick="{{ r.yes }}" style="{{ r.yesStyle }}">כן</button><button onClick="{{ r.no }}" style="{{ r.noStyle }}">לא</button></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ noRules }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #eaeefc; font-size: 14px; line-height: 20px">עוד לא ברור מה אתם אוהבים, אז סבב 2 ימשיך לגוון.</p>
+</sc-if>
+<button onClick="{{ toRound2 }}" style="margin-top: auto; width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">לסבב 2</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRevisit }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 12px">
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">סבב 3 · הכרעה</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">קודם עוד מבט על ה„אולי”. {{ rvCounter }}</p>
+</div>
+<section style="background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #f0e2dc; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 46px; font-weight: 600; line-height: 1.15">{{ rv.he }}</h2>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ rv.reason }}</p>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ rvYes }}" style="flex: 1; min-height: 52px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 16px; font-weight: 500; cursor: pointer">לגמר</button>
+<button onClick="{{ rvNo }}" style="flex: 1; min-height: 52px; border-radius: 16px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 16px; font-weight: 500; cursor: pointer">לא הפעם</button>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDuel }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 12px">
+<div>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 20px; font-weight: 600">סבב 3 · ראש בראש</h1>
+<p style="margin: 0; font-size: 13px; color: #625d86">מה עדיף לכם? {{ duelCounter }}</p>
+</div>
+<button onClick="{{ pickA }}" style="min-height: 210px; border-radius: 24px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15">{{ duelA.he }}</span><span style="font-size: 14px; line-height: 20px; color: #625d86">{{ duelA.reason }}</span></button>
+<span style="align-self: center; width: 40px; height: 40px; border-radius: 999px; background: #3a3560; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">או</span>
+<button onClick="{{ pickB }}" style="min-height: 210px; border-radius: 24px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><span style="font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15">{{ duelB.he }}</span><span style="font-size: 14px; line-height: 20px; color: #625d86">{{ duelB.reason }}</span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWinner }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding-top: 24px">
+<svg viewBox="0 0 160 170" width="110" height="117" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><ellipse cx="54" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><ellipse cx="106" cy="106" rx="8" ry="5.5" fill="#e27c7c" opacity="0.5"></ellipse><g fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"><path d="M55 90 Q62 82 69 90"></path><path d="M91 90 Q98 82 105 90"></path></g><path d="M66 102 Q80 120 94 102 Z" fill="#3a3560"></path></svg>
+<span style="font-size: 14px; color: #625d86">השם שבחרתם</span>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.2; color: #9c3846">{{ win.full }}</h1>
+<p style="margin: 0; font-size: 16px; line-height: 23px">{{ win.reason }}</p>
+<sc-if value="{{ hasOthers }}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 13px; color: #625d86">{{ others }}</p></sc-if>
+<div style="margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{ shareNote }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 10px 12px; border-radius: 14px; background: #eaeefc; font-size: 13px; line-height: 19px; text-align: right">בגרסה הזוגית (v2): בן או בת הזוג מדרגים את אותם שמות, ורואים איפה אתם מסכימים.</p></sc-if>
+<button onClick="{{ share }}" style="width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #1a7f4b; color: #ffffff; font-size: 17px; font-weight: 500; cursor: pointer">שליחה לבן/בת הזוג לדירוג</button>
+<button onClick="{{ restart }}" style="width: 100%; min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500; cursor: pointer">להריץ את הסימולציה שוב</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNoWinner }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding-top: 40px">
+<svg viewBox="0 0 160 170" width="96" height="102" aria-hidden="true"><g stroke="#ffcf70" stroke-width="12" stroke-linecap="round"><line x1="138" y1="95" x2="150" y2="95"></line><line x1="121.01" y1="136.01" x2="129.5" y2="144.5"></line><line x1="80" y1="153" x2="80" y2="165"></line><line x1="38.99" y1="136.01" x2="30.5" y2="144.5"></line><line x1="22" y1="95" x2="10" y2="95"></line><line x1="38.99" y1="53.99" x2="30.5" y2="45.5"></line><line x1="80" y1="37" x2="80" y2="25"></line><line x1="121.01" y1="53.99" x2="129.5" y2="45.5"></line></g><path d="M80 47 A48 48 0 0 0 80 143 Z" fill="#f7a9a8"></path><path d="M80 47 A48 48 0 0 1 80 143 Z" fill="#a6b8f0"></path><g fill="#3a3560"><ellipse cx="62" cy="89" rx="6.5" ry="8"></ellipse><ellipse cx="98" cy="89" rx="6.5" ry="8"></ellipse></g><path d="M68 112 Q80 102 92 112" fill="none" stroke="#3a3560" stroke-width="5" stroke-linecap="round"></path></svg>
+<h1 style="margin: 0; font-family: Fredoka, Rubik, sans-serif; font-size: 24px; font-weight: 600">{{ noWinTitle }}</h1>
+<p style="margin: 0; font-size: 15px; line-height: 22px; color: #625d86">{{ noWinText }}</p>
+<div style="margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{ canExploreAgain }}" hint-placeholder-val="{{ true }}"><button onClick="{{ exploreAgain }}" style="width: 100%; min-height: 56px; border-radius: 16px; border: 0; background: #b84a57; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer">סבב גילוי נוסף</button></sc-if>
+<button onClick="{{ restart }}" style="width: 100%; min-height: 48px; border-radius: 16px; border: 2px solid rgba(58,53,96,0.15); background: #ffffff; color: #3a3560; font-size: 15px; font-weight: 500; cursor: pointer">להתחיל מחדש</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</template>
+</div>
+<script type="text/x-dc-logic" data-for="Main" data-props="{&quot;details&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false}, &quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const open = st.open !== undefined ? st.open : (this.props.details ?? false);
+    return {
+      open: open,
+      toggleLabel: open ? 'הסתרה' : 'למה השם הזה?',
+      chevronStyle: open ? 'transform: rotate(180deg)' : '',
+      toggle: () => this.setState({ open: !open })
+    };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="F-preferences" data-props="{&quot;scenario&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;with-date-and-sibling&quot;, &quot;no-date-no-siblings&quot;], &quot;default&quot;: &quot;with-date-and-sibling&quot;}, &quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const noFamily = (this.props.scenario ?? 'with-date-and-sibling') === 'no-date-no-siblings';
+    const levels = st.levels || { clearMeaning: 'must', fitsSiblings: 'want', flowsWithSurname: 'want', dueDateLink: 'want' };
+    const defs = [
+      { id: 'englishFriendly', label: 'קל באנגלית' },
+      { id: 'singleSpelling', label: 'כתיב אחד ברור' },
+      { id: 'clearMeaning', label: 'משמעות עברית ברורה' },
+      { id: 'notTop20', label: 'לא בטופ 20' },
+      { id: 'fitsSiblings', label: noFamily ? 'מתאים לאחים' : 'מתאים לאיתי', needs: noFamily ? 'אין אחים ברשימה' : '' },
+      { id: 'flowsWithSurname', label: 'זורם עם „כהן”' },
+      { id: 'grandparents', label: 'יתקבל יפה אצל סבא וסבתא' },
+      { id: 'dueDateLink', label: noFamily ? 'קשור לחג או לעונה של הלידה' : 'קשור לפסח או לאביב', needs: noFamily ? 'צריך תאריך לידה' : '' },
+      { id: 'noUnisex', label: 'ללא שמות יוניסקס', binary: true }
+    ];
+    const base = 'min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; ';
+    const S = {
+      off: base + 'border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560',
+      want: base + 'border: 2px solid #4f5fb0; background: #eaeefc; color: #4f5fb0',
+      must: base + 'border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff',
+      disabled: base + 'border: 2px dashed #d9cfe0; background: transparent; color: #625d86; cursor: not-allowed'
+    };
+    const word = { off: 'לא חשוב', want: 'רצוי', must: 'חובה' };
+    let mustCount = 0;
+    let wantCount = 0;
+    const chips = defs.map((d) => {
+      const disabled = !!d.needs;
+      const lv = disabled ? 'off' : (levels[d.id] || 'off');
+      if (lv === 'must') mustCount += 1;
+      if (lv === 'want') wantCount += 1;
+      return {
+        label: d.label,
+        hint: d.needs || '',
+        hasHint: !!d.needs,
+        disabled: disabled,
+        isMust: lv === 'must',
+        isWant: lv === 'want',
+        style: disabled ? S.disabled : S[lv],
+        aria: d.label + ': ' + (disabled ? d.needs : word[lv]) + '. לחיצה משנה',
+        cycle: () => {
+          if (disabled) return;
+          const order = d.binary ? ['off', 'must'] : ['off', 'want', 'must'];
+          const nextLv = order[(order.indexOf(lv) + 1) % order.length];
+          const next = Object.assign({}, levels);
+          next[d.id] = nextLv;
+          this.setState({ levels: next });
+        }
+      };
+    });
+    return {
+      chips: chips,
+      mustCount: mustCount,
+      tooMany: mustCount >= 3,
+      counter: mustCount + ' חובה · ' + wantCount + ' רצוי'
+    };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="H1-finish-check" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="H2-before" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="H2-before-picked" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="H2-summary" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const fav = st.fav || 'agam';
+    const list = [
+      { id: 'agam', he: 'אֲגַם', meaning: 'מקווה מים גדול ביבשה', full: 'אֲגַם כֹּהֵן' },
+      { id: 'hadas', he: 'הֲדַס', meaning: 'שיח ריחני, מארבעת המינים', full: 'הֲדַס כֹּהֵן' },
+      { id: 'sheli', he: 'שֶׁלִּי', meaning: 'שייכת לי', full: 'שֶׁלִּי כֹּהֵן' },
+      { id: 'shir', he: 'שִׁיר', meaning: 'זמר ומנגינה', full: 'שִׁיר כֹּהֵן' }
+    ];
+    const names = list.map((n) => ({
+      he: n.he,
+      meaning: n.meaning,
+      full: n.full,
+      on: fav === n.id,
+      rowStyle: 'display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 14px; border-radius: 18px; cursor: pointer; background: #ffffff; border: 2px solid ' + (fav === n.id ? '#b84a57' : '#f0e2dc'),
+      pick: () => this.setState({ fav: n.id })
+    }));
+    return { names: names };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="G1-before" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="G1-entry" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="G1-taking-into-account" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 920}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const rachel = st.rachel || 'open';
+    const removedNotes = st.removedNotes || {};
+    const removedSkips = st.removedSkips || {};
+    const notes = [
+      { id: 'peleg', source: 'על פלג: „נשמע לי שם של בן”', rule: 'בלי שמות שרוב הנושאים בהם בנים' },
+      { id: 'spring', source: 'הערה על סבב 2', rule: 'עדיפות גבוהה יותר לשמות של פסח ואביב' },
+      { id: 'hadas', source: 'תיקון בהדס: „לא לזה התכוונתי”', rule: 'בודקים חג מול תאריך הלידה, לא כל חג' }
+    ];
+    const skips = [
+      { id: 'noga', label: 'נגה' }, { id: 'chali', label: 'חלי' }, { id: 'peleg', label: 'פלג' },
+      { id: 'eden', label: 'עדן' }, { id: 'tamar', label: 'תמר · תפוס במשפחה' }
+    ];
+    const roundNotes = notes.filter((n) => !removedNotes[n.id]).map((n) => ({
+      source: n.source, rule: n.rule, removeLabel: 'הסרה: ' + n.rule,
+      remove: () => { const r = Object.assign({}, removedNotes); r[n.id] = true; this.setState({ removedNotes: r }); }
+    }));
+    const skipped = skips.filter((s) => !removedSkips[s.id]).map((s) => ({
+      label: s.label, removeLabel: 'להחזיר את ' + s.label,
+      remove: () => { const r = Object.assign({}, removedSkips); r[s.id] = true; this.setState({ removedSkips: r }); }
+    }));
+    const pill = 'display: inline-flex; align-items: center; flex-shrink: 0; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; ';
+    const status = {
+      open: { text: 'עוד לא מסננים', style: pill + 'background: #fff4e0; color: #8a5a00' },
+      only: { text: 'מסננים: מתחיל ב־ר׳', style: pill + 'background: #eaeefc; color: #4f5fb0' },
+      idea: { text: 'רק להשראה', style: pill + 'background: #f6f1ee; color: #625d86' }
+    }[rachel];
+    return {
+      rachelStatus: status.text,
+      rachelStatusStyle: status.style,
+      rachelOpen: rachel === 'open',
+      rachelOnly: () => this.setState({ rachel: 'only' }),
+      rachelIdea: () => this.setState({ rachel: 'idea' }),
+      roundNotes: roundNotes,
+      noRoundNotes: roundNotes.length === 0,
+      skipped: skipped
+    };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="G2-start-over" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const keep = st.keep || { family: true, prefs: true, notes: true, skipped: true, taken: true };
+    const defs = [
+      { id: 'family', title: 'פרטי המשפחה והתאריך', detail: 'מיכל, יונתן, איתי · כהן · 15.4.2027' },
+      { id: 'prefs', title: 'מה חשוב לכם ושמות אהובים', detail: '4 בחירות · מאיה, אלה' },
+      { id: 'notes', title: 'הערות ותיקונים מהסבבים', detail: '3 הערות, למשל „פלג נשמע כמו שם של בן”' },
+      { id: 'skipped', title: 'שמות שלא תרצו לראות שוב', detail: 'נגה, חלי, פלג, עדן' },
+      { id: 'taken', title: 'שמות תפוסים במשפחה', detail: 'תמר' }
+    ];
+    const items = defs.map((d) => ({
+      title: d.title,
+      detail: d.detail,
+      on: !!keep[d.id],
+      rowStyle: 'display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 10px 12px; border-radius: 14px; cursor: pointer; background: ' + (keep[d.id] ? '#f4f6fe' : '#ffffff') + '; border: 1px solid ' + (keep[d.id] ? '#d5dcf6' : '#f0e2dc'),
+      toggle: () => { const k = Object.assign({}, keep); k[d.id] = !keep[d.id]; this.setState({ keep: k }); }
+    }));
+    const dropped = defs.filter((d) => !keep[d.id]).length;
+    return {
+      items: items,
+      summary: dropped === 0 ? 'כל השאר נשמר.' : dropped + ' דברים יימחקו.'
+    };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="E-why-no" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const picked = st.picked || { popular: true };
+    const defs = [
+      { id: 'popular', label: 'נפוץ מדי', effect: 'פחות שמות מהטופ 40, כמו נגה' },
+      { id: 'sound', label: 'לא אוהבים את הצליל', effect: 'פחות שמות עם הצליל של „נגה”' },
+      { id: 'meaning', label: 'המשמעות לא מדברת אלינו', effect: 'פחות שמות של אור וזוהר' },
+      { id: 'dated', label: 'מיושן', effect: 'יותר שמות עכשוויים' },
+      { id: 'boyish', label: 'נשמע כמו שם של בן', effect: 'בלי שמות שרוב הנושאים בהם בנים' },
+      { id: 'know', label: 'מישהו שאנחנו מכירים', effect: 'נגה תתווסף לשמות התפוסים' },
+      { id: 'other', label: 'אחר…', effect: '' }
+    ];
+    const on = 'min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-size: 14px; font-weight: 500; cursor: pointer';
+    const off = 'min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500; cursor: pointer';
+    const reasons = defs.map((d) => ({
+      label: d.label,
+      on: !!picked[d.id],
+      style: picked[d.id] ? on : off,
+      toggle: () => {
+        const next = Object.assign({}, picked);
+        next[d.id] = !picked[d.id];
+        this.setState({ picked: next });
+      }
+    }));
+    const effects = defs.filter((d) => picked[d.id] && d.effect).map((d) => d.effect);
+    return {
+      reasons: reasons,
+      showOther: !!picked.other,
+      hasLearned: effects.length > 0,
+      noLearned: effects.length === 0,
+      learned: effects.join(' · ')
+    };
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="I-step-urls" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="J-flow" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 660}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script type="text/x-dc-logic" data-for="J-prototype" data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 844}}">
+class Component extends DCLogic {
+  db() {
+    const N = {
+      agam: { he: 'אֲגַם', tr: 'Agam', reason: 'מקווה מים גדול. קצר וטבעי, ונשמע טוב ב„אגם כהן”.', f: ['nature', 'popular', 'short', 'modern'], probe: 'טבע · פופולרי' },
+      avigail: { he: 'אֲבִיגַיִל', tr: 'Avigail', reason: '„אבי גילה”. שם תנ״כי מלא, שמתקצר לאבי או לגילי.', f: ['biblical', 'long', 'classic', 'common'], probe: 'תנ״כי · ארוך' },
+      nitzan: { he: 'נִיצָן', tr: 'Nitzan', reason: 'הפריחה הראשונה של האביב, ממש בזמן ללידה בניסן.', f: ['nature', 'pesach', 'unisex', 'short', 'modern', 'common'], probe: 'אביב · יוניסקס' },
+      noga: { he: 'נֹגַהּ', tr: 'Noga', reason: 'אור וזוהר, וגם שם כוכב הלכת. קצר וקל לאיות.', f: ['light', 'popular', 'short', 'modern'], probe: 'פופולרי מאוד' },
+      sheli: { he: 'שֶׁלִּי', tr: 'Sheli', reason: '„שייכת לי”. רך, קצר ופחות נפוץ היום.', f: ['love', 'rare', 'short', 'modern'], probe: 'נדיר' },
+      shira: { he: 'שִׁירָה', tr: 'Shira', reason: 'שירת הים נקראת בשביעי של פסח. שם מוזיקלי וקלאסי.', f: ['music', 'pesach', 'classic', 'common', 'short'], probe: 'פסח · קלאסי' },
+      hadas: { he: 'הֲדַס', tr: 'Hadas', reason: 'שיח ריחני מארבעת המינים. קצר ושורשי.', f: ['nature', 'classic', 'common', 'short'], probe: 'טבע · קלאסי' },
+      tamar: { he: 'תָּמָר', tr: 'Tamar', reason: 'עץ התמר. קלאסי, קצר ואהוב מאוד.', f: ['nature', 'biblical', 'classic', 'popular', 'short'], probe: 'פופולרי מאוד' },
+      keshet: { he: 'קֶשֶׁת', tr: 'Keshet', reason: 'קשת בענן. צבעוני, קצר ולא נפוץ.', f: ['nature', 'modern', 'rare', 'short'], probe: 'נדיר · טבע' },
+      shir: { he: 'שִׁיר', tr: 'Shir', reason: 'זמר ומנגינה. קצר ושמח.', f: ['music', 'modern', 'common', 'short'], probe: 'מוזיקה' },
+      meshi: { he: 'מֶשִׁי', tr: 'Meshi', reason: 'בד רך ויקר. עדין ופחות נפוץ.', f: ['beauty', 'modern', 'common', 'short'], probe: 'יופי' },
+      yael: { he: 'יָעֵל', tr: 'Yael', reason: '„יעלת חן” מספר משלי. תנ״כי, קצר ופופולרי.', f: ['nature', 'biblical', 'classic', 'popular', 'short'], probe: 'תנ״כי · פופולרי' },
+      aviva: { he: 'אֲבִיבָה', tr: 'Aviva', reason: 'מלשון אביב. שם קלאסי שמתאים ללידה בניסן.', f: ['pesach', 'nature', 'classic', 'rare', 'long'], probe: 'אביב · ארוך' },
+      tal: { he: 'טַל', tr: 'Tal', reason: 'תפילת טל נאמרת בפסח. קצר ונקי.', f: ['nature', 'pesach', 'unisex', 'modern', 'common', 'short'], probe: 'פסח · יוניסקס' },
+      miriam: { he: 'מִרְיָם', tr: 'Miriam', reason: 'מרים הנביאה, מסיפור יציאת מצרים. קלאסי ותנ״כי.', f: ['biblical', 'pesach', 'classic', 'common', 'short'], probe: 'פסח · תנ״כי' },
+      nufar: { he: 'נוּפָר', tr: 'Nufar', reason: 'פרח מים. רך וטבעי.', f: ['nature', 'modern', 'common', 'short'], probe: 'טבע · עכשווי' },
+      orya: { he: 'אוֹרְיָה', tr: 'Orya', reason: '„אורה של יה”. אור עם משמעות.', f: ['light', 'modern', 'common', 'short'], probe: 'אור' },
+      nehora: { he: 'נְהוֹרָה', tr: 'Nehora', reason: '„אור” בארמית. מיוחד וארוך.', f: ['light', 'rare', 'long', 'classic'], probe: 'נדיר · ארוך' },
+      geula: { he: 'גְּאוּלָה', tr: 'Geula', reason: 'מסיפור פסח. שם קלאסי של פעם.', f: ['pesach', 'classic', 'rare', 'long'], probe: 'פסח · קלאסי' }
+    };
+    const L = {
+      popular: 'שמות פופולריים', rare: 'שמות נדירים', short: 'שמות קצרים', long: 'שמות ארוכים',
+      modern: 'שמות עכשוויים', classic: 'שמות קלאסיים', nature: 'שמות מהטבע', light: 'שמות של אור',
+      biblical: 'שמות תנ״כיים', beauty: 'שמות של יופי', music: 'שמות של שיר ומוזיקה', love: 'שמות של אהבה',
+      pesach: 'שמות של פסח ואביב', unisex: 'שמות יוניסקס'
+    };
+    const R = [
+      { id: 'popular', label: 'נפוץ מדי', w: { popular: -3 } },
+      { id: 'long', label: 'ארוך מדי', w: { long: -3 } },
+      { id: 'dated', label: 'מיושן', w: { classic: -3 } },
+      { id: 'boyish', label: 'נשמע כמו שם של בן', w: { unisex: -3 } },
+      { id: 'meaning', label: 'המשמעות', w: {} },
+      { id: 'sound', label: 'הצליל', w: {} }
+    ];
+    const CATS = ['nature', 'light', 'biblical', 'beauty', 'music', 'love', 'pesach'];
+    return { N: N, L: L, R: R, CATS: CATS, EXPLORE: [['agam', 'avigail', 'nitzan', 'noga', 'sheli', 'shira'], ['nufar', 'yael', 'geula', 'orya', 'keshet', 'nehora']] };
+  }
+
+  weights(ratings, reasons) {
+    const D = this.db();
+    const w = {};
+    const add = (f, v) => { if (f === 'common') return; w[f] = (w[f] || 0) + v; };
+    Object.keys(ratings).forEach((id) => {
+      const r = ratings[id];
+      const n = D.N[id];
+      if (!n) return;
+      const base = r === 'like' ? 2 : r === 'maybe' ? 1 : r === 'no' ? -2 : 0;
+      n.f.forEach((f) => add(f, base));
+      if (r === 'no') {
+        const rs = reasons[id] || {};
+        D.R.forEach((rd) => {
+          if (!rs[rd.id]) return;
+          Object.keys(rd.w).forEach((f) => add(f, rd.w[f]));
+          if (rd.id === 'meaning') n.f.filter((f) => D.CATS.indexOf(f) >= 0).forEach((f) => add(f, -2));
+        });
+      }
+    });
+    return w;
+  }
+
+  proposals(w, ratings) {
+    const D = this.db();
+    const liked = Object.keys(ratings || {}).filter((id) => ratings[id] === 'like');
+    const inLiked = (f) => liked.some((id) => D.N[id].f.indexOf(f) >= 0);
+    const keys = Object.keys(w).filter((f) => D.L[f]);
+    const avoid = keys.filter((f) => w[f] <= -3 && !inLiked(f)).sort((a, b) => w[a] - w[b]).map((f) => ({ key: 'avoid:' + f, f: f, kind: 'avoid' }));
+    const favor = keys.filter((f) => w[f] >= 3).sort((a, b) => w[b] - w[a]).map((f) => ({ key: 'favor:' + f, f: f, kind: 'favor' }));
+    return avoid.slice(0, 2).concat(favor).slice(0, 3);
+  }
+
+  pickRound2(st) {
+    const D = this.db();
+    const ratings = st.ratings || {};
+    const w = this.weights(ratings, st.reasons || {});
+    const acc = st.accepted || {};
+    const avoid = Object.keys(acc).filter((k) => acc[k] === true && k.indexOf('avoid:') === 0).map((k) => k.slice(6));
+    const favor = Object.keys(acc).filter((k) => acc[k] === true && k.indexOf('favor:') === 0).map((k) => k.slice(6));
+    const seen = Object.keys(ratings);
+    const pool = Object.keys(D.N).filter((id) => seen.indexOf(id) < 0 && !D.N[id].f.some((f) => avoid.indexOf(f) >= 0));
+    const score = (id) => D.N[id].f.reduce((s, f) => s + (w[f] || 0) + (favor.indexOf(f) >= 0 ? 3 : 0), 0);
+    const ranked = pool.slice().sort((a, b) => score(b) - score(a));
+    const picks = ranked.slice(0, 3);
+    const rest = ranked.filter((id) => picks.indexOf(id) < 0);
+    const liked = seen.filter((id) => ratings[id] === 'like');
+    const pesachMet = liked.some((id) => D.N[id].f.indexOf('pesach') >= 0);
+    let wild = null;
+    let wildTag = '';
+    if (!pesachMet && avoid.indexOf('pesach') < 0) {
+      wild = rest.find((id) => D.N[id].f.indexOf('pesach') >= 0) || null;
+      if (wild) wildTag = 'כרטיס פרא · רצוי שעוד לא התקיים: פסח';
+    }
+    if (!wild && rest.length) {
+      const fresh = (id) => D.N[id].f.filter((f) => f !== 'common' && !w[f]).length;
+      wild = rest.slice().sort((a, b) => fresh(b) - fresh(a))[0];
+      wildTag = 'כרטיס פרא · משהו אחר לגמרי';
+    }
+    const tags = {};
+    picks.forEach((id) => {
+      const twin = liked.map((l) => ({ l: l, n: D.N[l].f.filter((f) => f !== 'common' && D.N[id].f.indexOf(f) >= 0).length })).sort((a, b) => b.n - a.n)[0];
+      tags[id] = twin && twin.n >= 2 ? 'כי אהבתם את ' + D.N[twin.l].he.replace(/[֑-ׇ]/g, '') : 'לפי מה שלמדנו';
+    });
+    const set = picks.slice();
+    if (wild) { set.push(wild); tags[wild] = wildTag; }
+    return { set: set, tags: tags, wild: wild };
+  }
+
+  renderVals() {
+    const D = this.db();
+    const st = this.state || {};
+    const screen = st.screen || 'intro';
+    const ratings = st.ratings || {};
+    const reasons = st.reasons || {};
+    const set = st.set || [];
+    const idx = st.idx || 0;
+    const round = st.round || 1;
+    const plain = (he) => he.replace(/[֑-ׇ]/g, '');
+    const self = this;
+
+    const startExplore = (pass) => {
+      self.setState({ screen: 'rate', round: 1, pass: pass, set: D.EXPLORE[pass].slice(), idx: 0, tags: {}, wild: null, promoted: [], revisitIdx: 0, accepted: {}, tooStrict: false, ratings: pass === 0 ? {} : ratings, reasons: pass === 0 ? {} : reasons });
+    };
+
+    const vals = {
+      isIntro: screen === 'intro', isRate: screen === 'rate', isLearned: screen === 'learned',
+      isRevisit: screen === 'revisit', isDuel: screen === 'duel', isWinner: screen === 'winner', isNoWinner: screen === 'nowinner',
+      start: () => startExplore(0)
+    };
+
+    // ---------- rate ----------
+    const curId = set[idx];
+    const cur = curId ? D.N[curId] : null;
+    const myRating = curId ? ratings[curId] : null;
+    const btn = 'min-height: 44px; border-radius: 16px; border: 2px solid; font-size: 14px; font-weight: 500; cursor: pointer; ';
+    const styleFor = (kind, bg) => btn + (myRating === kind ? 'border-color: ' + bg + '; background: ' + bg + '; color: #ffffff' : 'border-color: #f0e2dc; background: #ffffff; color: #3a3560');
+    const rate = (kind) => () => {
+      if (!curId) return;
+      const r = Object.assign({}, ratings); r[curId] = kind;
+      self.setState({ ratings: r });
+    };
+    const lastInSet = idx >= set.length - 1;
+    const goNext = () => {
+      if (!curId) return;
+      if (!lastInSet) { self.setState({ idx: idx + 1 }); return; }
+      if (round === 1) { self.setState({ screen: 'learned' }); return; }
+      const maybes = Object.keys(ratings).filter((id) => ratings[id] === 'maybe');
+      if (maybes.length) { self.setState({ screen: 'revisit', revisitList: maybes, revisitIdx: 0, promoted: [] }); return; }
+      self.toDuel(ratings, []);
+    };
+    const skip = () => {
+      if (!curId) return;
+      const r = Object.assign({}, ratings); r[curId] = 'skip';
+      self.setState({ ratings: r });
+      if (!lastInSet) { self.setState({ idx: idx + 1 }); return; }
+      if (round === 1) { self.setState({ screen: 'learned' }); return; }
+      const maybes = Object.keys(r).filter((id) => r[id] === 'maybe');
+      if (maybes.length) { self.setState({ screen: 'revisit', revisitList: maybes, revisitIdx: 0, promoted: [] }); return; }
+      self.toDuel(r, []);
+    };
+    const myReasons = (curId && reasons[curId]) || {};
+    const chipOn = 'min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-size: 13px; font-weight: 500; cursor: pointer';
+    const chipOff = 'min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 13px; font-weight: 500; cursor: pointer';
+    const tags = st.tags || {};
+    const isWild = !!(st.wild && curId === st.wild);
+    Object.assign(vals, {
+      roundTitle: round === 1 ? ((st.pass || 0) === 0 ? 'סבב 1 · גילוי' : 'סבב גילוי נוסף') : 'סבב 2 · מיקוד',
+      roundSub: round === 1 ? '6 שמות שונים מאוד, כדי ללמוד מה אתם אוהבים.' : '3 לפי מה שלמדנו, ועוד כרטיס פרא אחד.',
+      dots: set.map((id, i) => ({ style: 'height: 8px; border-radius: 999px; background: ' + (i < idx ? '#f7a9a8; width: 8px' : i === idx ? '#b84a57; width: 24px' : '#f0e2dc; width: 8px') })),
+      counter: 'שם ' + (idx + 1) + ' מתוך ' + set.length,
+      cur: cur ? { he: cur.he, tr: cur.tr, reason: cur.reason } : { he: '', tr: '', reason: '' },
+      tagText: round === 1 ? ('בודק: ' + (cur ? cur.probe : '')) : (tags[curId] || ''),
+      tagStyle: 'align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; ' + (isWild ? 'background: #fff4e0; color: #8a5a00; border: 1px dashed #d9a441' : round === 1 ? 'background: #f6f1ee; color: #625d86' : 'background: #eaeefc; color: #4f5fb0'),
+      noStyle: styleFor('no', '#3a3560'), maybeStyle: styleFor('maybe', '#4f5fb0'), likeStyle: styleFor('like', '#b84a57'),
+      noOn: myRating === 'no', maybeOn: myRating === 'maybe', likeOn: myRating === 'like',
+      rateNo: rate('no'), rateMaybe: rate('maybe'), rateLike: rate('like'),
+      showWhy: myRating === 'no',
+      whyChips: D.R.map((rd) => ({
+        label: rd.label, on: !!myReasons[rd.id], style: myReasons[rd.id] ? chipOn : chipOff,
+        toggle: () => {
+          const all = Object.assign({}, reasons); const mine = Object.assign({}, all[curId] || {});
+          mine[rd.id] = !mine[rd.id]; all[curId] = mine; self.setState({ reasons: all });
+        }
+      })),
+      nextDisabled: !myRating || myRating === 'skip',
+      nextStyle: 'width: 100%; min-height: 56px; border-radius: 16px; border: 0; color: #ffffff; font-size: 18px; font-weight: 500; cursor: pointer; background: ' + (myRating && myRating !== 'skip' ? '#b84a57' : 'rgba(184,74,87,0.4)'),
+      nextLabel: !lastInSet ? 'לשם הבא' : round === 1 ? 'מה למדנו?' : 'לסבב ההכרעה',
+      next: goNext,
+      skip: skip
+    });
+
+    // ---------- learned ----------
+    const w = this.weights(ratings, reasons);
+    const props = this.proposals(w, ratings);
+    const acc = st.accepted || {};
+    const yesOn = 'flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #4f5fb0; background: #4f5fb0; color: #ffffff; font-size: 14px; font-weight: 500; cursor: pointer';
+    const yesOff = 'flex: 1; min-height: 44px; border-radius: 14px; border: 2px solid #f0e2dc; background: #ffffff; color: #3a3560; font-size: 14px; font-weight: 500; cursor: pointer';
+    const byKind = (k) => Object.keys(ratings).filter((id) => D.N[id] && ratings[id] === k).map((id) => plain(D.N[id].he));
+    const lines = [];
+    if (byKind('like').length) lines.push('מעניין: ' + byKind('like').join(', '));
+    if (byKind('maybe').length) lines.push('אולי: ' + byKind('maybe').join(', '));
+    if (byKind('no').length) lines.push('לא: ' + byKind('no').join(', '));
+    Object.assign(vals, {
+      learnedLines: lines.map((t) => ({ t: t })),
+      rules: props.map((p) => ({
+        text: p.kind === 'avoid' ? 'נראה שפחות מתחברים ל' + D.L[p.f] + '. להפסיק להציע אותם?' : 'אהבתם ' + D.L[p.f] + '. לתת להם עדיפות?',
+        icon: p.kind === 'avoid' ? '−' : '+',
+        yesStyle: acc[p.key] === true ? yesOn : yesOff,
+        noStyle: acc[p.key] === false ? yesOn : yesOff,
+        yes: () => { const a = Object.assign({}, acc); a[p.key] = true; self.setState({ accepted: a }); },
+        no: () => { const a = Object.assign({}, acc); a[p.key] = false; self.setState({ accepted: a }); }
+      })),
+      hasRules: props.length > 0,
+      noRules: props.length === 0,
+      toRound2: () => {
+        const pick = self.pickRound2(Object.assign({}, st, { accepted: acc }));
+        if (!pick.set.length) { self.setState({ screen: 'nowinner', tooStrict: true }); return; }
+        self.setState({ screen: 'rate', round: 2, set: pick.set, tags: pick.tags, wild: pick.wild, idx: 0, tooStrict: false });
+      }
+    });
+
+    // ---------- revisit ----------
+    const rl = st.revisitList || [];
+    const ri = st.revisitIdx || 0;
+    const rid = rl[ri];
+    const promoted = st.promoted || [];
+    const advanceRevisit = (prom) => {
+      if (ri + 1 < rl.length) { self.setState({ revisitIdx: ri + 1, promoted: prom }); return; }
+      self.toDuel(ratings, prom);
+    };
+    Object.assign(vals, {
+      rv: rid ? { he: D.N[rid].he, reason: D.N[rid].reason } : { he: '', reason: '' },
+      rvCounter: 'אולי ' + (ri + 1) + ' מתוך ' + rl.length,
+      rvYes: () => { if (rid) advanceRevisit(promoted.concat([rid])); },
+      rvNo: () => { if (rid) advanceRevisit(promoted); }
+    });
+
+    // ---------- duel ----------
+    const champ = st.champ;
+    const queue = st.queue || [];
+    const di = st.duelIdx || 0;
+    const chal = queue[di];
+    const pickDuel = (winnerId) => () => {
+      if (!winnerId) return;
+      if (di + 1 < queue.length) { self.setState({ champ: winnerId, duelIdx: di + 1 }); return; }
+      self.setState({ champ: winnerId, screen: 'winner' });
+    };
+    Object.assign(vals, {
+      duelA: champ ? { he: D.N[champ].he, reason: D.N[champ].reason } : { he: '', reason: '' },
+      duelB: chal ? { he: D.N[chal].he, reason: D.N[chal].reason } : { he: '', reason: '' },
+      pickA: pickDuel(champ), pickB: pickDuel(chal),
+      duelCounter: 'השוואה ' + (di + 1) + ' מתוך ' + queue.length
+    });
+
+    // ---------- winner / no winner ----------
+    const finalists = (st.finalists || []).filter((id) => id !== champ).map((id) => plain(D.N[id].he));
+    Object.assign(vals, {
+      win: champ ? { he: D.N[champ].he, full: D.N[champ].he + ' כֹּהֵן', reason: D.N[champ].reason } : { he: '', full: '', reason: '' },
+      others: finalists.length ? 'בגמר היו גם: ' + finalists.join(', ') : '',
+      hasOthers: finalists.length > 0,
+      shareNote: !!st.shareNote,
+      share: () => self.setState({ shareNote: true }),
+      restart: () => self.setState({ screen: 'intro', ratings: {}, reasons: {}, accepted: {}, set: [], idx: 0, champ: null, queue: [], duelIdx: 0, finalists: [], shareNote: false, pass: 0, round: 1 }),
+      canExploreAgain: (st.pass || 0) === 0,
+      cannotExploreAgain: (st.pass || 0) !== 0,
+      noWinTitle: st.tooStrict ? 'הכללים סיננו הכול' : 'עוד לא מצאנו את השם',
+      noWinText: st.tooStrict ? 'הכללים שאישרתם סיננו את כל השמות שנשארו. במוצר האמיתי נציע לבטל כלל אחד.' : 'אף שם לא קיבל „מעניין!”. זה בסדר, גם זה מלמד אותנו משהו.',
+      exploreAgain: () => { startExplore(1); }
+    });
+    return vals;
+  }
+
+  toDuel(ratings, promoted) {
+    const st = this.state || {};
+    const w = this.weights(ratings, st.reasons || {});
+    const D = this.db();
+    const score = (id) => D.N[id].f.reduce((s, f) => s + (w[f] || 0), 0);
+    const likes = Object.keys(ratings).filter((id) => ratings[id] === 'like').concat(promoted || [])
+      .sort((a, b) => score(b) - score(a)).slice(0, 4);
+    if (likes.length === 0) { this.setState({ screen: 'nowinner' }); return; }
+    if (likes.length === 1) { this.setState({ screen: 'winner', champ: likes[0], finalists: likes }); return; }
+    this.setState({ screen: 'duel', champ: likes[0], queue: likes.slice(1), duelIdx: 0, finalists: likes });
+  }
+}
+</script>
+<script>
+// Minimal runtime for the canvas's .dc.html screens, so they work outside the canvas.
+// Each screen = a <template id="tpl-NAME"> (the markup) + a <script type="text/x-dc-logic" data-for="NAME"> (its logic class).
+(function () {
+  class DCLogic {
+    constructor(props) { this.props = props || {}; this.state = null; }
+    setState(patch) {
+      const p = typeof patch === 'function' ? patch(this.state || {}, this.props) : patch;
+      this.state = Object.assign({}, this.state || {}, p);
+      schedule(this);
+    }
+    forceUpdate() { schedule(this); }
+  }
+
+  const pending = new Set();
+  function schedule(inst) {
+    pending.add(inst);
+    if (pending.size === 1) queueMicrotask(() => { const list = [...pending]; pending.clear(); list.forEach(render); });
+  }
+
+  const WHOLE = /^\s*\{\{\s*([\w.$-]+)\s*\}\}\s*$/;
+  const HOLE = /\{\{\s*([\w.$-]+)\s*\}\}/g;
+
+  function lookup(path, vals, scope) {
+    if (path === 'true') return true;
+    if (path === 'false') return false;
+    if (/^-?\d+(\.\d+)?$/.test(path)) return Number(path);
+    const parts = path.split('.');
+    let cur = Object.prototype.hasOwnProperty.call(scope, parts[0]) ? scope[parts[0]] : vals[parts[0]];
+    for (let i = 1; i < parts.length; i++) { if (cur == null) return undefined; cur = cur[parts[i]]; }
+    return cur;
+  }
+  const interp = (s, vals, scope) => s.replace(HOLE, (_, p) => { const v = lookup(p, vals, scope); return v == null ? '' : String(v); });
+
+  function renderChildren(src, out, vals, scope) { for (const n of src.childNodes) renderNode(n, out, vals, scope); }
+
+  function renderNode(n, out, vals, scope) {
+    if (n.nodeType === 3) { out.appendChild(document.createTextNode(interp(n.nodeValue, vals, scope))); return; }
+    if (n.nodeType !== 1) return;
+    const tag = n.localName;
+    if (tag === 'sc-if') {
+      const m = (n.getAttribute('value') || '').match(WHOLE);
+      if (m && lookup(m[1], vals, scope)) renderChildren(n, out, vals, scope);
+      return;
+    }
+    if (tag === 'sc-for') {
+      const m = (n.getAttribute('list') || '').match(WHOLE);
+      const list = (m && lookup(m[1], vals, scope)) || [];
+      const as = n.getAttribute('as') || 'item';
+      list.forEach((item, i) => renderChildren(n, out, vals, Object.assign({}, scope, { [as]: item, $index: i })));
+      return;
+    }
+    const el = n.namespaceURI === 'http://www.w3.org/2000/svg'
+      ? document.createElementNS(n.namespaceURI, tag) : document.createElement(tag);
+    for (const a of n.attributes) {
+      const name = a.name;
+      if (name.startsWith('hint-')) continue;
+      const m = a.value.match(WHOLE);
+      if (name.startsWith('on') && m) {
+        const fn = lookup(m[1], vals, scope);
+        if (typeof fn === 'function') el.addEventListener(name.slice(2), (e) => { if (el.localName === 'a') e.preventDefault(); fn(e); });
+        continue;
+      }
+      if (m) {
+        const v = lookup(m[1], vals, scope);
+        if (name === 'disabled' || name === 'checked' || name === 'selected') { if (v) el.setAttribute(name, ''); el[name] = !!v; continue; }
+        if (v == null || (v === false && !name.startsWith('aria-'))) continue;
+        el.setAttribute(name, String(v));
+        continue;
+      }
+      let v = interp(a.value, vals, scope);
+      if (name === 'href' && /\.dc\.html$/.test(v)) v = '#ab-' + v.replace(/^.*\//, '').replace(/\.dc\.html$/, '');
+      el.setAttribute(name, v);
+    }
+    if (tag === 'template') { out.appendChild(el); return; }
+    renderChildren(n, el, vals, scope);
+    out.appendChild(el);
+  }
+
+  function render(inst) {
+    try {
+      const vals = inst.renderVals() || {};
+      const frag = document.createDocumentFragment();
+      renderChildren(inst.tpl.content, frag, vals, {});
+      inst.host.replaceChildren(frag);
+    } catch (err) {
+      console.error('[' + inst.name + ']', err);
+      inst.host.textContent = 'Could not render ' + inst.name + ': ' + err.message;
+    }
+  }
+
+  function mount() {
+    document.querySelectorAll('script[type="text/x-dc-logic"]').forEach((s) => {
+      const name = s.dataset.for;
+      const tpl = document.getElementById('tpl-' + name);
+      const host = document.getElementById('host-' + name);
+      if (!tpl || !host) return;
+      const defs = JSON.parse(s.dataset.props || '{}');
+      const props = {};
+      Object.keys(defs).forEach((k) => { if (k[0] !== '$' && defs[k] && 'default' in defs[k]) props[k] = defs[k].default; });
+      const Comp = new Function('DCLogic', s.textContent + '\n;return Component;')(DCLogic);
+      const inst = new Comp(props);
+      inst.name = name; inst.tpl = tpl; inst.host = host;
+      render(inst);
+    });
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href="#"]');
+      if (a) e.preventDefault();
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+})();
+
+</script>
+</body>
+</html>

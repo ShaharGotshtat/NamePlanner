@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ComponentPropsWithRef, ReactNode } from "react";
 import { Mascot, type MascotMood } from "./Mascot";
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -13,7 +13,7 @@ export function Button({
   variant = "primary",
   className = "",
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+}: ComponentPropsWithRef<"button"> & { variant?: Variant }) {
   return (
     <button
       className={`min-h-11 rounded-2xl px-5 font-medium transition-colors disabled:cursor-not-allowed ${VARIANTS[variant]} ${className}`}
@@ -42,7 +42,7 @@ export function ScreenTitle({ children, subtitle, mood }: { children: ReactNode;
   return (
     <header className="mb-6 flex items-start gap-3">
       <div className="flex-1">
-        <h1 className="font-display text-2xl font-semibold leading-tight">{children}</h1>
+        <h1 className="font-display text-2xl font-semibold leading-tight focus:outline-none">{children}</h1>
         {subtitle && <p className="mt-2 text-ink-soft">{subtitle}</p>}
       </div>
       {mood && <Mascot key={mood} mood={mood} size={72} className="animate-mascot-pop" />}

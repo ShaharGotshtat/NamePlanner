@@ -4,11 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { errorIdOf, fetchRound, withErrorId } from "@/lib/client/api";
 import { Prefetch } from "@/lib/client/prefetch";
 import { inputKey, runCheck } from "@/lib/client/preferences";
-import { roundRequest, useApp, type AppState } from "@/lib/client/state";
+import { roundRequest, unseenNames, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
 import { Mascot, ThinkingMascot, type MascotMood } from "../Mascot";
 import { Button, inputClass } from "../ui";
+import { FinishCheck } from "./FinishCheck";
 import { NameCard } from "./NameCard";
 
 /** The header mascot mirrors the latest vote in this round. */
@@ -57,14 +58,15 @@ export function Rounds() {
     return !!r && r.suggestions.some((x) => state.ratings[x.name.id]?.verdict);
   });
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [finishCheck, setFinishCheck] = useState(false);
 
   const round = currentRound(state);
   const roundNumber = state.rounds.filter((r) => r.pass === state.pass).length;
   const allowNotes = !state.freeTextDisabled;
 
   const addRound = useCallback(
-    ({ suggestions, token }: RoundResult) =>
-      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false }] })),
+    ({ suggestions, token, notice }: RoundResult) =>
+      update((s) => ({ token, rounds: [...s.rounds, { pass: s.pass, suggestions, completed: false, notice }] })),
     [update],
   );
 
@@ -107,6 +109,13 @@ export function Rounds() {
     const current = prefetch.current;
     return () => current.cancel();
   }, []);
+
+  // Counts the names the parent has seen, so the summary can list the rest of a round left early.
+  const seenNow = round && opened ? index + 1 : 0;
+  useEffect(() => {
+    if (!round || seenNow <= (round.seen ?? 0)) return;
+    update((s) => ({ rounds: s.rounds.map((r) => (r === round ? { ...r, seen: seenNow } : r)) }));
+  }, [round, seenNow, update]);
 
   const rate = (nameId: number, verdict: Verdict) => {
     setLastVerdict(verdict);
@@ -226,24 +235,33 @@ export function Rounds() {
   const goTo = (i: number) => {
     setIndex(i);
     requestAnimationFrame(() => {
-      const el = cardRef.current;
-      el?.focus({ preventScroll: true });
-      el?.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      scrollTo({ top: 0 });
+      cardRef.current?.focus({ preventScroll: true });
     });
   };
 
+  const unseenCount = unseenNames(state)?.names.length ?? 0;
+  const toSummary = () => (unseenCount ? setFinishCheck(true) : update({ step: "summary" }));
+
   return (
     <div>
+      {finishCheck && (
+        <FinishCheck
+          count={unseenCount}
+          onKeepGoing={() => setFinishCheck(false)}
+          onFinish={() => update({ step: "summary" })}
+        />
+      )}
       <div className="mb-4 flex min-h-11 items-center justify-between">
         <div className="flex items-center gap-2">
           <Mascot key={lastVerdict ?? "start"} mood={HEADER_MOOD[lastVerdict ?? "start"]} size={44} className="animate-mascot-pop" />
-          <p className="font-display text-lg font-semibold">
+          <h1 className="font-display text-lg font-semibold focus:outline-none">
             סבב {roundNumber} מתוך {ROUNDS_PER_PASS}
-          </p>
+          </h1>
         </div>
         {anyInteresting && (
-          <Button variant="secondary" className="animate-name-reveal text-sm" onClick={() => update({ step: "summary" })}>
-            מצאתי!
+          <Button variant="secondary" className="animate-name-reveal text-sm" onClick={toSummary}>
+            לסיכום
           </Button>
         )}
       </div>
@@ -251,6 +269,7 @@ export function Rounds() {
       {roundNumber === 1 && state.profile?.summary && (
         <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{state.profile.summary}</p>
       )}
+      {roundNumber === 1 && round.notice && <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{round.notice}</p>}
 
       <div className="mb-3 flex items-center justify-center gap-2" aria-label={`שם ${index + 1} מתוך ${total}`}>
         {round.suggestions.map((s, i) => (

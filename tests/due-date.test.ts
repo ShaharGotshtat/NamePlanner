@@ -3,7 +3,7 @@ import { deriveFromDueDate } from "@/lib/due-date";
 
 describe("deriveFromDueDate", () => {
   it("finds the Hebrew month, a nearby holiday, the zodiac sign and the season", () => {
-    expect(deriveFromDueDate("2026-12-05")).toEqual({ hebrewMonth: "כסלו", holiday: "חנוכה", zodiac: "קשת", season: "חורף" });
+    expect(deriveFromDueDate("2026-12-05")).toMatchObject({ hebrewMonth: "כסלו", holiday: "חנוכה", zodiac: "קשת", season: "חורף" });
   });
 
   it("finds Purim in Adar II of a leap year", () => {

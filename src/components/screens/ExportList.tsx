@@ -43,25 +43,25 @@ export function ExportList({ names, favorite, unsure }: { names: Suggestion[]; f
   return (
     <div className="mt-6">
       <p className="mb-2 font-medium">ייצוא הרשימה</p>
-      <a
-        className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-whatsapp font-medium text-white hover:brightness-95"
-        href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite, unsure))}`}
-        target="_blank"
-        rel="noreferrer"
-        onClick={() => trackEvent({ name: "share", props: { channel: "whatsapp" } })}
-      >
-        שליחה בוואטסאפ
-      </a>
-      <div className="mt-2 flex gap-2">
-        <Button variant="secondary" className="flex-1" onClick={copy}>
-          {copied ? "הועתק!" : "העתקת הטקסט"}
+      <div className="flex gap-2">
+        <a
+          className="flex min-h-13 flex-2 items-center justify-center gap-2 rounded-2xl bg-whatsapp font-medium text-white hover:brightness-95"
+          href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite, unsure))}`}
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => trackEvent({ name: "share", props: { channel: "whatsapp" } })}
+        >
+          שליחה בוואטסאפ
+        </a>
+        <Button variant="secondary" className="min-h-13 flex-1" onClick={copy}>
+          {copied ? "הועתק!" : "העתקה"}
         </Button>
-        {canShare && (
-          <Button variant="secondary" className="flex-1" onClick={share}>
-            שיתוף אחר
-          </Button>
-        )}
       </div>
+      {canShare && (
+        <button className="mx-auto mt-1 block min-h-11 text-sm text-ink-soft underline" onClick={share}>
+          שיתוף אחר
+        </button>
+      )}
     </div>
   );
 }

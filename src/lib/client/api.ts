@@ -87,7 +87,7 @@ export const checkPreferences = (input: PreferencesInput, token: string | null) 
   withSession<{ status: PreferencesStatus; profile?: ParsedProfile | null; errorId?: string }>("/api/preferences", input, token);
 
 export const fetchRound = (req: RoundRequest, token: string | null, signal?: AbortSignal) =>
-  withSession<{ suggestions: Suggestion[] }>("/api/rounds", req, token, signal);
+  withSession<{ suggestions: Suggestion[]; notice?: string | null }>("/api/rounds", req, token, signal);
 
 export const fetchOurPick = (req: RoundRequest, token: string | null) =>
   withSession<{ suggestion: Suggestion | null }>("/api/our-pick", req, token);

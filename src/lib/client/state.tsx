@@ -12,6 +12,7 @@ import type {
   Suggestion,
 } from "@/lib/types";
 import { forgetAnalytics, newRun } from "./analytics";
+import { usableChips } from "./chip-levels";
 import { CHIP_IDS } from "@/lib/engine/chips";
 import { clearJourney, describeChange, track } from "./journey";
 
@@ -21,6 +22,10 @@ export interface RoundState {
   pass: number;
   suggestions: Suggestion[];
   completed: boolean;
+  /** How many names of this round were shown, counted from the first. */
+  seen?: number;
+  /** A line from the server about this round, such as few names fitting the due date. */
+  notice?: string | null;
 }
 
 /** Everything the parent enters. It lives only in this browser's local storage. */
@@ -178,6 +183,15 @@ export const shownIds = (s: AppState) => s.rounds.flatMap((r) => r.suggestions.m
 
 export const shownSuggestions = (s: AppState) => s.rounds.flatMap((r) => r.suggestions);
 
+/** The open round of this pass, if the parent left it before seeing every name. */
+export function unseenNames(s: AppState): { round: number; names: Suggestion[] } | null {
+  const rounds = s.rounds.filter((r) => r.pass === s.pass);
+  const open = rounds.at(-1);
+  if (!open || open.completed) return null;
+  const names = open.suggestions.slice(open.seen ?? 0).filter((x) => !s.ratings[x.name.id]?.verdict);
+  return names.length ? { round: rounds.length, names } : null;
+}
+
 /** Every name the parent turned down, in this search or an earlier one. */
 export function declinedNames(s: AppState): string[] {
   const now = shownSuggestions(s).filter((x) => s.ratings[x.name.id]?.verdict === "no").map((x) => x.name.nameHe);
@@ -203,7 +217,7 @@ export function roundRequest(s: AppState): RoundRequest {
     dueDerived: s.dueDerived,
     surname: s.surname,
     family: s.family,
-    chips: s.chips,
+    chips: usableChips(s),
     profile: s.profile,
     namesWeLike: s.namesWeLike,
     declined: declinedNames(s),

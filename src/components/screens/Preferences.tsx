@@ -1,32 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { CHIPS, isFilterChip } from "@/lib/engine/chips";
+import { useState, type ReactNode } from "react";
+import { CHIPS, type ChipDefinition } from "@/lib/engine/chips";
 import { errorIdOf, withErrorId } from "@/lib/client/api";
+import { MANY_MUSTS, missingData, nextLevel, usableChips } from "@/lib/client/chip-levels";
+import { dueChipLabel } from "@/lib/links";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp, type AppState } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
-import { LevelPicker } from "../LevelPicker";
 import { TagInput } from "../TagInput";
-import { Button, inputClass, ScreenTitle, Toggle } from "../ui";
+import { Button, inputClass, ScreenTitle } from "../ui";
 
 export function Preferences() {
   const { state, update } = useApp();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  const chips = CHIPS.filter((c) => !c.needsDueDate || state.dueDerived);
   const pending = needsCheck(state);
 
-  const toggle = (id: ChipId) =>
+  const cycle = (id: ChipId) =>
     update((s) => {
       const { [id]: current, ...rest } = s.chips;
-      return { chips: current ? rest : { ...rest, [id]: isFilterChip(id) ? "must" : "want" } };
+      const next = nextLevel(id, current);
+      return { chips: next ? { ...rest, [id]: next } : rest };
     });
 
-  const setLevel = (id: ChipId, level: ChipLevel) => update((s) => ({ chips: { ...s.chips, [id]: level } }));
-
-  const selected = chips.filter((c) => state.chips[c.id] && !c.filter);
+  const chosen = Object.values(usableChips(state));
+  const selectedCount = chosen.length;
+  const mustCount = chosen.filter((level) => level === "must").length;
 
   const goToRounds = () => update({ step: "rounds" });
 
@@ -59,39 +60,37 @@ export function Preferences() {
 
   return (
     <div>
-      <ScreenTitle mood="happy" subtitle="אפשר לבחור כל מה שחשוב.">מה חשוב לכם בשם?</ScreenTitle>
+      <ScreenTitle mood="happy" subtitle="לחיצה אחת: רצוי. שנייה: חובה. שלישית: מבטלת.">מה חשוב לכם בשם?</ScreenTitle>
 
-      <div className="flex flex-wrap gap-2">
-        {chips.map((chip) => {
-          const level = state.chips[chip.id];
-          return (
-            <Toggle key={chip.id} selected={!!level} onClick={() => toggle(chip.id)}>
-              {level && <span aria-hidden>✓ </span>}
-              {chip.label}
-              {level === "must" && !chip.filter && <span className="ms-1 rounded-full bg-white/25 px-2 text-xs">חובה</span>}
-            </Toggle>
-          );
-        })}
+      <div aria-hidden className="-mt-3 mb-4 flex items-center gap-2 text-xs text-ink-soft">
+        <span className="rounded-full border-2 border-line bg-white px-2.5 py-1 text-ink">לא חשוב</span>
+        <span>←</span>
+        <span className={`rounded-full border-2 px-2.5 py-1 font-medium ${LEVEL_STYLES.want}`}>✓ רצוי</span>
+        <span>←</span>
+        <span className={`rounded-full border-2 px-2.5 py-1 font-medium ${LEVEL_STYLES.must}`}>
+          <LockIcon /> חובה
+        </span>
       </div>
 
-      {selected.length > 0 && (
-        <section className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-line" aria-labelledby="must-title">
-          <h2 id="must-title" className="font-medium">
-            כמה זה חשוב?
-          </h2>
-          <p className="mt-1 text-sm text-ink-soft">רצוי: שמות כאלה יקבלו עדיפות. חובה: שם שלא עומד בזה לא יוצע בכלל.</p>
-          <ul className="mt-3 divide-y divide-line">
-            {selected.map((chip) => {
-              const level = state.chips[chip.id] ?? "want";
-              return (
-                <li key={chip.id} className="flex min-h-12 items-center justify-between gap-3 py-1">
-                  <span className="text-sm">{chip.label}</span>
-                  <LevelPicker label={chip.label} level={level} onChange={(next) => setLevel(chip.id, next)} />
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+      <div role="group" aria-label="מה חשוב לכם" className="flex flex-wrap gap-2">
+        {CHIPS.map((chip) => (
+          <ChipButton
+            key={chip.id}
+            chip={chip.id === "dueDateLink" && state.dueDerived ? { ...chip, label: dueChipLabel(state.dueDerived) } : chip}
+            level={state.chips[chip.id]}
+            hint={missingData(chip, state)}
+            onClick={() => cycle(chip.id)}
+          />
+        ))}
+      </div>
+
+      <p className="mt-3 text-sm text-ink-soft" aria-live="polite">
+        {selectedCount === 0 ? "לא נבחר כלום עדיין" : `נבחרו ${selectedCount}, מתוכם ${mustCount} חובה`}
+      </p>
+      {mustCount >= MANY_MUSTS && (
+        <p className="mt-2 rounded-xl bg-[#fdeceb] px-3 py-2 text-sm text-rose-deep">
+          {mustCount} דרישות חובה עלולות לצמצם מאוד את ההצעות. אפשר להפוך חלק ל„רצוי”.
+        </p>
       )}
 
       <div className="mt-8">
@@ -120,5 +119,58 @@ export function Preferences() {
         {busy ? "אנחנו על זה..." : "המשך"}
       </Button>
     </div>
+  );
+}
+
+const LEVEL_STYLES: Record<ChipLevel | "off", string> = {
+  off: "border-line bg-white text-ink hover:border-lavender-dark/50",
+  want: "border-lavender-dark bg-lavender-soft text-lavender-dark",
+  must: "border-lavender-dark bg-lavender-dark text-white",
+};
+
+const LEVEL_NAMES: Record<ChipLevel | "off", string> = { off: "לא נבחר", want: "רצוי", must: "חובה" };
+
+function LockIcon() {
+  return (
+    <svg aria-hidden width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-[-1px]">
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
+  );
+}
+
+/**
+ * One chip per criterion; each tap moves it to the next level. Every level's text is laid in the same
+ * grid cell and only the current one shows, so the chip keeps its size and the row never reflows.
+ */
+function ChipButton({ chip, level, hint, onClick }: { chip: ChipDefinition; level: ChipLevel | undefined; hint: string | null; onClick: () => void }) {
+  const state = hint ? "off" : (level ?? "off");
+  const variants: { key: ChipLevel | "off"; content: ReactNode }[] = [
+    { key: "off", content: chip.label },
+    ...(chip.filter ? [] : [{ key: "want" as const, content: <>✓ {chip.label}</> }]),
+    { key: "must", content: <><LockIcon /> {chip.label} · חובה</> },
+  ];
+  return (
+    <button
+      type="button"
+      disabled={!!hint}
+      aria-label={hint ? `${chip.label}: ${hint}` : `${chip.label}: ${LEVEL_NAMES[state]}`}
+      onClick={onClick}
+      className={`min-h-11 rounded-full border-2 px-4 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${LEVEL_STYLES[state]}`}
+    >
+      {hint ? (
+        <>
+          {chip.label} <span className="text-xs font-normal">· {hint}</span>
+        </>
+      ) : (
+        <span className="grid">
+          {variants.map((v) => (
+            <span key={v.key} aria-hidden className={`col-start-1 row-start-1 ${v.key === "off" ? "" : "font-medium"} ${v.key === state ? "" : "invisible"}`}>
+              {v.content}
+            </span>
+          ))}
+        </span>
+      )}
+    </button>
   );
 }

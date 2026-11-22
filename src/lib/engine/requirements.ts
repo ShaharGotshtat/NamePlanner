@@ -1,13 +1,17 @@
 import type { ChipId, ChipLevel, ExplanationLine, Fit, NameEntry, RoundRequest, TextRequirement } from "@/lib/types";
 import { featuresOf, findByName, nameSex, wasInTop } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
+import { dueChipLabel, dueHeadline, linkCodes, linkLabel, type LinkCode } from "@/lib/links";
 import { chipLabel, isFilterChip } from "./chips";
 import { closest, profileOf, profileOfText, type NameProfile } from "./similarity";
 
 export interface MatchContext {
   siblings: NameProfile[];
   surname: string;
-  dueLinks: string[];
+  /** Codes of what the due date is linked to, and the chip's label naming them. */
+  dueLinks: LinkCode[];
+  dueLabel: string | null;
+  dueHeadline: string | null;
 }
 
 /** Siblings found in the name list are compared on everything we know about them, including style. */
@@ -20,7 +24,9 @@ export function matchContext(req: Pick<RoundRequest, "family" | "surname" | "due
   return {
     siblings: req.family.filter((f) => f.relation === "sibling").map((f) => profileOfName(f.name)),
     surname: normalizeHebrew(req.surname),
-    dueLinks: due ? [due.hebrewMonth, due.holiday, due.zodiac, due.season].filter((v): v is string => !!v) : [],
+    dueLinks: due ? linkCodes(due.links ?? [due.hebrewMonth, due.holiday, due.zodiac, due.season]) : [],
+    dueLabel: due ? dueChipLabel(due) : null,
+    dueHeadline: due ? dueHeadline(due) : null,
   };
 }
 
@@ -43,6 +49,37 @@ function surnameClashes(entry: NameEntry, surname: string): string[] {
   return clashes;
 }
 
+/** Met when the name is linked to something around the due date; partly when it is linked only to other dates. */
+export function dueDateFit(entry: NameEntry, ctx: MatchContext): Check | null {
+  if (!ctx.dueLinks.length) return null;
+  const own = linkCodes(entry.tags.links);
+  const hit = own.find((code) => ctx.dueLinks.includes(code));
+  if (hit) return { fit: "met", detail: `קשור ל${linkLabel(hit)}` };
+  if (own.length) return { fit: "partly", detail: `${own.map(linkLabel).join(", ")}, לא ${ctx.dueHeadline}` };
+  return { fit: "not_met", detail: "אין לו קשר לתאריך הלידה" };
+}
+
+/** Below this many names linked to the due date, the parent is told the pool is small. */
+export const FEW_DUE_NAMES = 15;
+
+/** Says plainly when few names in the pool meet the due date wish, for example "יש לנו רק 8 שמות שקשורים לפסח". */
+export function dueDateNotice(names: NameEntry[], req: Pick<RoundRequest, "babySex" | "chips" | "dueDerived">): string | null {
+  const due = req.dueDerived;
+  if (!req.chips.dueDateLink || !due) return null;
+  // Counts only what the message names (the holiday or month, and the season), among names for this baby's sex.
+  const named = linkCodes([due.holiday ?? due.hebrewMonth, due.season]);
+  const otherSex = req.babySex === "girl" ? "boy" : req.babySex === "boy" ? "girl" : null;
+  const count = names.filter((n) => nameSex(n) !== otherSex && linkCodes(n.tags.links).some((c) => named.includes(c))).length;
+  if (count >= FEW_DUE_NAMES) return null;
+  const to = `ל${dueHeadline(due)} או ל${due.season}`;
+  if (count === 0) return `אין לנו עדיין שמות שקשורים ${to}.`;
+  if (count === 1) return `יש לנו רק שם אחד שקשור ${to}.`;
+  return `יש לנו רק ${count} שמות שקשורים ${to}.`;
+}
+
+/** Chips where a partial fit earns nothing: a name linked to another holiday does not answer the wish. */
+const NO_PARTIAL_CREDIT: ChipId[] = ["dueDateLink"];
+
 /** Returns null when the parent gave no data to check the chip against. */
 function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | null {
   switch (id) {
@@ -60,11 +97,8 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
     }
     case "grandparentFriendly":
       return fit(entry.tags.style !== "modern", "שם מוכר שעובר בין הדורות", "שם מודרני יחסית");
-    case "dueDateLink": {
-      const link = entry.tags.links.find((l) => ctx.dueLinks.includes(l));
-      if (!ctx.dueLinks.length) return null;
-      return fit(!!link, `קשור ל${link}`, "אין לו קשר לתאריך הלידה");
-    }
+    case "dueDateLink":
+      return dueDateFit(entry, ctx);
     case "fitsSiblings": {
       const match = closest(profileOf(entry), ctx.siblings);
       if (!match) return null;
@@ -208,12 +242,13 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
       mustsMet &&= check.fit === "met";
       continue;
     }
-    const label = level === "must" ? `${chipLabel(id)} (חובה)` : chipLabel(id);
+    const name = id === "dueDateLink" && ctx.dueLabel ? ctx.dueLabel : chipLabel(id);
+    const label = level === "must" ? `${name} (חובה)` : name;
     lines.push({ requirement: label, ...check });
     if (level === "must") mustsMet &&= check.fit === "met";
     else {
       wantsTotal++;
-      if (check.fit !== "not_met") wantsMet++;
+      if (check.fit === "met" || (check.fit === "partly" && !NO_PARTIAL_CREDIT.includes(id))) wantsMet++;
     }
   }
 

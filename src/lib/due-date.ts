@@ -1,3 +1,4 @@
+import { linkCodes } from "./links";
 import type { DueDerived } from "./types";
 
 const HEBREW_MONTHS: Record<string, string> = {
@@ -52,6 +53,8 @@ const ZODIAC: [month: number, day: number, sign: string][] = [
 const SEASONS = ["חורף", "חורף", "אביב", "אביב", "אביב", "קיץ", "קיץ", "קיץ", "סתיו", "סתיו", "סתיו", "חורף"];
 
 const HOLIDAY_WINDOW_DAYS = 7;
+/** Due dates move, so a name linked to anything within two weeks of the date counts. */
+const LINK_WINDOW_DAYS = 14;
 const DAY_MS = 86_400_000;
 
 const hebrewParts = new Intl.DateTimeFormat("en-u-ca-hebrew", { day: "numeric", month: "long", timeZone: "UTC" });
@@ -82,14 +85,25 @@ function zodiacSign(month: number, day: number): string {
   return (started.at(-1) ?? ZODIAC.at(-1)!)[2];
 }
 
+/** The holidays and Hebrew months of every day in the window around the date. */
+function linksAround(date: Date): string[] {
+  const values: string[] = [];
+  for (let offset = -LINK_WINDOW_DAYS; offset <= LINK_WINDOW_DAYS; offset++) {
+    const day = new Date(date.getTime() + offset * DAY_MS);
+    values.push(HEBREW_MONTHS[hebrewDate(day).month], holidayOn(day) ?? "");
+  }
+  return values;
+}
+
 /** Runs on the device: the date stays there, only these values are sent to the server. */
 export function deriveFromDueDate(isoDate: string): DueDerived {
   const date = new Date(`${isoDate}T12:00:00Z`);
   const month = date.getUTCMonth() + 1;
-  return {
+  const derived = {
     hebrewMonth: HEBREW_MONTHS[hebrewDate(date).month],
     holiday: nearestHoliday(date),
     zodiac: zodiacSign(month, date.getUTCDate()),
     season: SEASONS[month - 1],
   };
+  return { ...derived, links: linkCodes([...linksAround(date), derived.zodiac, derived.season]) };
 }
