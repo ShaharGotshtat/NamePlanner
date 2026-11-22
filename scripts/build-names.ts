@@ -7,6 +7,8 @@ import type { MeaningCategory, NameEntry, Origin, Style, YearStat } from "../src
 const MIN_BABIES = 50;
 const FROM_YEAR = 2000;
 const NOT_RANKED = 9999;
+/** Single words CBS lists that are really half of a double name (בת שבע, היא-לי, שר שלום). */
+const FRAGMENTS = new Set(["בת", "שבע", "היא", "שר"]);
 
 const CATEGORIES: Record<string, MeaningCategory> = {
   טבע: "nature",
@@ -63,10 +65,23 @@ function links(value: string): string[] {
   return [...new Set(cleaned.filter((l) => LINKS.has(l)))];
 }
 
+// Hand-written content: meaning, niqqud, tags and so on, one row per name.
+const [header, ...rows] = readFileSync("data/name-content.tsv", "utf8").trim().split("\n");
+const columns = header.split("\t");
+const content = new Map(
+  rows.map((row) => {
+    const cells = row.split("\t");
+    return [cells[0], Object.fromEntries(columns.map((c, i) => [c, cells[i] ?? ""]))];
+  }),
+);
+
 // CBS counts: year,sex,name,n for the Jewish sector, from the babynamesIL package.
 const counts = new Map<string, Map<number, { F: number; M: number }>>();
 for (const line of readFileSync("data/cbs/babynamesIL-jewish.csv", "utf8").trim().split("\n").slice(1)) {
-  const [year, sex, name, n] = line.split(",");
+  const [year, sex, spelling, n] = line.split(",");
+  if (FRAGMENTS.has(spelling)) continue;
+  // Another spelling of the same name (לטם for לוטם) counts toward that name and gets no card of its own.
+  const name = content.get(spelling)?.reading_of || spelling;
   const byYear = counts.get(name) ?? new Map();
   const cell = byYear.get(Number(year)) ?? { F: 0, M: 0 };
   cell[sex as "F" | "M"] += Number(n);
@@ -103,16 +118,6 @@ const chosen = [...counts]
   .filter((c) => c.girls + c.boys >= MIN_BABIES)
   .sort((a, b) => b.girls + b.boys - (a.girls + a.boys) || a.name.localeCompare(b.name, "he"));
 
-// Hand-written content: meaning, niqqud, tags and so on, one row per name.
-const [header, ...rows] = readFileSync("data/name-content.tsv", "utf8").trim().split("\n");
-const columns = header.split("\t");
-const content = new Map(
-  rows.map((row) => {
-    const cells = row.split("\t");
-    return [cells[0], Object.fromEntries(columns.map((c, i) => [c, cells[i] ?? ""]))];
-  }),
-);
-
 const missing = chosen.filter((c) => !content.has(c.name)).map((c) => c.name);
 if (missing.length) throw new Error(`No content for ${missing.length} names: ${missing.join(", ")}`);
 
@@ -122,6 +127,22 @@ const chosenNames = new Set(chosen.map((c) => c.name));
 const unknownStyled = [...styles.keys()].filter((name) => !chosenNames.has(name));
 // A spelling merged into another name keeps its old row until someone removes it: harmless, so only warn.
 if (unknownStyled.length) console.warn(`Style scores for names that are not in the list (ignored): ${unknownStyled.join(", ")}`);
+
+// Variants go both ways, and a merged spelling becomes a variant of the name it is read as.
+const spellingsOf = new Map<string, string[]>();
+const link = (from: string, to: string) => {
+  if (from === to) return;
+  const known = spellingsOf.get(from) ?? [];
+  if (!known.includes(to)) spellingsOf.set(from, [...known, to]);
+};
+for (const [spelling, c] of content) {
+  if (c.reading_of) {
+    if (!content.has(c.reading_of)) throw new Error(`${spelling}: reading_of ${c.reading_of} has no row`);
+    link(c.reading_of, spelling);
+  } else if (chosenNames.has(spelling)) {
+    for (const v of list(c.variants)) if (chosenNames.has(v)) link(v, spelling);
+  }
+}
 
 const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const c = content.get(name)!;
@@ -135,7 +156,7 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   }
   const unknownTags = list(c.tags).filter((t) => !CATEGORIES[t]);
   if (unknownTags.length) throw new Error(`${name}: unknown tags ${unknownTags.join(", ")}`);
-  const variants = list(c.variants);
+  const variants = [...new Set([...list(c.variants), ...(spellingsOf.get(name) ?? [])])];
   return {
     id: i + 1,
     nameHe: name,
