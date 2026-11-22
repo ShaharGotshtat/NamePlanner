@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CHIPS, isFilterChip } from "@/lib/engine/chips";
 import { errorIdOf, withErrorId } from "@/lib/client/api";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
-import { useApp } from "@/lib/client/state";
+import { useApp, type AppState } from "@/lib/client/state";
 import type { ChipId, ChipLevel } from "@/lib/types";
 import { LevelPicker } from "../LevelPicker";
 import { TagInput } from "../TagInput";
@@ -30,15 +30,26 @@ export function Preferences() {
 
   const goToRounds = () => update({ step: "rounds" });
 
+  /** An open round without votes was picked for the old input, so it is dropped and a fresh one is fetched. */
+  const dropUnvotedRound = (s: AppState) => {
+    const last = s.rounds.at(-1);
+    const unvoted = last && last.pass === s.pass && !last.completed && !last.suggestions.some((x) => s.ratings[x.name.id]?.verdict);
+    return unvoted ? { rounds: s.rounds.slice(0, -1) } : {};
+  };
+
+  /**
+   * One tap goes straight to the suggestions. How the free text was understood shows as a short line
+   * on the first round, not as a confirmation step here. Only a problem with the text stops here.
+   */
   const proceed = async () => {
     if (!pending) return goToRounds();
     setBusy(true);
     setMessage(null);
     try {
       const result = await runCheck(state);
-      update(result.patch);
       setMessage(result.message);
-      if (result.ok && !result.patch.profile?.summary && !result.message) goToRounds();
+      const go = result.ok && !result.message;
+      update((s) => ({ ...result.patch, ...(go ? { ...dropUnvotedRound(s), step: "rounds" as const } : {}) }));
     } catch (error) {
       setMessage(withErrorId("משהו השתבש. אפשר לנסות שוב.", errorIdOf(error)));
     } finally {
@@ -103,13 +114,10 @@ export function Preferences() {
         </label>
       )}
 
-      {!pending && state.profile?.summary && (
-        <p className="mt-4 rounded-2xl bg-lavender-soft p-3 text-sm">{state.profile.summary} לא מדויק? אפשר לנסות שוב.</p>
-      )}
       {message && <p className="mt-4 rounded-2xl bg-white p-3 text-sm ring-1 ring-line">{message}</p>}
 
       <Button className="mt-8 w-full" onClick={proceed} disabled={busy}>
-        {busy ? "אנחנו על זה..." : pending ? "המשך" : "נראה טוב, להצעות"}
+        {busy ? "אנחנו על זה..." : "המשך"}
       </Button>
     </div>
   );

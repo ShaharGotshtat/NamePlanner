@@ -248,6 +248,9 @@ export function Rounds() {
         )}
       </div>
       <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
+      {roundNumber === 1 && state.profile?.summary && (
+        <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{state.profile.summary}</p>
+      )}
 
       <div className="mb-3 flex items-center justify-center gap-2" aria-label={`שם ${index + 1} מתוך ${total}`}>
         {round.suggestions.map((s, i) => (
