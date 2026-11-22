@@ -1,5 +1,5 @@
-import { isFilterChip, type ChipDefinition } from "@/lib/engine/chips";
-import type { ChipId, ChipLevel } from "@/lib/types";
+import { CHIPS, isFilterChip, type ChipDefinition } from "@/lib/engine/chips";
+import type { ChipId, ChipLevel, ChipSelection } from "@/lib/types";
 import type { AppState } from "./state";
 
 /** At this many musts the parent is warned that few names may be left. */
@@ -25,3 +25,10 @@ export function missingData(chip: ChipDefinition, s: AppState): string | null {
       return null;
   }
 }
+
+/** The chosen chips whose data is there. A chip picked before its data was removed shows as off and is not sent. */
+export const usableChips = (s: AppState): ChipSelection =>
+  Object.fromEntries(Object.entries(s.chips).filter(([id]) => {
+    const chip = CHIPS.find((c) => c.id === id);
+    return chip && !missingData(chip, s);
+  }));

@@ -12,6 +12,7 @@ import type {
   Suggestion,
 } from "@/lib/types";
 import { forgetAnalytics, newRun } from "./analytics";
+import { usableChips } from "./chip-levels";
 import { CHIP_IDS } from "@/lib/engine/chips";
 import { clearJourney, describeChange, track } from "./journey";
 
@@ -216,7 +217,7 @@ export function roundRequest(s: AppState): RoundRequest {
     dueDerived: s.dueDerived,
     surname: s.surname,
     family: s.family,
-    chips: s.chips,
+    chips: usableChips(s),
     profile: s.profile,
     namesWeLike: s.namesWeLike,
     declined: declinedNames(s),

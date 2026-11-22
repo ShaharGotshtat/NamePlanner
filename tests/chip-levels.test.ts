@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { missingData, nextLevel } from "@/lib/client/chip-levels";
+import { missingData, nextLevel, usableChips } from "@/lib/client/chip-levels";
 import { initialState } from "@/lib/client/state";
 import { CHIPS } from "@/lib/engine/chips";
 
@@ -30,5 +30,12 @@ describe("missingData", () => {
     const s = { ...initialState, surname: "כהן", family: [{ name: "יואב", relation: "sibling" as const }] };
     expect(missingData(chip("fitsSiblings"), s)).toBeNull();
     expect(missingData(chip("flowsWithSurname"), s)).toBeNull();
+  });
+});
+
+describe("usableChips", () => {
+  it("leaves out a chip whose data was removed after it was picked", () => {
+    const s = { ...initialState, chips: { dueDateLink: "must" as const, clearMeaning: "want" as const } };
+    expect(usableChips(s)).toEqual({ clearMeaning: "want" });
   });
 });

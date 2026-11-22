@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { CHIPS, type ChipDefinition } from "@/lib/engine/chips";
 import { errorIdOf, withErrorId } from "@/lib/client/api";
-import { MANY_MUSTS, missingData, nextLevel } from "@/lib/client/chip-levels";
+import { MANY_MUSTS, missingData, nextLevel, usableChips } from "@/lib/client/chip-levels";
 import { dueChipLabel } from "@/lib/links";
 import { needsCheck, runCheck } from "@/lib/client/preferences";
 import { useApp, type AppState } from "@/lib/client/state";
@@ -25,8 +25,9 @@ export function Preferences() {
       return { chips: next ? { ...rest, [id]: next } : rest };
     });
 
-  const selectedCount = CHIPS.filter((c) => state.chips[c.id]).length;
-  const mustCount = CHIPS.filter((c) => state.chips[c.id] === "must").length;
+  const chosen = Object.values(usableChips(state));
+  const selectedCount = chosen.length;
+  const mustCount = chosen.filter((level) => level === "must").length;
 
   const goToRounds = () => update({ step: "rounds" });
 

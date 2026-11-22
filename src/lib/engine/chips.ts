@@ -3,7 +3,6 @@ import type { ChipId } from "@/lib/types";
 export interface ChipDefinition {
   id: ChipId;
   label: string;
-  needsDueDate?: boolean;
   /** An opt-out: always a hard rule, so it has no Want/Must level and adds no line to the card. */
   filter?: boolean;
 }
@@ -16,7 +15,7 @@ export const CHIPS: ChipDefinition[] = [
   { id: "fitsSiblings", label: "מתאים לשמות האחים והאחיות" },
   { id: "flowsWithSurname", label: "זורם עם שם המשפחה" },
   { id: "grandparentFriendly", label: "יתקבל יפה אצל סבא וסבתא" },
-  { id: "dueDateLink", label: "קשור לחג, לעונה או למזל", needsDueDate: true },
+  { id: "dueDateLink", label: "קשור לחג, לעונה או למזל" },
   { id: "noUnisex", label: "ללא שמות יוניסקס", filter: true },
 ];
 

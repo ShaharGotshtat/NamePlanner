@@ -167,6 +167,15 @@ export function shortReason(text: string): string {
   return (lastSpace > 0 ? cut.slice(0, lastSpace) : clean.slice(0, REASON_MAX)).replace(/[,;:–-]$/, "").trim();
 }
 
+/** The fallback for "our pick", which has room for the meaning too. */
+export function longReason(c: Candidate): string {
+  const meaning = `משמעות: ${c.entry.meaningHe}.`;
+  if (c.likedMatch) return `בסגנון של ${c.likedMatch} שאהבתם. ${meaning}`;
+  const { wantsMet, wantsTotal } = c.evaluation;
+  if (wantsTotal) return `עונה על ${wantsMet} מתוך ${wantsTotal} מההעדפות. ${meaning}`;
+  return meaning;
+}
+
 export function standardReason(c: Candidate): string {
   if (c.likedMatch) return shortReason(`בסגנון של ${c.likedMatch} שאהבתם`);
   const { wantsMet, wantsTotal } = c.evaluation;

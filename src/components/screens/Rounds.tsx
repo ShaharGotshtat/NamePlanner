@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { errorIdOf, fetchRound, withErrorId } from "@/lib/client/api";
 import { Prefetch } from "@/lib/client/prefetch";
 import { inputKey, runCheck } from "@/lib/client/preferences";
-import { roundRequest, useApp, type AppState } from "@/lib/client/state";
+import { roundRequest, unseenNames, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
 import { Mascot, ThinkingMascot, type MascotMood } from "../Mascot";
@@ -240,7 +240,7 @@ export function Rounds() {
     });
   };
 
-  const unseenCount = round.suggestions.filter((x, i) => (!opened || i > index) && !state.ratings[x.name.id]?.verdict).length;
+  const unseenCount = unseenNames(state)?.names.length ?? 0;
   const toSummary = () => (unseenCount ? setFinishCheck(true) : update({ step: "summary" }));
 
   return (

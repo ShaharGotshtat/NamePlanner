@@ -63,12 +63,15 @@ export function dueDateFit(entry: NameEntry, ctx: MatchContext): Check | null {
 export const FEW_DUE_NAMES = 15;
 
 /** Says plainly when few names in the pool meet the due date wish, for example "יש לנו רק 8 שמות שקשורים לפסח". */
-export function dueDateNotice(names: NameEntry[], req: Pick<RoundRequest, "chips" | "family" | "surname" | "dueDerived">): string | null {
-  if (!req.chips.dueDateLink || !req.dueDerived) return null;
-  const ctx = matchContext(req);
-  const count = names.filter((n) => dueDateFit(n, ctx)?.fit === "met").length;
+export function dueDateNotice(names: NameEntry[], req: Pick<RoundRequest, "babySex" | "chips" | "dueDerived">): string | null {
+  const due = req.dueDerived;
+  if (!req.chips.dueDateLink || !due) return null;
+  // Counts only what the message names (the holiday or month, and the season), among names for this baby's sex.
+  const named = linkCodes([due.holiday ?? due.hebrewMonth, due.season]);
+  const otherSex = req.babySex === "girl" ? "boy" : req.babySex === "boy" ? "girl" : null;
+  const count = names.filter((n) => nameSex(n) !== otherSex && linkCodes(n.tags.links).some((c) => named.includes(c))).length;
   if (count >= FEW_DUE_NAMES) return null;
-  const to = `ל${dueHeadline(req.dueDerived)} או ל${req.dueDerived.season}`;
+  const to = `ל${dueHeadline(due)} או ל${due.season}`;
   if (count === 0) return `אין לנו עדיין שמות שקשורים ${to}.`;
   if (count === 1) return `יש לנו רק שם אחד שקשור ${to}.`;
   return `יש לנו רק ${count} שמות שקשורים ${to}.`;
