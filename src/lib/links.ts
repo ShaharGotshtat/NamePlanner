@@ -2,7 +2,7 @@ import type { DueDerived } from "./types";
 
 /**
  * Fixed codes for what a name can be linked to: holidays, Hebrew months, seasons and zodiac signs.
- * The name data still holds the Hebrew words; linkCode reads either form.
+ * The build writes these codes into names.json from the Hebrew in name-content.tsv; linkCode reads either form.
  */
 export const LINKS = {
   rosh_hashana: "ראש השנה",

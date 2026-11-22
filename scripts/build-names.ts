@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { readStyles } from "./styles";
+import { linkCode } from "../src/lib/links";
 import { averageBirthYear, eraOfYear } from "../src/lib/names/era";
 import type { MeaningCategory, NameEntry, Origin, Style, YearStat } from "../src/lib/types";
 
@@ -42,13 +43,6 @@ const ORIGINS: [string, Origin][] = [
 ];
 
 /** The values the due-date chip matches: months, holidays, zodiac signs and seasons. */
-const LINKS = new Set([
-  "תשרי", "חשוון", "כסלו", "טבת", "שבט", "אדר", "ניסן", "אייר", "סיוון", "תמוז", "אב", "אלול",
-  "ראש השנה", "יום כיפור", "סוכות", "חנוכה", "ט״ו בשבט", "פורים", "פסח", "ל״ג בעומר", "שבועות", "ט״ו באב",
-  "טלה", "שור", "תאומים", "סרטן", "אריה", "בתולה", "מאזניים", "עקרב", "קשת", "גדי", "דלי", "דגים",
-  "חורף", "אביב", "קיץ", "סתיו",
-]);
-
 const list = (value: string) => value.split(",").map((v) => v.trim()).filter(Boolean);
 
 function primaryOrigin(originHe: string): Origin {
@@ -60,9 +54,10 @@ function primaryOrigin(originHe: string): Origin {
   return "other";
 }
 
+/** Holidays, months, signs and seasons, stored as fixed codes (see src/lib/links.ts). Other notes are dropped. */
 function links(value: string): string[] {
   const cleaned = list(value).map((l) => l.replace(/\s*\(.*\)$/, "").replace(/^(מזל|חודש) /, "").replace(/^סיון$/, "סיוון"));
-  return [...new Set(cleaned.filter((l) => LINKS.has(l)))];
+  return [...new Set(cleaned.map(linkCode).filter((c) => c !== null))];
 }
 
 // Hand-written content: meaning, niqqud, tags and so on, one row per name.
