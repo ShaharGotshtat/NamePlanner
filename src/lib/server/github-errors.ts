@@ -45,6 +45,7 @@ function allowWrite(fingerprint: string, now = new Date()): boolean {
 export const resetErrorReportingForTests = () => {
   Object.assign(counts, { day: "", total: 0, perIssue: new Map() });
   issueNumbers.clear();
+  inFlight.clear();
 };
 
 const marker = (fingerprint: string) => `[fp:${createHash("sha256").update(fingerprint).digest("hex").slice(0, 10)}]`;
@@ -76,8 +77,24 @@ async function findOpenIssue(token: string, repo: string, tag: string): Promise<
   return found?.number ?? null;
 }
 
+/**
+ * The server and the browser report the same error at the same moment. Reports of one kind run one after
+ * another on an instance, so the second one finds the issue the first opened instead of opening another.
+ */
+const inFlight = new Map<string, Promise<void>>();
+
 /** Opens or comments on the issue for this kind of error. Never throws: a failed report is only logged. */
-export async function sendToGitHub({ fingerprint, title, comment }: Occurrence): Promise<void> {
+export function sendToGitHub(occurrence: Occurrence): Promise<void> {
+  const tag = marker(occurrence.fingerprint);
+  const run = (inFlight.get(tag) ?? Promise.resolve()).then(() => send(occurrence, tag));
+  inFlight.set(tag, run);
+  void run.finally(() => {
+    if (inFlight.get(tag) === run) inFlight.delete(tag);
+  });
+  return run;
+}
+
+async function send({ fingerprint, title, comment }: Occurrence, tag: string): Promise<void> {
   const settings = config();
   if (!settings) return;
   if (!allowWrite(fingerprint)) {
@@ -85,7 +102,6 @@ export async function sendToGitHub({ fingerprint, title, comment }: Occurrence):
     return;
   }
   const { token, repo } = settings;
-  const tag = marker(fingerprint);
   try {
     const existing = await findOpenIssue(token, repo, tag);
     if (existing) {
