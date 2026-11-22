@@ -40,7 +40,9 @@ Otherwise, turn each wish into requirements. Each requirement has:
 Themes always use meaningCategory, never origin. A wish for a biblical name, or to avoid one ("not biblical", "too biblical"), is meaningCategory biblical with kind want or avoid. A name whose word only appears in the Tanakh, such as a colour or a plant, is not biblical. A wish for a name that is a character trait or a feeling ("שם שהוא תכונה", "a name like Tom or Simcha") is meaningCategory trait.
   - style: traditional, classic, modern
   - length: short, long
-  - ending: Hebrew letters the name ends with, for example "אל"
+  - starting: Hebrew letters the name starts with, for example "נ" or "אל".
+  - ending: Hebrew letters the name ends with, for example "אל" or "ה".
+For starting and ending, put the letters themselves in values: no hyphen, no quotes, and no geresh used only to name a letter ("ב-נ׳" is "נ"). Keep a geresh only for a different sound, such as "ג׳" in ג׳וליה. Several letters the parent accepts go in one requirement as separate values: "starting only with נ or ס" is one want with values "נ" and "ס". "Not starting with א" is an avoid. These are strict filters: names that miss them are never shown.
   - popularity: common, rare, veryRare. Use it only when the parent asks how common the name should be. common: "a common name", "not too rare". rare: "not too common", "less common". veryRare: "very rare", "special", "unusual", "one nobody else has".
 Skip wishes that do not map to any facet, and mention that in the summary.
 Notes about specific names (for example "too similar to my cousin Noa") tell you what the parent dislikes about a style: map them to an avoid requirement when you can.

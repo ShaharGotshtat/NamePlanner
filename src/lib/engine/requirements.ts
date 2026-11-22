@@ -112,9 +112,34 @@ export function normalizeThemeRequirement<T extends Omit<TextRequirement, "id">>
   return { ...req, facet: "meaningCategory", values: ["biblical"] };
 }
 
+/** Letter wishes (starts with, ends with) are explicit, so they filter like a Must instead of adding to the score. */
+export const isLetterFacet = (facet: TextRequirement["facet"]) => facet === "starting" || facet === "ending";
+
+const GERESH = /['׳`’]/g;
+/** Letters that change sound with a geresh (ג׳ in ג׳וליה). After any other letter a geresh only names the letter (נ׳). */
+const GERESH_LETTERS = "גזצת";
+
+/**
+ * A letter value as the parser or a parent may write it ("נ׳", "ב-ס", "ן", "ג'") becomes plain
+ * Hebrew letters with final forms folded, and a geresh kept only where it changes the sound.
+ */
+export function normalizeLetters(value: string): string {
+  const text = normalizeHebrew(value).replace(GERESH, "׳").replace(/[^א-ת׳]/g, "");
+  return text
+    .replace(/(.)׳/g, (match, letter: string) => (GERESH_LETTERS.includes(letter) ? match : letter))
+    .replace(/^׳+/, "")
+    .slice(0, 4);
+}
+
+const nameLetters = (nameHe: string) => normalizeHebrew(nameHe).replace(GERESH, "׳").replace(/[^א-ת׳]/g, "");
+
+/** "ג" matches גל but not ג׳וליה: a letter with a geresh is a different sound. */
+function startsWithLetters(name: string, value: string): boolean {
+  return name.startsWith(value) && (value.endsWith("׳") || name[value.length] !== "׳");
+}
+
 function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
   const features = featuresOf(entry);
-  const name = normalizeHebrew(entry.nameHe);
   switch (req.facet) {
     case "meaningCategory":
       return entry.tags.meaningCategories.some((c) => req.values.includes(c));
@@ -126,8 +151,20 @@ function matchesFacet(req: TextRequirement, entry: NameEntry): boolean {
       return req.values.some((v) =>
         v === "short" ? features.syllables <= 2 && features.letters <= 3 : features.syllables >= 3 || features.letters >= 5,
       );
-    case "ending":
-      return req.values.some((v) => name.endsWith(normalizeHebrew(v)));
+    case "starting": {
+      const letters = nameLetters(entry.nameHe);
+      return req.values.some((v) => {
+        const value = normalizeLetters(v);
+        return !!value && startsWithLetters(letters, value);
+      });
+    }
+    case "ending": {
+      const letters = nameLetters(entry.nameHe);
+      return req.values.some((v) => {
+        const value = normalizeLetters(v);
+        return !!value && letters.endsWith(value);
+      });
+    }
     case "popularity":
       return req.values.some((v) => matchesPopularity(v, entry));
   }
@@ -170,6 +207,12 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
 
   for (const text of req.profile?.requirements ?? []) {
     const check = checkText(text, entry);
+    if (isLetterFacet(text.facet)) {
+      // Too few names that match means a shorter round, never a name with other letters.
+      mustsMet &&= check.fit === "met";
+      lines.push({ requirement: text.label, ...check });
+      continue;
+    }
     lines.push({ requirement: text.label, ...check });
     wantsTotal++;
     if (check.fit === "met") wantsMet++;

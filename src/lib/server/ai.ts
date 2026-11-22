@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
 import { chipLabel } from "@/lib/engine/chips";
-import { normalizeThemeRequirement } from "@/lib/engine/requirements";
+import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
 import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
@@ -13,6 +13,7 @@ const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null>
   origin: ORIGINS,
   style: STYLES,
   length: LENGTHS,
+  starting: null,
   ending: null,
   popularity: POPULARITY,
 };
@@ -65,8 +66,10 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
     .map(normalizeThemeRequirement)
     .map((r, i) => {
       const allowed = ALLOWED_VALUES[r.facet];
-      const values = r.values.filter((v) => !allowed || allowed.includes(v)).slice(0, 12);
-      return { ...r, id: `text-${i}`, label: asOutput(r.label, 120), values: values.map((v) => asData(v, 20)) };
+      const kept = isLetterFacet(r.facet)
+        ? [...new Set(r.values.map(normalizeLetters).filter(Boolean))]
+        : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
+      return { ...r, id: `text-${i}`, label: asOutput(r.label, 120), values: kept.slice(0, 12) };
     })
     .filter((r) => r.values.length > 0)
     .slice(0, 20);
