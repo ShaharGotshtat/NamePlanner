@@ -153,12 +153,34 @@ export function pickDiverse(candidates: Candidate[], babySex: RoundRequest["baby
 /** What the No votes so far have in common, for the model prompt. */
 export const noPatternsFor = (names: NameEntry[], req: RoundRequest) => signalsFor(names, req).noPatterns;
 
-export function standardReason(c: Candidate): string {
+/** The reason shows as one line under the name, so it is kept short. */
+export const REASON_MAX = 40;
+
+/** Fits a reason to one line: its first clause if that is short enough, otherwise whole words up to the limit. */
+export function shortReason(text: string): string {
+  const clean = text.trim().replace(/[.。]+$/, "");
+  if (clean.length <= REASON_MAX) return clean;
+  const clause = clean.split(/[.;:,–-]\s/)[0].trim();
+  if (clause.length <= REASON_MAX) return clause;
+  const cut = clean.slice(0, REASON_MAX + 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : clean.slice(0, REASON_MAX)).replace(/[,;:–-]$/, "").trim();
+}
+
+/** The fallback for "our pick", which has room for the meaning too. */
+export function longReason(c: Candidate): string {
   const meaning = `משמעות: ${c.entry.meaningHe}.`;
   if (c.likedMatch) return `בסגנון של ${c.likedMatch} שאהבתם. ${meaning}`;
   const { wantsMet, wantsTotal } = c.evaluation;
   if (wantsTotal) return `עונה על ${wantsMet} מתוך ${wantsTotal} מההעדפות. ${meaning}`;
   return meaning;
+}
+
+export function standardReason(c: Candidate): string {
+  if (c.likedMatch) return shortReason(`בסגנון של ${c.likedMatch} שאהבתם`);
+  const { wantsMet, wantsTotal } = c.evaluation;
+  if (wantsTotal) return `עונה על ${wantsMet} מתוך ${wantsTotal} מההעדפות`;
+  return shortReason(c.entry.meaningHe);
 }
 
 export function toSuggestion(c: Candidate, reason: string): Suggestion {

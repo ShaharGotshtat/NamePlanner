@@ -66,7 +66,7 @@ ${RESPECT_RULES}
 Rules:
 - Choose only ids from the candidate list. Never invent a name.
 - Pick names that differ from each other in sound, length or meaning, so each pick tests a different direction.
-- The reason is one short Hebrew sentence, at most 20 words.
+- The reason is one short Hebrew line of at most 40 characters, shown under the name. For example: מארבעת המינים, קצר ונעים.
 - ${NEUTRAL_HEBREW_RULE}
 - Use only the facts given for each candidate (meaning, origin, themes, popularity, how it meets the requirements). Do not add facts.
 - ${THEME_RULE}`;

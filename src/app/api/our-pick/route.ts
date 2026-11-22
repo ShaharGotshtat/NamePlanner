@@ -1,4 +1,4 @@
-import { chooseOurPick, standardReason, toSuggestion } from "@/lib/engine/round";
+import { chooseOurPick, longReason, toSuggestion } from "@/lib/engine/round";
 import { ourPickReason } from "@/lib/server/ai";
 import { handler, readBody, readSession } from "@/lib/server/http";
 import { getNames } from "@/lib/server/names";
@@ -17,5 +17,5 @@ export const POST = handler(async (request) => {
     session.calls++;
     reason = await ourPickReason(pick);
   }
-  return { body: { suggestion: toSuggestion(pick, reason ?? standardReason(pick)) }, session };
+  return { body: { suggestion: toSuggestion(pick, reason ?? longReason(pick)) }, session };
 });
