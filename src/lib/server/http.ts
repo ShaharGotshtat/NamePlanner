@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
-import { sendInBackground, serverErrorOccurrence } from "./github-errors";
+import { rejectedRequestOccurrence, sendInBackground, serverErrorOccurrence } from "./github-errors";
 import { log, newRequestId, REQUEST_ID_HEADER, withRequestId } from "./request-id";
 import { decodeToken, encodeToken, type SessionClaims } from "./token";
 
@@ -48,6 +48,10 @@ export function handler(run: (request: Request) => Promise<{ body: object; sessi
         const path = new URL(request.url).pathname;
         if (error instanceof HttpError) {
           log.warn(`${path} ${error.status}: ${error.message}`);
+          // 401 is retried with a new session in the browser and never reaches the user.
+          if (error.status !== 401 && path !== ERRORS_PATH) {
+            sendInBackground(rejectedRequestOccurrence(path, error.status, requestId, error.message));
+          }
           return fail(error.status, error.message);
         }
         log.error(`${path} 500`, error);

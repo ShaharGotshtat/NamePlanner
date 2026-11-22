@@ -31,7 +31,8 @@ async function post<T>(path: string, body: unknown, token: string | null, signal
     const body = await response.json().catch(() => null);
     const errorId = body?.errorId ?? response.headers.get("x-request-id");
     track(`api ${path} ${response.status}${errorId ? ` (${errorId})` : ""}`);
-    if (response.status >= 500) {
+    // Every failure the user can see with its code goes to the issues repo. 401 is retried with a new session.
+    if (response.status !== 401) {
       reportError({ kind: "server", message: `${path} ${response.status}`, errorId, path, status: response.status });
     }
     throw new ApiError(response.status, errorId);

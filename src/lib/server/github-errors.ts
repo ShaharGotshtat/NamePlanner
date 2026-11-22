@@ -79,7 +79,11 @@ async function findOpenIssue(token: string, repo: string, tag: string): Promise<
 /** Opens or comments on the issue for this kind of error. Never throws: a failed report is only logged. */
 export async function sendToGitHub({ fingerprint, title, comment }: Occurrence): Promise<void> {
   const settings = config();
-  if (!settings || !allowWrite(fingerprint)) return;
+  if (!settings) return;
+  if (!allowWrite(fingerprint)) {
+    log.warn(`Error report skipped, daily limit reached: ${title}`);
+    return;
+  }
   const { token, repo } = settings;
   const tag = marker(fingerprint);
   try {
@@ -105,7 +109,10 @@ export async function sendToGitHub({ fingerprint, title, comment }: Occurrence):
 
 /** Runs after the response is sent when inside a request, so reporting never slows the user down. */
 export function sendInBackground(occurrence: Occurrence) {
-  if (!errorReportingEnabled()) return;
+  if (!errorReportingEnabled()) {
+    log.warn(`Error report skipped, GITHUB_NAME_PLANNER_ISSUES_TOKEN is not set: ${occurrence.title}`);
+    return;
+  }
   try {
     after(() => sendToGitHub(occurrence));
   } catch {
@@ -131,6 +138,49 @@ const clock = (iso: string) => {
 
 export const serverErrorFingerprint = (path: string, status: number) => `server ${path} ${status}`;
 
+/** A request the server turned down with a status the user sees as an error with its code. */
+export function rejectedRequestOccurrence(path: string, status: number, errorId: string, reason: string, now = new Date()): Occurrence {
+  return {
+    fingerprint: serverErrorFingerprint(path, status),
+    title: `Request rejected with ${status} in ${path}`,
+    comment: [`### Server log · error ID \`${errorId}\``, `${israelTime(now)} · \`${path}\` returned ${status}`, codeBlock(reason)].join("\n\n"),
+  };
+}
+
+/** A model call that gave no usable answer. The app falls back, but the user may see a notice with the error ID. */
+export function modelFailureOccurrence(model: string, kind: string, detail: string, errorId: string | undefined, now = new Date()): Occurrence {
+  return {
+    fingerprint: `model ${model} ${kind}`,
+    title: `Model call failed: ${model} ${kind}`,
+    comment: [
+      `### Model call${errorId ? ` · error ID \`${errorId}\`` : ""}`,
+      `${israelTime(now)} · \`${model}\` · ${kind}. The app fell back to the rules.`,
+      codeBlock(detail.slice(0, 6000)),
+    ].join("\n\n"),
+  };
+}
+
+/** Checks that the token can reach the issues repo, for the admin page. Never throws. */
+export async function errorReportingHealth(): Promise<{ ok: boolean; message: string }> {
+  const settings = config();
+  if (!settings) return { ok: false, message: "GITHUB_NAME_PLANNER_ISSUES_TOKEN לא מוגדר ב-Vercel, לכן לא נפתחים issues." };
+  try {
+    const response = await fetch(`${API}/repos/${settings.repo}`, {
+      headers: { Authorization: `Bearer ${settings.token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+      cache: "no-store",
+    });
+    if (response.status === 401) return { ok: false, message: `GitHub דחה את הטוקן (401): לא תקף או שפג תוקפו.` };
+    if (response.status === 403 || response.status === 404)
+      return { ok: false, message: `לטוקן אין גישה ל-${settings.repo} (${response.status}).` };
+    if (!response.ok) return { ok: false, message: `GitHub החזיר ${response.status}.` };
+    const repo = (await response.json()) as { has_issues?: boolean };
+    if (repo.has_issues === false) return { ok: false, message: `Issues כבויים ב-${settings.repo}.` };
+    return { ok: true, message: `מחובר ל-${settings.repo}.` };
+  } catch (error) {
+    return { ok: false, message: `אין חיבור ל-GitHub: ${error instanceof Error ? error.message : String(error)}` };
+  }
+}
+
 export function serverErrorOccurrence(path: string, errorId: string, error: unknown, now = new Date()): Occurrence {
   const details = error instanceof Error ? (error.stack ?? `${error.name}: ${error.message}`) : String(error);
   return {
@@ -147,11 +197,12 @@ export function serverErrorOccurrence(path: string, errorId: string, error: unkn
 
 export function clientReportOccurrence(report: ErrorReportRequest, now = new Date()): Occurrence {
   const isServer = report.kind === "server" && report.path && report.status;
+  const serverTitle = report.status && report.status < 500 ? `Request rejected with ${report.status} in ${report.path}` : `Server error in ${report.path}`;
   const firstLine = report.message.split("\n")[0].slice(0, 120);
   const journey = report.journey.map((step) => `${clock(step.at)}  ${step.what}`).join("\n") || "(empty)";
   return {
     fingerprint: isServer ? serverErrorFingerprint(report.path!, report.status!) : `client ${firstLine}`,
-    title: isServer ? `Server error in ${report.path}` : `Browser error: ${firstLine}`,
+    title: isServer ? serverTitle : `Browser error: ${firstLine}`,
     comment: [
       `### ${isServer ? "Browser journey" : "Browser error"}${report.errorId ? ` · error ID \`${report.errorId}\`` : ""}`,
       `${israelTime(now)} · screen \`${report.screen}\` · version ${report.appVersion}`,
