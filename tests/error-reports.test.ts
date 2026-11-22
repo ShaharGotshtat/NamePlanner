@@ -122,3 +122,21 @@ describe("codeBlock", () => {
     expect(codeBlock("a ```` b")).toBe("`````text\na ```` b\n`````");
   });
 });
+
+describe("simultaneous reports", () => {
+  beforeEach(() => {
+    resetErrorReportingForTests();
+    vi.stubEnv("GITHUB_NAME_PLANNER_ISSUES_TOKEN", "token");
+    vi.stubEnv("GITHUB_ISSUES_REPO", "team/errors");
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
+  });
+
+  it("open one issue when the server and the browser report the same error at once", async () => {
+    const fetchMock = mockGitHub();
+    await Promise.all([sendToGitHub(occurrence), sendToGitHub(occurrence)]);
+    expect(calls(fetchMock)).toEqual(["GET /issues?state=open&per_page=100", "POST /issues", "POST /issues/7/comments"]);
+  });
+});

@@ -5,6 +5,7 @@ import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/li
 import { popularity } from "@/lib/names/catalog";
 import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
+import { log } from "./request-id";
 import { asData, asOutput, looksLikeName, OUR_PICK_SYSTEM, PREFERENCES_SYSTEM, ROUND_SYSTEM } from "./prompts";
 import { FACETS, LENGTHS, MEANING_CATEGORIES, ORIGINS, POPULARITY, STYLES } from "./schemas";
 
@@ -18,16 +19,31 @@ const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null>
   popularity: POPULARITY,
 };
 
+const requirementOutput = z.object({
+  label: z.string(),
+  kind: z.enum(["want", "avoid"]),
+  facet: z.enum(FACETS),
+  values: z.array(z.string()),
+  level: z.enum(["must", "want"]),
+});
+
+/** The format the model is asked for. */
 const preferencesOutput = z.object({
   flagged: z.boolean(),
   summary: z.string(),
-  requirements: z.array(
-    z.object({
-      label: z.string(),
-      kind: z.enum(["want", "avoid"]),
-      facet: z.enum(FACETS),
-      values: z.array(z.string()),
-      level: z.enum(["must", "want"]),
+  requirements: z.array(requirementOutput),
+});
+
+/**
+ * How the answer is read: the model sometimes invents a facet outside the list (issue #2 in the issues repo).
+ * Such a requirement is dropped and the rest of the answer is kept, instead of failing the whole parse.
+ */
+export const preferencesAnswer = preferencesOutput.extend({
+  requirements: z.array(z.unknown()).transform((items) =>
+    items.flatMap((item) => {
+      const parsed = requirementOutput.safeParse(item);
+      if (!parsed.success) log.warn("Dropped a free-text requirement the model gave in an unknown shape", JSON.stringify(item).slice(0, 300));
+      return parsed.success ? [parsed.data] : [];
     }),
   ),
 });
@@ -57,7 +73,8 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
     model: MODELS.parse,
     system: PREFERENCES_SYSTEM,
     prompt,
-    schema: preferencesOutput,
+    schema: preferencesAnswer,
+    format: preferencesOutput,
     maxTokens: 2000,
   });
   if (!output) return null;

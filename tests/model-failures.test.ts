@@ -96,3 +96,17 @@ describe("rejected requests", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
+
+describe("free-text answers", () => {
+  it("drop a requirement with an unknown facet and keep the rest", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { preferencesAnswer } = await import("@/lib/server/ai");
+    const req = { label: "x", kind: "want", values: ["joy"], level: "want" };
+    const parsed = preferencesAnswer.parse({
+      flagged: false,
+      summary: "s",
+      requirements: [{ ...req, facet: "sentiment" }, { ...req, facet: "meaningCategory" }],
+    });
+    expect(parsed.requirements.map((r) => r.facet)).toEqual(["meaningCategory"]);
+  });
+});

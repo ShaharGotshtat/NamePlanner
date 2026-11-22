@@ -26,7 +26,10 @@ interface StructuredCall<T extends z.ZodType> {
   model: Model;
   system: string;
   prompt: string;
+  /** Validates the answer. */
   schema: T;
+  /** The JSON format the model is asked for, when it should be stricter than what is accepted. Defaults to schema. */
+  format?: z.ZodType;
   maxTokens: number;
 }
 
@@ -61,7 +64,7 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
         max_tokens: maxTokens,
         system: call.system,
         messages: [{ role: "user", content: call.prompt }],
-        output_config: { format: zodOutputFormat(call.schema), effort: "low" },
+        output_config: { format: zodOutputFormat(call.format ?? call.schema), effort: "low" },
       });
       const price = USD_PER_MTOK[call.model];
       await recordSpend((response.usage.input_tokens * price.input + response.usage.output_tokens * price.output) / 1e6);
