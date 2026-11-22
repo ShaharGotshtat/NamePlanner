@@ -4,6 +4,7 @@ import { connection } from "next/server";
 import type { ReactNode } from "react";
 import { dashboardStats, israelDay, type Spread } from "@/lib/analytics/stats";
 import { chipLabel } from "@/lib/engine/chips";
+import { errorReportingHealth } from "@/lib/server/github-errors";
 import { dailyBudget } from "@/lib/server/spend";
 import { getStore } from "@/lib/server/store";
 import type { ChipId } from "@/lib/types";
@@ -34,10 +35,11 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const since = range === "all" ? null : new Date(Date.now() - Number(range) * 24 * 60 * 60 * 1000);
 
   const store = getStore();
-  const [events, spend, budget] = await Promise.all([
+  const [events, spend, budget, reporting] = await Promise.all([
     store.listEvents(since),
     store.listSpend(since ? israelDay(since) : null),
     dailyBudget(),
+    errorReportingHealth(),
   ]);
   const s = dashboardStats(events, spend, budget);
 
@@ -60,6 +62,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         </nav>
       </header>
       <p className="mt-1 text-sm text-ink-soft">מתעדכן כל דקה. ימים לפי שעון ישראל.</p>
+      <p className={`mt-3 rounded-xl px-3 py-2 text-sm ring-1 ${reporting.ok ? "ring-line" : "bg-red-50 text-red-800 ring-red-200"}`} role="status">
+        דיווח תקלות ל-GitHub: {reporting.message}
+      </p>
 
       <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Tile label="כניסות" value={fmt(s.visits)} />

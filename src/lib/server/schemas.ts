@@ -87,7 +87,7 @@ export const errorReportRequestSchema = z.object({
   stack: z.string().max(4000).optional(),
   errorId: z.string().regex(/^[2-9A-Z]{8}$/).optional(),
   path: z.string().regex(/^\/api\/[a-z-/]{1,40}$/).optional(),
-  status: z.number().int().min(500).max(599).optional(),
+  status: z.number().int().min(400).max(599).optional(),
   screen: z.string().max(40),
   appVersion: z.string().max(20),
   device: z.string().max(200),
