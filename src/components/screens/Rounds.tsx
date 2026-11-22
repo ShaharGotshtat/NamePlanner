@@ -9,6 +9,7 @@ import { ROUNDS_PER_PASS } from "@/lib/constants";
 import type { Verdict } from "@/lib/types";
 import { Mascot, ThinkingMascot, type MascotMood } from "../Mascot";
 import { Button, inputClass } from "../ui";
+import { FinishCheck } from "./FinishCheck";
 import { NameCard } from "./NameCard";
 
 /** The header mascot mirrors the latest vote in this round. */
@@ -57,6 +58,7 @@ export function Rounds() {
     return !!r && r.suggestions.some((x) => state.ratings[x.name.id]?.verdict);
   });
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [finishCheck, setFinishCheck] = useState(false);
 
   const round = currentRound(state);
   const roundNumber = state.rounds.filter((r) => r.pass === state.pass).length;
@@ -107,6 +109,13 @@ export function Rounds() {
     const current = prefetch.current;
     return () => current.cancel();
   }, []);
+
+  // Counts the names the parent has seen, so the summary can list the rest of a round left early.
+  const seenNow = round && opened ? index + 1 : 0;
+  useEffect(() => {
+    if (!round || seenNow <= (round.seen ?? 0)) return;
+    update((s) => ({ rounds: s.rounds.map((r) => (r === round ? { ...r, seen: seenNow } : r)) }));
+  }, [round, seenNow, update]);
 
   const rate = (nameId: number, verdict: Verdict) => {
     setLastVerdict(verdict);
@@ -231,8 +240,18 @@ export function Rounds() {
     });
   };
 
+  const unseenCount = round.suggestions.filter((x, i) => (!opened || i > index) && !state.ratings[x.name.id]?.verdict).length;
+  const toSummary = () => (unseenCount ? setFinishCheck(true) : update({ step: "summary" }));
+
   return (
     <div>
+      {finishCheck && (
+        <FinishCheck
+          count={unseenCount}
+          onKeepGoing={() => setFinishCheck(false)}
+          onFinish={() => update({ step: "summary" })}
+        />
+      )}
       <div className="mb-4 flex min-h-11 items-center justify-between">
         <div className="flex items-center gap-2">
           <Mascot key={lastVerdict ?? "start"} mood={HEADER_MOOD[lastVerdict ?? "start"]} size={44} className="animate-mascot-pop" />
@@ -241,8 +260,8 @@ export function Rounds() {
           </h1>
         </div>
         {anyInteresting && (
-          <Button variant="secondary" className="animate-name-reveal text-sm" onClick={() => update({ step: "summary" })}>
-            מצאתי!
+          <Button variant="secondary" className="animate-name-reveal text-sm" onClick={toSummary}>
+            לסיכום
           </Button>
         )}
       </div>

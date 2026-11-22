@@ -21,6 +21,8 @@ export interface RoundState {
   pass: number;
   suggestions: Suggestion[];
   completed: boolean;
+  /** How many names of this round were shown, counted from the first. */
+  seen?: number;
 }
 
 /** Everything the parent enters. It lives only in this browser's local storage. */
@@ -177,6 +179,15 @@ export function useApp(): AppContextValue {
 export const shownIds = (s: AppState) => s.rounds.flatMap((r) => r.suggestions.map((x) => x.name.id));
 
 export const shownSuggestions = (s: AppState) => s.rounds.flatMap((r) => r.suggestions);
+
+/** The open round of this pass, if the parent left it before seeing every name. */
+export function unseenNames(s: AppState): { round: number; names: Suggestion[] } | null {
+  const rounds = s.rounds.filter((r) => r.pass === s.pass);
+  const open = rounds.at(-1);
+  if (!open || open.completed) return null;
+  const names = open.suggestions.slice(open.seen ?? 0).filter((x) => !s.ratings[x.name.id]?.verdict);
+  return names.length ? { round: rounds.length, names } : null;
+}
 
 /** Every name the parent turned down, in this search or an earlier one. */
 export function declinedNames(s: AppState): string[] {

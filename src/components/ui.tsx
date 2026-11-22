@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ComponentPropsWithRef, ReactNode } from "react";
 import { Mascot, type MascotMood } from "./Mascot";
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -13,7 +13,7 @@ export function Button({
   variant = "primary",
   className = "",
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+}: ComponentPropsWithRef<"button"> & { variant?: Variant }) {
   return (
     <button
       className={`min-h-11 rounded-2xl px-5 font-medium transition-colors disabled:cursor-not-allowed ${VARIANTS[variant]} ${className}`}
