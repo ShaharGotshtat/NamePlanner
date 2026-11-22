@@ -3,7 +3,7 @@ import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundReques
 import { chipLabel } from "@/lib/engine/chips";
 import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
-import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
+import { noPatternsFor, ROUND_SIZE, shortReason, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
 import { log } from "./request-id";
 import { asData, asOutput, looksLikeName, OUR_PICK_SYSTEM, PREFERENCES_SYSTEM, ROUND_SYSTEM } from "./prompts";
@@ -145,7 +145,7 @@ ${candidates.map(describeCandidate).join("\n")}`;
   if (!output) return null;
   const candidateIds = new Set(candidates.map((c) => c.entry.id));
   const valid = output.picks.filter((p) => candidateIds.has(p.id)).slice(0, size);
-  return new Map(valid.map((p) => [p.id, asOutput(p.reason, 200)]));
+  return new Map(valid.map((p) => [p.id, shortReason(asOutput(p.reason, 200))]));
 }
 
 const ourPickOutput = z.object({ reason: z.string() });

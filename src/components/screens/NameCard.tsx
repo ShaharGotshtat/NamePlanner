@@ -13,10 +13,11 @@ const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string
   { id: "interesting", label: "מעניין!", selected: "border-rose-dark bg-rose-dark text-white" },
 ];
 
-const FIT_ICONS: Record<Fit, { icon: string; label: string; className: string }> = {
-  met: { icon: "✓", label: "מתקיים", className: "bg-lavender-dark text-white" },
-  partly: { icon: "~", label: "מתקיים חלקית", className: "bg-amber-400 text-ink" },
-  not_met: { icon: "✗", label: "לא מתקיים", className: "bg-ink/15 text-ink" },
+/** Each fit has its own icon as well as its colour, so the state never relies on colour alone. */
+const FIT_CHIPS: Record<Fit, { icon: string; label: string; className: string }> = {
+  met: { icon: "✓", label: "מתקיים", className: "bg-lavender-soft text-lavender-dark" },
+  partly: { icon: "~", label: "מתקיים חלקית", className: "border border-dashed border-ink-soft/60 bg-white text-ink-soft" },
+  not_met: { icon: "✗", label: "לא מתקיים", className: "bg-ink/10 text-ink" },
 };
 
 const SEX_LABELS = { boy: "לבן", girl: "לבת", unisex: "יוניסקס" };
@@ -71,7 +72,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
   const openFeedback = useFeedback();
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
-  const { name, sex, explanation } = suggestion;
+  const { name, sex, reason, explanation } = suggestion;
   const { latest, trend } = popularity(name);
   const meaning = displayMeaning(name);
 
@@ -100,11 +101,14 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
         {showSex && <span className="rounded-full bg-cream px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}
       </div>
 
-      <button className="mt-2 min-h-11 text-sm font-medium text-lavender-dark" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
+      {reason && <p className="mt-3 truncate text-base" title={reason}>{reason}</p>}
+
+      <button className="mt-1 flex min-h-11 items-center gap-1 text-sm font-medium text-lavender-dark" aria-expanded={whyOpen} onClick={() => setWhyOpen(!whyOpen)}>
         {whyOpen ? "הסתרה" : "למה השם הזה?"}
+        <span aria-hidden className={`text-xs transition-transform ${whyOpen ? "rotate-180" : ""}`}>▾</span>
       </button>
       {whyOpen && (
-        <div className="space-y-4 text-sm">
+        <div className="space-y-3 rounded-2xl bg-cream px-4 py-3 text-sm">
           <dl className="space-y-1.5">
             {meaning && (
               <div>
@@ -127,21 +131,18 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             </div>
           </dl>
           {explanation.length > 0 && (
-            <div>
-              <p className="mb-2 font-medium">מול הבקשות</p>
-              <ul className="space-y-2">
-              {explanation.map((line) => (
-                <li key={line.requirement} className="flex items-start gap-2">
-                  <span aria-label={FIT_ICONS[line.fit].label} className={`grid size-6 shrink-0 place-items-center rounded-full text-xs ${FIT_ICONS[line.fit].className}`}>
-                    {FIT_ICONS[line.fit].icon}
-                  </span>
-                  <span className="flex-1">
-                    <span className="font-medium">{line.requirement}:</span> {line.detail}
-                  </span>
-                </li>
-              ))}
-              </ul>
-            </div>
+            <ul className="flex flex-wrap gap-1.5" aria-label="מול הבקשות">
+              {explanation.map((line) => {
+                const chip = FIT_CHIPS[line.fit];
+                return (
+                  <li key={line.requirement} title={line.detail} className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${chip.className}`}>
+                    <span aria-hidden>{chip.icon}</span>
+                    <span className="sr-only">{chip.label}: </span>
+                    {line.fit === "met" ? line.requirement : `${line.requirement}: ${line.detail}`}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
       )}
