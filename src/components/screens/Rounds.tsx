@@ -39,7 +39,6 @@ export function Rounds() {
   // Set when a round fails to load; holds the server's error ID when there is one.
   const [error, setError] = useState<{ errorId: string | null } | null>(null);
   const [roundNote, setRoundNote] = useState("");
-  const [misreads, setMisreads] = useState<{ nameId: number; requirement: string }[]>([]);
   const [lastVerdict, setLastVerdict] = useState<Verdict | null>(null);
   const requested = useRef(false);
   const prefetch = useRef(new Prefetch<RoundResult>());
@@ -140,7 +139,6 @@ export function Rounds() {
       .map((x) => `על השם ${x.name}: ${x.note}`);
     const newNotes = [
       ...cardNotes,
-      ...[...new Set(misreads.map((m) => m.requirement))].map((r) => `לגבי "${r}": לא לזה התכוונתי`),
       ...(roundNote.trim() ? [`על הסבב: ${roundNote.trim()}`] : []),
     ];
 
@@ -165,7 +163,6 @@ export function Rounds() {
     }
 
     setRoundNote("");
-    setMisreads([]);
     setLastVerdict(null);
     setIndex(0);
     setOpened(false);
@@ -286,11 +283,6 @@ export function Rounds() {
             allowNotes={allowNotes}
             onRate={(verdict) => rate(current.name.id, verdict)}
             onNote={(note) => setNote(current.name.id, note)}
-            onMisread={(requirement, on) =>
-              setMisreads((m) =>
-                on ? [...m, { nameId: current.name.id, requirement }] : m.filter((x) => !(x.nameId === current.name.id && x.requirement === requirement)),
-              )
-            }
             onUndoTaken={() => undoTaken(current.name.id, current.name.nameHe)}
           />
         </div>

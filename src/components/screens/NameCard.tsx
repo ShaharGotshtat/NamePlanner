@@ -62,17 +62,15 @@ interface Props {
   allowNotes: boolean;
   onRate: (verdict: Verdict) => void;
   onNote: (note: string) => void;
-  onMisread: (requirement: string, misread: boolean) => void;
   onUndoTaken: () => void;
   /** Bigger name for the one-at-a-time round view. */
   large?: boolean;
 }
 
-export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onMisread, onUndoTaken, large }: Props) {
+export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNote, onUndoTaken, large }: Props) {
   const openFeedback = useFeedback();
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
-  const [misread, setMisread] = useState<string[]>([]);
   const { name, sex, explanation } = suggestion;
   const { latest, trend } = popularity(name);
   const meaning = displayMeaning(name);
@@ -139,31 +137,6 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
                   </span>
                   <span className="flex-1">
                     <span className="font-medium">{line.requirement}:</span> {line.detail}
-                    {allowNotes &&
-                      (misread.includes(line.requirement) ? (
-                        <span className="block text-xs text-lavender-dark">
-                          תודה, נתקן בסבב הבא.{" "}
-                          <button
-                            className="min-h-9 font-medium underline"
-                            onClick={() => {
-                              setMisread(misread.filter((r) => r !== line.requirement));
-                              onMisread(line.requirement, false);
-                            }}
-                          >
-                            ביטול
-                          </button>
-                        </span>
-                      ) : (
-                        <button
-                          className="block min-h-9 text-xs text-ink-soft underline"
-                          onClick={() => {
-                            setMisread([...misread, line.requirement]);
-                            onMisread(line.requirement, true);
-                          }}
-                        >
-                          לא לזה התכוונתי
-                        </button>
-                      ))}
                   </span>
                 </li>
               ))}
