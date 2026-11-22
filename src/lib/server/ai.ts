@@ -5,7 +5,7 @@ import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/li
 import { popularity } from "@/lib/names/catalog";
 import { noPatternsFor, ROUND_SIZE, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
-import { asData, asOutput, OUR_PICK_SYSTEM, PREFERENCES_SYSTEM, ROUND_SYSTEM } from "./prompts";
+import { asData, asOutput, looksLikeName, OUR_PICK_SYSTEM, PREFERENCES_SYSTEM, ROUND_SYSTEM } from "./prompts";
 import { FACETS, LENGTHS, MEANING_CATEGORIES, ORIGINS, POPULARITY, STYLES } from "./schemas";
 
 const ALLOWED_VALUES: Record<TextRequirement["facet"], readonly string[] | null> = {
@@ -116,7 +116,7 @@ Pick ${size} names.
 Parent's chips: ${chips.join(", ") || "none"}
 <parent_input>
 Parent's free-text wishes as understood: ${req.profile ? asData(req.profile.summary, 300) : "none"}
-Sibling names: ${req.family.filter((f) => f.relation === "sibling").map((f) => asData(f.name, 60)).join(", ") || "none"}
+Sibling names: ${req.family.filter((f) => f.relation === "sibling" && looksLikeName(f.name)).map((f) => asData(f.name, 60)).join(", ") || "none"}
 </parent_input>
 Verdicts so far: ${ratedNames.join(", ") || "none"}
 What the No names have in common, and no Interesting name has: ${patterns.join(", ") || "nothing yet"}

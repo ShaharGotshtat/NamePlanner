@@ -72,8 +72,8 @@ export const preferencesRequestSchema = z.object({
 export const reportRequestSchema = z.object({
   type: z.enum(["error", "suggestion", "other"]),
   message: z.string().trim().min(1).max(1000),
-  screen: z.string().max(40),
-  appVersion: z.string().max(20),
+  screen: z.string().regex(/^[a-z]{1,20}$/),
+  appVersion: z.string().regex(/^[\w.+-]{1,20}$/),
   device: z.string().max(200),
   nameId: z.number().int().optional(),
   nameHe: shortText.optional(),

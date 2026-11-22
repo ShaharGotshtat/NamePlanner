@@ -27,6 +27,7 @@ export function memoryStore(): Store {
     addReport: async (report) => {
       reports.push(report);
     },
+    countReports: async () => reports.length,
     takeReports: async () => {
       const taken = reports;
       reports = [];

@@ -18,7 +18,7 @@ export const eventSchema = z.discriminatedUnion("name", [
     name: z.literal("finished"),
     props: z.object({ pass: count, interesting: count, unsure: count, no: count, taken: count }),
   }),
-  z.object({ name: z.literal("preferences"), props: z.object({ chips: z.array(z.string().max(40)).max(60), freeText: z.boolean(), namesWeLike: count }) }),
+  z.object({ name: z.literal("preferences"), props: z.object({ chips: z.array(z.string().regex(/^[a-zA-Z0-9]{1,40}$/)).max(60), freeText: z.boolean(), namesWeLike: count }) }),
   z.object({ name: z.literal("share"), props: z.object({ channel: z.enum(SHARE_CHANNELS) }) }),
   z.object({ name: z.literal("go_again"), props: z.object({ pass: count }) }),
   z.object({ name: z.literal("our_pick"), props: z.object({ action: z.enum(["accepted", "dismissed"]) }) }),
