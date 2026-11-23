@@ -11,11 +11,10 @@ import type { NameEntry, NameNote, ParsedProfile, Rating, RoundRequest, Verdict 
  * npx tsx --env-file=.env.local scripts/bench-round-wait.ts [runs]
  */
 const runs = Number(process.argv[2] ?? 2);
-// "disabled" turns thinking off on every call, to compare. Each answer's blocks are logged either way.
-const thinking = process.env.BENCH_THINKING;
+// Logs each answer's blocks, to see whether output tokens go to thinking or to the answer.
 const create = Messages.prototype.create;
 Messages.prototype.create = async function (this: Messages, params: Parameters<typeof create>[0], options?: Parameters<typeof create>[1]) {
-  const response = (await create.call(this, thinking ? { ...params, thinking: { type: thinking } } as never : params, options)) as Awaited<ReturnType<Messages["create"]>> & { content: { type: string; text?: string; thinking?: string }[] };
+  const response = (await create.call(this, params, options)) as Awaited<ReturnType<Messages["create"]>> & { content: { type: string; text?: string; thinking?: string }[] };
   const blocks = response.content.map((b) => `${b.type}:${(b.text ?? b.thinking ?? "").length} chars`).join(", ");
   console.log(`    blocks: ${blocks}`);
   return response;

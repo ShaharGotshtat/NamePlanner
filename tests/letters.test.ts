@@ -147,6 +147,7 @@ describe("parsing a letter wish", () => {
       profile: {
         summary: "הבנו: שמות שמתחילים ב-נ או ב-ס",
         requirements: [{ id: "text-0", label: "מתחיל ב-נ או ס", kind: "want", facet: "starting", values: ["נ", "ס"], level: "must" }],
+        wishesRead: expect.any(String),
       },
     });
   });

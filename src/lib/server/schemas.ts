@@ -34,6 +34,7 @@ const profile = z.object({
   requirements: z.array(textRequirement).max(20),
   notesSummary: z.string().max(300).optional(),
   notesRead: z.array(z.string().max(20)).max(60).optional(),
+  wishesRead: z.string().max(20).optional(),
   sig: z.string().max(100).optional(),
 });
 
