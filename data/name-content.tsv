@@ -98,18 +98,18 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 סתיו	סְתָיו	Stav	עונת הסתיו; בלשון המקרא: החורף, עונת הגשמים	תנ״ך; טבע (עונה)	שיר השירים ב׳, י״א	סתו			טבע	1	modern	1	סתיו (עונה)	H
 כרמל	כַּרְמֶל	Karmel,Carmel	הר הכרמל בצפון הארץ; גם: כרם, שדה פורה	תנ״ך; טבע (הר)	מלכים א׳ י״ח, י״ט				טבע, תנ״כי	1	modern	1		H
 ים	יָם	Yam	גוף מים גדול	תנ״ך; טבע (מים)					טבע	1	modern	1		H
-ליאם	לִיאָם	Liam	בעברית: לי עם. גם קיצור אירי של ויליאם	עברית; אירית						0	modern	1		M
+ליאם	לִיאָם	Liam	בעברית: לי עם. גם קיצור אירי של ויליאם	עברית; אירית					לאום	0	modern	1		M
 אורי	אוּרִי	Uri,Ori	האור שלי; אבי בצלאל, בונה המשכן	תנ״ך	שמות ל״א, ב׳				אור, תנ״כי	0	classic	1		H
 אריאל	אֲרִיאֵל	Ariel	אריה של האל; כינוי לירושלים	תנ״ך	ישעיהו כ״ט, א׳				עוצמה, אמונה, תנ״כי	0	classic	1		H
 דוד	דָּוִד	David	אהוב, ידיד; דוד המלך	תנ״ך	שמואל א׳ ט״ז, י״ג				אהבה, מלכות, תנ״כי	0	traditional	1		H
 משה	מֹשֶׁה	Moshe,Moses	נמשה מן המים; משה רבנו	תנ״ך	שמות ב׳, י׳				תנ״כי	0	traditional	0	פסח	H
 שרה	שָׂרָה	Sarah,Sara	נסיכה, גבירה; אשת אברהם אבינו	תנ״ך	בראשית י״ז, ט״ו				מלכות, תנ״כי	0	traditional	1		H
 עמית	עָמִית	Amit	חבר, רע	תנ״ך	ויקרא י״ט, ט״ו				אהבה	1	modern	1		H
-אברהם	אַבְרָהָם	Avraham,Abraham	אב המון גויים; אברהם אבינו	תנ״ך	בראשית י״ז, ה׳				תנ״כי	0	traditional	1		H
+אברהם	אַבְרָהָם	Avraham,Abraham	אב המון גויים; אברהם אבינו	תנ״ך	בראשית י״ז, ה׳				תנ״כי, משפחה	0	traditional	1		H
 יהונתן	יְהוֹנָתָן	Yehonatan,Jonathan	ה׳ נתן; בן שאול המלך וחברו של דוד	תנ״ך	שמואל א׳ י״ח, א׳				מתנה, אמונה, תנ״כי	0	traditional	0		H
 עומר	עוֹמֶר	Omer,Omar	אלומת שיבולים; ספירת העומר	תנ״ך; טבע (צמח)	ויקרא כ״ג, ט״ו				טבע	1	modern	1	ספירת העומר, שבועות, ל״ג בעומר	H
 יהודה	יְהוּדָה	Yehuda,Yehudah	הודיה לה׳; בן יעקב ולאה	תנ״ך	בראשית כ״ט, ל״ה				אמונה, תנ״כי	0	traditional	0		H
-ישראל	יִשְׂרָאֵל	Yisrael,Israel	כי שרית עם אלוהים; שמו של יעקב אבינו	תנ״ך	בראשית ל״ב, כ״ט				עוצמה, אמונה, תנ״כי	0	traditional	1		H
+ישראל	יִשְׂרָאֵל	Yisrael,Israel	כי שרית עם אלוהים; שמו של יעקב אבינו	תנ״ך	בראשית ל״ב, כ״ט				עוצמה, אמונה, תנ״כי, לאום	0	traditional	1		H
 אליה	אֵלִיָּה	Eliya,Elia	אלי הוא ה׳. צורה של אליהו	תנ״ך	מלכים ב׳ א׳, ג׳			אליהו	אמונה, תנ״כי	0	modern	1		H
 אסתר	אֶסְתֵּר	Esther,Ester	אסתר המלכה, גיבורת מגילת אסתר; מפרסית: כוכב	תנ״ך; פרסית	אסתר ב׳, ז׳				מלכות, תנ״כי	0	traditional	1	פורים	H
 חנה	חַנָּה	Hana,Hannah,Chana	חן; אם שמואל הנביא	תנ״ך	שמואל א׳ א׳, ב׳				יופי, תנ״כי	0	traditional	1	ראש השנה	H
@@ -149,7 +149,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 מאיר	מֵאִיר	Meir	נותן אור; רבי מאיר בעל הנס	עברית; תלמוד					אור	1	traditional	1		H
 אביב	אָבִיב	Aviv	עונת האביב	תנ״ך; טבע (עונה)	שמות י״ג, ד׳				טבע	1	modern	1	אביב, פסח	H
 ליאל	לִיאֵל	Liel	האל שלי	עברית					אמונה	0	modern	1		H
-בן	בֵּן	Ben	ילד, צאצא	עברית; אנגלית					חיים	1	modern	1		H
+בן	בֵּן	Ben	ילד, צאצא	עברית; אנגלית					חיים, משפחה	1	modern	1		H
 נעמי	נָעֳמִי	Naomi,Noemi	נעימה; חמותה של רות	תנ״ך	רות א׳, ב׳				יופי, תנ״כי, תכונה	0	classic	1	שבועות	H
 הדר	הֲדָר	Hadar	יופי והדר	תנ״ך	ויקרא כ״ג, מ׳				יופי	1	modern	1	סוכות	H
 לאה	לֵאָה	Leah,Lea	לאה אימנו, אשת יעקב	תנ״ך	בראשית כ״ט, ט״ז				תנ״כי	0	traditional	1		H
@@ -158,7 +158,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 אליהו	אֵלִיָּהוּ	Eliyahu	אלי הוא ה׳; אליהו הנביא	תנ״ך	מלכים א׳ י״ז, א׳				אמונה, תנ״כי	0	traditional	0	פסח	H
 נגה	נֹגַהּ	Noga,Nogah	אור, זוהר; גם שם כוכב הלכת	תנ״ך	ישעיהו ס׳, ג׳	נוגה			אור	1	modern	1		H
 מנחם	מְנַחֵם	Menachem,Menahem	מביא נחמה; מנחם בן גדי, מלך ישראל	תנ״ך	מלכים ב׳ ט״ו, י״ד				תנ״כי	0	traditional	0	תשעה באב	H
-בנימין	בִּנְיָמִין	Binyamin,Benjamin	בן הימין; בן יעקב ורחל	תנ״ך	בראשית ל״ה, י״ח				תנ״כי	0	traditional	1		H
+בנימין	בִּנְיָמִין	Binyamin,Benjamin	בן הימין; בן יעקב ורחל	תנ״ך	בראשית ל״ה, י״ח				תנ״כי, משפחה	0	traditional	1		H
 עידן	עִידָּן	Idan	תקופה, זמן	עברית					חיים	1	modern	1		H
 ארי	אֲרִי	Ari	אריה	תנ״ך; טבע (בעל חיים)					טבע, עוצמה	1	modern	1	מזל אריה	H
 ליאן	לִיאָן	Lian,Lianne	שם חדש, מלשון לי; גם שם בינלאומי	עברית; בינלאומי					חיים	0	modern	1		M
@@ -175,7 +175,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 טוהר	טוֹהַר	Tohar	ניקיון ותום	תנ״ך	שמות כ״ד, י׳	טהר			יופי, תכונה	1	modern	1	יום כיפור	H
 נתן	נָתָן	Natan,Nathan	מתנה, ה׳ נתן; נתן הנביא	תנ״ך	שמואל ב׳ ז׳, ב׳				מתנה, תנ״כי	0	classic	1		H
 נעמה	נַעֲמָה	Naama,Naamah	נעימה; אחות תובל קין	תנ״ך	בראשית ד׳, כ״ב				יופי, תנ״כי, תכונה	0	classic	1		H
-יהודית	יְהוּדִית	Yehudit,Judith	יהודייה; יהודית בת בארי, אשת עשו; גם גיבורת ספר יהודית	תנ״ך	בראשית כ״ו, ל״ד				תנ״כי	0	traditional	1	חנוכה	H
+יהודית	יְהוּדִית	Yehudit,Judith	יהודייה; יהודית בת בארי, אשת עשו; גם גיבורת ספר יהודית	תנ״ך	בראשית כ״ו, ל״ד				תנ״כי, לאום	0	traditional	1	חנוכה	H
 בר	בַּר	Bar	שדה פתוח; בארמית: בן	עברית; ארמית					טבע	1	modern	1		H
 אמה	אֶמָּה	Emma	שם אירופי, מגרמנית עתיקה: שלמה, כוללת	גרמנית; בינלאומי					חיים	0	modern	1		M
 אופק	אוֹפֶק	Ofek	קו האופק, שבו השמיים פוגשים את הארץ	עברית; טבע (נוף)					טבע	1	modern	1		H
@@ -210,7 +210,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 אוריאל	אוּרִיאֵל	Uriel,Oriel	האל הוא האור שלי	תנ״ך	דברי הימים א׳ ו׳, ט׳				אור, אמונה, תנ״כי	0	classic	1		H
 ברכה	בְּרָכָה	Bracha,Beracha	איחול טוב, שפע	תנ״ך					אמונה	1	traditional	0		H
 אביה	אֲבִיָּה	Aviya,Avia	ה׳ הוא אבי	תנ״ך	מלכים א׳ י״ד, א׳				אמונה, תנ״כי	0	modern	1		H
-דור	דּוֹר	Dor	תקופה של זמן; בני אותה תקופה	תנ״ך					חיים	1	modern	1		H
+דור	דּוֹר	Dor	תקופה של זמן; בני אותה תקופה	תנ״ך					חיים, משפחה	1	modern	1		H
 נחמן	נַחְמָן	Nachman,Nahman	מנחם; רבי נחמן מברסלב	עברית; תלמוד					חוכמה	0	traditional	0		H
 אלעזר	אֶלְעָזָר	Elazar	האל עזר; בן אהרון הכהן	תנ״ך	שמות ו׳, כ״ג				אמונה, תנ״כי	0	traditional	1	ל״ג בעומר	H
 אלחנן	אֶלְחָנָן	Elchanan,Elhanan	האל חנן	תנ״ך	שמואל ב׳ כ״א, י״ט				אמונה, תנ״כי	0	traditional	0		H
@@ -223,7 +223,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 ינון	יִנּוֹן	Yinon,Inon	כינוי למשיח (״לפני שמש ינון שמו״)	תנ״ך	תהלים ע״ב, י״ז				אמונה	0	classic	1		H
 עמנואל	עִמָּנוּאֵל	Emanuel,Immanuel	האל איתנו	תנ״ך	ישעיהו ז׳, י״ד				אמונה	0	classic	1		H
 ניב	נִיב	Niv	ביטוי, דיבור; ״ניב שפתיים״	תנ״ך	ישעיהו נ״ז, י״ט				חוכמה	1	modern	1		H
-חוה	חַוָּה	Chava,Hava,Eve	אם כל חי; האישה הראשונה	תנ״ך	בראשית ג׳, כ׳	חווה			חיים, תנ״כי	0	traditional	1		H
+חוה	חַוָּה	Chava,Hava,Eve	אם כל חי; האישה הראשונה	תנ״ך	בראשית ג׳, כ׳	חווה			חיים, תנ״כי, משפחה	0	traditional	1		H
 אביאל	אֲבִיאֵל	Aviel	אבי הוא האל; סבו של שאול המלך	תנ״ך	שמואל א׳ ט׳, א׳				אמונה, תנ״כי	0	classic	1		H
 אורין	אוֹרִין	Orin	שם חדש, מלשון אור	עברית					אור	0	modern	1		H
 אלעד	אֶלְעָד	Elad	האל לעד; מבני אפרים	תנ״ך	דברי הימים א׳ ז׳, כ״א				אמונה, תנ״כי	0	classic	1		H
@@ -267,7 +267,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 שמחה	שִׂמְחָה	Simcha,Simha	גיל, ששון	תנ״ך					שמחה, תכונה	1	traditional	0	שמחת תורה, סוכות	H
 אלין	אֵלִין	Elin	שם בינלאומי; בעברית מלשון אל	בינלאומי					יופי	0	modern	1		L
 פיגא	פֵיגָא	Feiga	ציפור, ביידיש	יידיש		פייגא			טבע	0	traditional	0		M
-ליאב	לִיאָב	Liav	האב שלי	עברית						0	modern	1		M
+ליאב	לִיאָב	Liav	האב שלי	עברית					משפחה	0	modern	1		M
 אלרואי	אֶלְרוֹאִי	Elroi,Elroy	האל רואה אותי	תנ״ך	בראשית ט״ז, י״ג				אמונה	0	modern	1		H
 לוי	לֵוִי	Levi	ילווה, יתחבר; בן יעקב ולאה	תנ״ך	בראשית כ״ט, ל״ד				תנ״כי	0	traditional	1		H
 אשר	אָשֵׁר	Asher	אושר; בן יעקב וזלפה	תנ״ך	בראשית ל׳, י״ג				שמחה, תנ״כי	0	traditional	1		H
@@ -324,7 +324,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 שובל	שׁוֹבֶל	Shoval	שובל השמלה; ושובל, מבני יהודה	תנ״ך	דברי הימים א׳ ד׳, א׳				תנ״כי	1	modern	1		H
 אושרי	אוֹשְׁרִי	Oshri	האושר שלי	עברית					שמחה	0	modern	1		H
 יחזקאל	יְחֶזְקֵאל	Yechezkel,Yehezkel	האל יחזק; יחזקאל הנביא	תנ״ך	יחזקאל א׳, ג׳				עוצמה, אמונה, תנ״כי	0	traditional	0		H
-לידור	לִידוֹר	Lidor	הדור שלי	עברית					חיים	0	modern	1		H
+לידור	לִידוֹר	Lidor	הדור שלי	עברית					חיים, משפחה	0	modern	1		H
 נאיה	נָאיָה	Naya	יפה, נאה	עברית					יופי, תכונה	0	modern	1		H
 אלונה	אַלּוֹנָה	Alona	עץ אלון קטן	עברית; טבע (צמח)					טבע	0	modern	1		H
 נאור	נָאוֹר	Naor	מואר, משכיל	עברית					אור, חוכמה, תכונה	1	modern	1		H
@@ -351,7 +351,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 טום	טוֹם	Tom	תאום, בארמית. קיצור אנגלי של תומאס	אנגלית				תומאס		0	modern	1		H
 ענהאל	עֲנָהאֵל	Anael	שם חדש: האל ענה	עברית					אמונה	0	modern	1		L
 אודיה	אוֹדִיָּה	Odeya	אודה ליה, אודה לאל	עברית					אמונה	0	modern	1		H
-עברי	עִבְרִי	Ivri,Ivry	יהודי, מעבר לנהר; כינוי לאברהם	תנ״ך	בראשית י״ד, י״ג				תנ״כי	1	modern	1		H
+עברי	עִבְרִי	Ivri,Ivry	יהודי, מעבר לנהר; כינוי לאברהם	תנ״ך	בראשית י״ד, י״ג				תנ״כי, לאום	1	modern	1		H
 סיון	סִיוָן	Sivan	החודש העברי סיוון	תנ״ך	אסתר ח׳, ט׳	סיוון			טבע	1	classic	1	סיוון, שבועות	H
 לירי	לִירִי	Liri	פירוש השם לא ודאי	עברית					שמחה	0	modern	1		L
 סול	סוֹל	Sol	שמש, בלטינית ובספרדית	לטינית; ספרדית					אור, טבע	0	modern	1		H
@@ -364,7 +364,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 אדוה	אַדְוָה	Adva	גל קטן, אדווה במים	עברית; טבע (מים)		אדווה			טבע	1	classic	1		H
 עדיאל	עֲדִיאֵל	Adiel	האל הוא עדיי, תכשיטי	תנ״ך	דברי הימים א׳ ד׳, ל״ו				אמונה, תנ״כי	0	modern	1		H
 בועז	בּוֹעַז	Boaz,Boas	בו עוז; בעלה של רות	תנ״ך	רות ב׳, א׳				עוצמה, תנ״כי	0	classic	1	שבועות	H
-עמיחי	עַמִּיחַי	Amichai,Amihai	העם שלי חי	עברית					חיים	0	classic	1		H
+עמיחי	עַמִּיחַי	Amichai,Amihai	העם שלי חי	עברית					חיים, לאום	0	classic	1		H
 יעלה	יַעֲלָה	Yaala	נקבת היעל	תנ״ך; טבע (בעל חיים)	משלי ה׳, י״ט				טבע	1	modern	1		H
 בלומה	בְּלוּמָה	Bluma	פרח, ביידיש	יידיש					טבע, יופי	0	traditional	0		H
 דין	דִּין	Din	משפט וצדק	עברית					חוכמה	1	modern	1		H
@@ -493,8 +493,8 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 רעי	רֵעִי	Re'i,Rei	החבר שלי	תנ״ך	מלכים א׳ א׳, ח׳				אהבה, תנ״כי	0	modern	1		H
 אייר	אִיָּיר	Iyar	החודש העברי אייר	אכדית					טבע	1	modern	1	אייר	H
 ליאורה	לִיאוֹרָה	Liora,Leora	האור שלי	עברית					אור	0	classic	1		H
-ליעם	לִיעָם	Liam	העם שלי	עברית		ליאם				0	modern	1		M
-נילי	נִילִי	Nili	ראשי תיבות: נצח ישראל לא ישקר	עברית	שמואל א׳ ט״ו, כ״ט				אמונה	0	classic	1		H
+ליעם	לִיעָם	Liam	העם שלי	עברית		ליאם			לאום	0	modern	1		M
+נילי	נִילִי	Nili	ראשי תיבות: נצח ישראל לא ישקר	עברית	שמואל א׳ ט״ו, כ״ט				אמונה, לאום	0	classic	1		H
 יוגב	יוֹגֵב	Yogev	עובד אדמה	תנ״ך	ירמיהו נ״ב, ט״ז				טבע	1	modern	1		H
 אלישיב	אֶלְיָשִׁיב	Elyashiv,Eliashiv	האל ישיב; הכהן הגדול בימי נחמיה	תנ״ך	נחמיה ג׳, א׳				אמונה, תנ״כי	0	traditional	0		H
 אלרועי	אֶלְרוֹעִי	Elroi,Elroee	האל הוא הרועה שלי	עברית		אלרואי	אלרואי		אמונה	0	modern	1		H
@@ -507,7 +507,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 ארד	אַרְדְּ	Ard	נכד בנימין	תנ״ך	במדבר כ״ו, מ׳				תנ״כי	0	modern	1		M
 לילך	לִילָךְ	Lilach,Lilah	שיח הלילך הסגול	ערבית; טבע (צמח)					טבע, יופי	1	classic	1		H
 ארייה	אֲרִיָּיה	Aria	לחן לזמר יחיד; בעברית מלשון אריה	איטלקית; עברית		אריאה	אריאה		שמחה	0	modern	1		M
-דורי	דּוֹרִי	Dori	הדור שלי	עברית					חיים	0	modern	1		H
+דורי	דּוֹרִי	Dori	הדור שלי	עברית					חיים, משפחה	0	modern	1		H
 ליאון	לֵיאוֹן	Leon	אריה, ביוונית	יוונית					טבע, עוצמה	0	modern	1		H
 הלני	הֶלֶנִי	Heleni	על שם הילני המלכה, שהתגיירה	יוונית					מלכות	0	modern	1		M
 קרני	קַרְנִי	Karni	קרן האור שלי	עברית					אור	0	modern	1		H
@@ -531,7 +531,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 מרק	מַרְק	Mark	שם לטיני, מרקוס: על שם אל המלחמה מרס	לטינית					עוצמה	0	modern	1		H
 סימה	סִימָה	Sima	אוצר, בארמית	ארמית					יופי	0	traditional	0		H
 כליל	כְּלִיל	Klil	שלם, מושלם; ״כליל יופי״	תנ״ך	יחזקאל כ״ח, י״ב				יופי, תכונה	1	modern	1		H
-דורין	דּוֹרִין	Dorin	שם חדש, מלשון דור	עברית					חיים	0	modern	1		L
+דורין	דּוֹרִין	Dorin	שם חדש, מלשון דור	עברית					חיים, משפחה	0	modern	1		L
 אלדר	אֶלְדָּר	Eldar	האל דר, שוכן	עברית					אמונה	0	modern	1		M
 אלכסנדרה	אָלֶכְּסַנְדְּרָה	Alexandra	מגינת בני האדם, מיוונית	יוונית					עוצמה	0	classic	1		H
 שמשון	שִׁמְשׁוֹן	Shimshon,Samson	מלשון שמש; שמשון הגיבור	תנ״ך	שופטים י״ג, כ״ד				עוצמה, אור, תנ״כי	0	traditional	1		H
@@ -543,7 +543,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 אמור	אָמוֹר	Amor	אהבה, בלטינית ובספרדית	לטינית; ספרדית					אהבה, תכונה	0	modern	1		H
 ישעיהו	יְשַׁעְיָהוּ	Yeshayahu	ישועת יה; ישעיהו הנביא	תנ״ך	ישעיהו א׳, א׳	ישעיה			אמונה, תנ״כי	0	traditional	0		H
 אורלי	אוֹרְלִי	Orly	האור שלי	עברית					אור	0	classic	1		H
-ציון	צִיּוֹן	Tzion,Zion,Tsion	הר ציון, ירושלים	תנ״ך	שמואל ב׳ ה׳, ז׳				אמונה, תנ״כי	0	traditional	1		H
+ציון	צִיּוֹן	Tzion,Zion,Tsion	הר ציון, ירושלים	תנ״ך	שמואל ב׳ ה׳, ז׳				אמונה, תנ״כי, לאום	0	traditional	1		H
 מזל	מַזָּל	Mazal	מזל טוב	עברית					שמחה	1	traditional	1		H
 ויקטוריה	וִיקְטוֹרְיָה	Victoria	ניצחון, בלטינית	לטינית					עוצמה	0	classic	1		H
 שניר	שְׂנִיר	Snir	שם קדום להר החרמון	תנ״ך; טבע (הר)	דברים ג׳, ט׳				טבע, תנ״כי	0	modern	1		H
@@ -572,7 +572,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 רחלי	רָחֵלִי	Racheli,Raheli	כבשה. צורת חיבה של רחל	עברית				רחל		0	classic	1		H
 אהוד	אֵהוּד	Ehud	אהוד בן גרא, שופט בישראל	תנ״ך	שופטים ג׳, ט״ו				תנ״כי	0	classic	1		H
 רזיאל	רָזִיאֵל	Raziel	סוד האל; מלאך במסורת	עברית					חוכמה, אמונה	0	modern	1		H
-עמרם	עַמְרָם	Amram	עם רם; אבי משה רבנו	תנ״ך	שמות ו׳, כ׳				תנ״כי	0	traditional	0		H
+עמרם	עַמְרָם	Amram	עם רם; אבי משה רבנו	תנ״ך	שמות ו׳, כ׳				תנ״כי, לאום	0	traditional	0		H
 זהבה	זְהָבָה	Zehava	זהב	עברית					יופי	0	traditional	1		H
 איידל	אֵיידְל	Eidel,Aidel	עדינה, ביידיש	יידיש					יופי, תכונה	0	traditional	0		H
 אליסף	אֶלְיָסָף	Elyasaf,Eliasaf	האל יוסיף; נשיא שבט גד	תנ״ך	במדבר א׳, י״ד				אמונה, תנ״כי	0	modern	1		H
@@ -624,7 +624,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 להב	לַהַב	Lahav	להבה, שלהבת	תנ״ך					אור, עוצמה	1	modern	1		H
 מבשר	מְבַשֵּׂר	Mevaser,Mevasser	מביא בשורה טובה	עברית					שמחה	1	traditional	0		H
 ריין	רֵיין	Rain	גשם, באנגלית	אנגלית; טבע (מזג אוויר)					טבע	0	modern	1		M
-אבי	אֲבִי	Avi	האב שלי. גם קיצור של אברהם ושמות דומים	עברית						0	classic	1		H
+אבי	אֲבִי	Avi	האב שלי. גם קיצור של אברהם ושמות דומים	עברית					משפחה	0	classic	1		H
 שירלי	שִׁירְלִי	Shirley,Shirly	השיר שלי; גם שם אנגלי	עברית; אנגלית					שמחה	0	classic	1		H
 בלה	בֵּלָה	Bella	יפה, באיטלקית	איטלקית; בינלאומי					יופי, תכונה	0	modern	1		H
 שטערנא	שְׁטֶערְנָא	Sterna,Shterna	כוכב, ביידיש	יידיש					אור	0	traditional	0		H
@@ -683,7 +683,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 מילנה	מִילָנָה	Milana	שם סלאבי: אהובה	סלאבית					אהבה, תכונה	0	modern	1		H
 מינדל	מִינְדְּל	Mindel	שם יידי; פירוש השם לא ודאי	יידיש						0	traditional	0		L
 שרית	שָׂרִית	Sarit	נסיכה קטנה, מלשון שרה	עברית					מלכות	0	classic	1		H
-דוריה	דּוֹרִיָּה	Doria,Doriya	דור של יה	עברית					אמונה	0	modern	1		H
+דוריה	דּוֹרִיָּה	Doria,Doriya	דור של יה	עברית					אמונה, משפחה	0	modern	1		H
 נעומי	נָעוֹמִי	Naomi	נעימה; חמותה של רות	תנ״ך	רות א׳, ב׳	נעמי	נעמי		יופי, תנ״כי	0	classic	1		H
 רותי	רוּתִי	Ruti	על שם רות המואבייה. צורת חיבה של רות	עברית				רות		0	classic	1		H
 יוני	יוֹנִי	Yoni	היונה שלי. קיצור של יונתן	עברית				יונתן	שלום	0	classic	1		H
@@ -773,7 +773,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 שריי	שָׂרַיי	Sarai	שמה הראשון של שרה אמנו	תנ״ך	בראשית י״א, כ״ט	שרי	שרי		מלכות, תנ״כי	0	classic	1		M
 בינה	בִּינָה	Bina	חוכמה ותבונה	תנ״ך					חוכמה, תכונה	1	traditional	0		H
 ברוריה	בְּרוּרְיָה	Bruria,Beruria	אשת רבי מאיר, חכמה בתלמוד	תלמוד					חוכמה	0	traditional	0		H
-דוראל	דּוֹרְאֵל	Dorel	דור האל	עברית					אמונה	0	modern	1		H
+דוראל	דּוֹרְאֵל	Dorel	דור האל	עברית					אמונה, משפחה	0	modern	1		H
 עינת	עֵינַת	Einat,Enat	מעיין קטן	עברית; טבע (מים)					טבע	0	classic	1		H
 יליזבטה	יֶלִיזָבֶטָה	Elizaveta,Yelizaveta	אלי שבועה. הצורה הרוסית של אלישבע	רוסית; תנ״ך				אלישבע		0	classic	0		H
 אבשלום	אַבְשָׁלוֹם	Avshalom	אבי שלום; בן דוד המלך	תנ״ך	שמואל ב׳ ג׳, ג׳				שלום, תנ״כי	0	classic	1		H
@@ -792,7 +792,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 לידר	לִידֵר	Lider	לי דר, הפנינה שלי (דר היא אבן יקרה במגילת אסתר); גם מאנגלית: מנהיג	עברית					יופי	0	modern	1		L
 בת חן	בַּת חֵן	Bat Chen,Bat Hen	מלאת חן	עברית					יופי, תכונה	0	classic	1		H
 יוליה	יוּלְיָה	Yulia	שם משפחה רומי עתיק. הצורה הנקבית של יוליוס	לטינית				יוליוס		0	modern	1		H
-עמיאל	עַמִּיאֵל	Amiel	העם של האל	תנ״ך	במדבר י״ג, י״ב				אמונה, תנ״כי	0	modern	1		H
+עמיאל	עַמִּיאֵל	Amiel	העם של האל	תנ״ך	במדבר י״ג, י״ב				אמונה, תנ״כי, לאום	0	modern	1		H
 תאי	תַּאי	Tai	תא קטן; גם שם בינלאומי	עברית						0	modern	1		L
 אלישי	אֱלִישַׁי	Elishai,Elishay	האל הוא שי, מתנה	עברית					מתנה, אמונה	0	modern	1		H
 רומן	רוֹמָן	Roman	רומאי, בלטינית	לטינית						0	modern	1		H
@@ -846,7 +846,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 לבנה	לְבָנָה	Levana	ירח	תנ״ך; טבע	שיר השירים ו׳, י׳				טבע, אור	1	classic	1		H
 אוליבר	אוֹלִיבֶר	Oliver	עץ הזית, מלטינית	אנגלית; לטינית					טבע, שלום	0	modern	1		H
 מרטין	מַרְטִין	Martin	על שם מרס, אל המלחמה הרומי	לטינית					עוצמה	0	modern	1		H
-בת ציון	בַּת צִיּוֹן	Bat Tzion,Bat Zion	בתה של ציון, כינוי לירושלים	תנ״ך	ישעיהו א׳, ח׳				אמונה	0	traditional	0		H
+בת ציון	בַּת צִיּוֹן	Bat Tzion,Bat Zion	בתה של ציון, כינוי לירושלים	תנ״ך	ישעיהו א׳, ח׳				אמונה, לאום	0	traditional	0		H
 עטי	עֶטִי	Etti	כוכב, בפרסית. צורת חיבה של אסתר	יידיש				אסתר		0	traditional	0		M
 ג'סיקה	ג'ֶסִיקָה	Jessica	שם שטבע שייקספיר. כנראה צורה של יסכה	אנגלית; תנ״ך				יסכה		0	modern	1		M
 רוזה	רוֹזָה	Rosa	ורד	לטינית; טבע (צמח)					טבע, יופי	0	classic	1		H
@@ -928,7 +928,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 אדריאן	אַדְרִיאָן	Adrian	מהעיר אדריה, בלטינית	לטינית						0	modern	1		H
 מידן	מֵידָן	Meidan,Maidan	זירה, מגרש	ערבית						0	modern	1		M
 מרגריטה	מַרְגָּרִיטָה	Margarita	פנינה, ביוונית; גם פרח החרצית	יוונית; טבע (צמח)					טבע, יופי	0	classic	1		H
-נחלה	נַחֲלָה	Nachala,Nahala	ירושה, אחוזה	תנ״ך						1	modern	0		H
+נחלה	נַחֲלָה	Nachala,Nahala	ירושה, אחוזה	תנ״ך					משפחה	1	modern	0		H
 כנה	כַּנָּה	Kana	שתיל, נטע	תנ״ך; טבע (צמח)	תהלים פ׳, ט״ז				טבע	1	modern	1		M
 אילנית	אִילָנִית	Ilanit	עץ קטן	עברית; טבע (צמח)					טבע	0	classic	1	ט״ו בשבט	H
 תלמה	תַּלְמָה	Talma	תלם, גבעה קטנה	עברית; טבע (נוף)					טבע	0	classic	1		M
@@ -980,7 +980,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 ירוחם	יְרוֹחָם	Yerucham,Yeruham	יזכה לרחמים; אבי אלקנה	תנ״ך	שמואל א׳ א׳, א׳				תנ״כי	0	traditional	0		H
 לימאי	לִימַאי	Limai	שם חדש; פירוש השם לא ודאי	עברית						0	modern	1		L
 לי-שי	לִי-שַׁי	Li-Shai,Lishai	המתנה שלי	עברית		לישי	לישי		מתנה	0	modern	1		H
-עמיעד	עַמִּיעַד	Amiad	עמי לעד	עברית						0	modern	1		H
+עמיעד	עַמִּיעַד	Amiad	עמי לעד	עברית					לאום	0	modern	1		H
 אופאל	אוֹפָּאל	Opal	אבן חן צבעונית	בינלאומי		אופל	אופל		יופי	0	modern	1		M
 ילין	יָלִין	Yalin	ילון, ישהה; גם שם בינלאומי	עברית						0	modern	1		L
 שבתי	שַׁבְּתַי	Shabtai	נולד בשבת; מתקופת עזרא	תנ״ך	עזרא י׳, ט״ו				תנ״כי	0	traditional	0		H
@@ -1025,7 +1025,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 נתניאל	נְתַנְיָאֵל	Netaniel	האל נתן	עברית		נתנאל			מתנה, אמונה	0	modern	1		H
 שחק	שַׁחַק	Shachak,Shahak	שמיים, עננים	תנ״ך; טבע (מזג אוויר)					טבע	1	modern	1		H
 תדהר	תִּדְהָר	Tidhar	עץ מעצי לבנון	תנ״ך; טבע (צמח)	ישעיהו מ״א, י״ט				טבע	1	modern	1		H
-בן-ציון	בֶּן-צִיּוֹן	Ben-Tzion,Ben-Zion	בן של ציון, ירושלים	עברית					אמונה	0	traditional	0		H
+בן-ציון	בֶּן-צִיּוֹן	Ben-Tzion,Ben-Zion	בן של ציון, ירושלים	עברית					אמונה, לאום	0	traditional	0		H
 פרלה	פֶּרְלָה	Perla	פנינה	ספרדית					יופי	0	traditional	1		H
 ולדימיר	וְלָדִימִיר	Vladimir	שליט העולם, ברוסית	רוסית					מלכות	0	modern	0		H
 סימון	סִימוֹן	Simon	כי שמע ה׳. הצורה הבינלאומית של שמעון	בינלאומי; תנ״ך				שמעון		0	modern	1		H
@@ -1038,7 +1038,7 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 ירמיהו	יִרְמְיָהוּ	Yirmiyahu	ה׳ ירומם; ירמיהו הנביא	תנ״ך	ירמיהו א׳, א׳				אמונה, תנ״כי	0	traditional	0		H
 אלבי	אַלְבִּי	Albi	שם חדש; פירוש השם לא ודאי	עברית						0	modern	1		L
 מטביי	מַטְבֵיי	Matvei	מתנת ה׳. הצורה הרוסית של מתתיהו	רוסית; תנ״ך				מתתיהו	מתנה	0	modern	0		H
-אומה	אוּמָּה	Uma	בעברית: עם, לאום; גם שם הודי	בינלאומי						0	modern	1		L
+אומה	אוּמָּה	Uma	בעברית: עם, לאום; גם שם הודי	בינלאומי					לאום	0	modern	1		L
 נצח	נֶצַח	Netzach,Netzah	תמידות, עולם ללא סוף; גם ניצחון	תנ״ך					חיים	1	modern	1		H
 איירוס	אַיירוֹס	Iris	פרח האירוס, באנגלית	אנגלית; טבע (צמח)		איריס			טבע, יופי	0	modern	1		M
 פליאה	פְּלִיאָה	Pliya	פלא, דבר מופלא	תנ״ך						1	modern	1		M
@@ -1062,8 +1062,8 @@ name	niqqud	translit	meaning	origin	biblical_ref	variants	reading_of	form_of	tag
 יגור	יָגוּר	Yagur	ישכון; גם קיבוץ בכרמל	עברית						0	modern	1		M
 דומיניק	דּוֹמִינִיק	Dominic	של האדון, בלטינית	לטינית						0	modern	1		H
 שירין	שִׁירִין	Shirin	מתוקה, בפרסית	פרסית					תכונה	0	modern	1		H
-עמי	עַמִּי	Ami	העם שלי	תנ״ך	הושע ב׳, ג׳					0	classic	1		H
-ציונה	צִיּוֹנָה	Tziona	מלשון ציון	עברית					אמונה	0	traditional	0		H
+עמי	עַמִּי	Ami	העם שלי	תנ״ך	הושע ב׳, ג׳				לאום	0	classic	1		H
+ציונה	צִיּוֹנָה	Tziona	מלשון ציון	עברית					אמונה, לאום	0	traditional	0		H
 ליהן	לִיהַן	Lihan	שם חדש; פירוש השם לא ודאי	עברית						0	modern	1		L
 פערי	פֶּערִי	Peri,Perry	פנינה, ביידיש	יידיש					יופי	0	traditional	0		L
 מרי	מֵרִי	Mary	על שם מרים הנביאה. הצורה האנגלית של מרים	אנגלית; תנ״ך				מרים		0	classic	1		H

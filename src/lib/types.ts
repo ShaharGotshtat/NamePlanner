@@ -14,6 +14,10 @@ export type MeaningCategory =
   | "gift"
   | "royalty"
   | "life"
+  /** The meaning is about family: a father, a son, a generation or an inheritance (ליאב, לידור, נחלה). */
+  | "family"
+  /** The meaning is about the people of Israel, Zion or the nation (עמי, ישראל, ציון). */
+  | "nation"
   /** The name is known as the name of a biblical figure. A word that only appears in the Tanakh does not count. */
   | "biblical"
   /**

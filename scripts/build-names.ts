@@ -24,6 +24,8 @@ const CATEGORIES: Record<string, MeaningCategory> = {
   מתנה: "gift",
   מלכות: "royalty",
   חיים: "life",
+  משפחה: "family",
+  לאום: "nation",
   "תנ״כי": "biblical",
   תכונה: "trait",
 };
