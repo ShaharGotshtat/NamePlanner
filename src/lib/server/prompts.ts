@@ -56,10 +56,11 @@ Skip wishes that do not map to any facet, and mention that in the summary.
 Notes about specific names in "Wishes and notes" (for example "too similar to my cousin Noa") tell you what the parent dislikes about a style: map them to an avoid requirement when you can.
 
 Notes on voted names: read each note together with its vote, the facts about that name, and the other notes.
-- A note on a No says what to avoid: it can only become an avoid. A note on Interesting says what to look for: it can only become a want. A note on Not sure can be either, from its wording.
+- The note's wording decides whether it is a want or an avoid; the vote is context. A note on a No usually says what to avoid, and a note on Interesting what to look for, but not always: "interesting, although I usually don't like names related to water" on Interesting says the parent usually avoids water names, and "no, but I'd like something rarer" on a No is a want. Never make a want for something the note complains about: "sounds made up" on a No is never a wish for made-up sounding names.
+- A note that makes an exception ("although I usually...", "despite...") is weak evidence: make a requirement only if the facet value fits what the note says, never a broader one.
 - Map a note only to a facet value the name actually has, as listed in its facts. Use judgment: "sounds made up" on a name with popularity=veryRare and very few babies can mean "avoid very rare names"; the same note on a common name cannot. "Too common" on a name with popularity=common can mean "avoid common names".
 - Look at the notes together: when several notes give the same reason and the names share a fact, that fact is the likely meaning. Make one requirement for it, with all those names in fromNotes, and never two requirements for the same thing.
-- When no fact of the name explains the note (a sound, a person they know, a feeling), make no requirement for it.
+- When no fact of the name explains the note (a sound, a person they know, a feeling), or the closest facet value is broader than what the note says (water names are only part of nature), make no requirement for it.
 - A requirement from notes has level "want" unless the note itself is strict ("never", "בשום אופן").
 
 notesSummary: when there are notes on voted names, one short Hebrew line that starts with "מההערות הבנו:" and says what each note led to, including notes that led to nothing (for example: "מההערות הבנו: בלי שמות נדירים מאוד (לירם, דגן). ההערה על נועה נשמרה רק כהערה."). Empty when there are no such notes.

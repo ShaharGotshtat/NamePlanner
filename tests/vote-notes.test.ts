@@ -33,20 +33,20 @@ describe("notes on voted names", () => {
     expect(prompt).toContain("popularity=rare/veryRare");
   });
 
-  it("never turn a No note into a wish, or an Interesting note into an avoid", async () => {
+  it("keep the direction the model read from the note, whatever the vote", async () => {
     vi.mocked(structuredCall).mockResolvedValueOnce(
-      answer([
-        { label: "שם שנשמע מומצא", kind: "want", facet: "popularity", values: ["veryRare"], level: "want", fromNotes: ["לירם"] },
-        { label: "שמות נפוצים", kind: "avoid", facet: "popularity", values: ["common"], level: "want", fromNotes: ["נועה"] },
-        { label: "שמות נדירים מאוד", kind: "avoid", facet: "popularity", values: ["veryRare"], level: "want", fromNotes: ["לירם"] },
-      ]),
+      answer([{ label: "שמות שקשורים לטבע", kind: "avoid", facet: "meaningCategory", values: ["nature"], level: "want", fromNotes: ["נועה"] }]),
     );
-    const result = await parse([
-      { nameId: rare.id, verdict: "no", note: "זה שם מומצא" },
-      { nameId: common.id, verdict: "interesting", note: "אהבתי שהוא מוכר" },
-    ]);
-    expect(result).toMatchObject({ flagged: false, profile: { requirements: [{ kind: "avoid", values: ["veryRare"], fromNotes: ["לירם"] }] } });
-    expect((result as { profile: ParsedProfile }).profile.requirements).toHaveLength(1);
+    const result = await parse([{ nameId: common.id, verdict: "interesting", note: "למרות שבדרך כלל לא אוהבת שמות של טבע" }]);
+    expect(result).toMatchObject({ profile: { requirements: [{ kind: "avoid", values: ["nature"], fromNotes: ["נועה"] }] } });
+  });
+
+  it("drop note names that were not noted", async () => {
+    vi.mocked(structuredCall).mockResolvedValueOnce(
+      answer([{ label: "שמות נדירים מאוד", kind: "avoid", facet: "popularity", values: ["veryRare"], level: "want", fromNotes: ["לירם", "יוסי"] }]),
+    );
+    const result = await parse([{ nameId: rare.id, verdict: "no", note: "זה שם מומצא" }]);
+    expect((result as { profile: ParsedProfile }).profile.requirements[0].fromNotes).toEqual(["לירם"]);
   });
 
   it("become one requirement when two notes say the same thing", async () => {

@@ -80,17 +80,6 @@ function describeNote(n: NameNote, entry: NameEntry): string {
   return `- ${asData(entry.nameHe, 30)} | vote: ${VERDICT_WORDS[n.verdict]} | note: ${asData(n.note, 300)} | meaning: ${asData(entry.meaningHe ?? "", 80)} | ${count} | ${facetsOf(entry)}`;
 }
 
-/**
- * A note never turns into the opposite of its vote: a No note only says what to avoid, an Interesting note only
- * what to look for. A requirement that breaks this is dropped, so a No note can never show up as a wish.
- */
-function followsVotes(fromNotes: string[], kind: TextRequirement["kind"], verdictOf: Map<string, NameNote["verdict"]>): boolean {
-  return fromNotes.every((name) => {
-    const verdict = verdictOf.get(name);
-    return verdict === "unsure" || (verdict === "no" ? kind === "avoid" : kind === "want");
-  });
-}
-
 /** Checks the free text and family names, then parses the wishes. Flagged input goes no further. */
 export async function parsePreferences(input: PreferencesInput, names: NameEntry[] = []): Promise<PreferencesResult | null> {
   const byId = new Map(names.map((n) => [n.id, n]));
@@ -98,7 +87,7 @@ export async function parsePreferences(input: PreferencesInput, names: NameEntry
     const entry = byId.get(n.nameId);
     return entry ? [{ note: n, entry }] : [];
   });
-  const verdictOf = new Map(notes.map(({ note, entry }) => [entry.nameHe, note.verdict]));
+  const notedNames = new Set(notes.map(({ entry }) => entry.nameHe));
 
   const prompt = `<parent_input>
 Wishes and notes:
@@ -131,8 +120,8 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
     const values = isLetterFacet(r.facet)
       ? [...new Set(r.values.map(normalizeLetters).filter(Boolean))]
       : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
-    const fromNotes = [...new Set((given ?? []).map((n) => n.trim()).filter((n) => verdictOf.has(n)))];
-    if (!values.length || !followsVotes(fromNotes, r.kind, verdictOf)) return [];
+    const fromNotes = [...new Set((given ?? []).map((n) => n.trim()).filter((n) => notedNames.has(n)))];
+    if (!values.length) return [];
     return [{ ...rest, label: asOutput(r.label, 120), values: values.slice(0, 12), ...(fromNotes.length ? { fromNotes: fromNotes.slice(0, 8) } : {}) }];
   });
   const requirements = mergeRequirements(cleaned)
