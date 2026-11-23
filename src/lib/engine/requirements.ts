@@ -41,6 +41,12 @@ interface Check {
 
 const fit = (ok: boolean, yes: string, no: string): Check => (ok ? { fit: "met", detail: yes } : { fit: "not_met", detail: no });
 
+/**
+ * For the "משמעות עברית ברורה" chip: the name comes from Hebrew or Aramaic (דניאל, עילאי), or is itself a
+ * Hebrew word (לילך, טופז). A foreign form of a Hebrew name (סמואל) or a foreign name (קים, אמיל) does not count.
+ */
+export const hasHebrewSource = (entry: NameEntry) => entry.tags.hebrewWord || entry.origin === "hebrew" || entry.origin === "aramaic";
+
 function surnameClashes(entry: NameEntry, surname: string): string[] {
   const name = normalizeHebrew(entry.nameHe);
   const clashes: string[] = [];
@@ -91,7 +97,7 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
     case "oneSpelling":
       return fit(entry.tags.singleSpelling, "נכתב רק בדרך אחת", "יש לו יותר מכתיב מקובל אחד");
     case "clearMeaning":
-      return fit(entry.tags.hebrewWord, `משמעות: ${entry.meaningHe}`, "המקור שלו אינו עברי");
+      return fit(hasHebrewSource(entry), `משמעות: ${entry.meaningHe}`, "המקור שלו אינו עברי");
     case "notTop20": {
       const latest = entry.stats.at(-1)!;
       return fit(!wasInTop(entry, 20, 2), `מקום ${latest.rank} ב-${latest.year}`, `היה בטופ 20 בשנתיים האחרונות`);
