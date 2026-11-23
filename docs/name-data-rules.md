@@ -24,6 +24,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - The original does not have to be in the list (ליזה → אלישבע is, קרולינה → קרל is not). Only an original in the list passes on its tags.
 - Leave it empty when the name's own meaning comes first and it is only also short for another name (נרי, אילי).
 - Leave it empty for a feminine name made from a man's name (דניאלה, מיכאלה, גבריאלה). It is a name of its own, so it does not get the man's verse; tag it from its own meaning.
+- Unless `hebrew_word` is 1, the first language in `origin` decides the "משמעות עברית ברורה" chip. A foreign form starts with its own language (סמואל: בינלאומי; תנ״ך, תומאס: אנגלית; ארמית), so the chip leaves it out. A feminine name made from a Hebrew man's name starts with עברית (מיכאלה: עברית; בינלאומי), so the chip counts it.
 
 ## Tags
 
@@ -43,4 +44,5 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - Look the meaning up. Behind the Name is the most reliable source for international and Yiddish names. Israeli name sites often contradict themselves, so do not copy them without checking.
 - When sources give several readings, write the most common one, or two at most (מירה: שלום, עולם; ים).
 - A new Hebrew name may be read from the Hebrew words it is made of (לינס: לי נס, הנס שלי), with confidence L.
-- Write "פירוש השם לא ודאי" only when no source explains the name. Never invent an etymology.
+- `hebrew_word` is 1 when the name is a Hebrew word in its own right (in a Hebrew dictionary, not only a name) with the meaning the card gives, whatever language the word came from (לילך, טופז, דפנה, יסמין, אירוס, אומה). The chip counts such a name whatever its origin. The international spelling of such a word is 0 (איריס, איירוס), and so is a Gregorian month (מאי, יולי); a Hebrew month is 1 (אדר, ניסן). A name made from a word, such as גילי or רוני, is 0.
+- Write "פירוש השם לא ודאי" only when no source explains the name. Never invent an etymology. A name with this text does not count for the "משמעות עברית ברורה" chip.

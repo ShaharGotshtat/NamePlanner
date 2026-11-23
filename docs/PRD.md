@@ -120,7 +120,7 @@ Proposed chips (my picks of what Israeli parents tend to weigh; I have not valid
 | Unisex | Names given to both sexes in Israel |
 | English-friendly | Easy for English speakers to say and spell: no ח, כ (as kh) or ע sounds, no Hebrew ר, one natural Latin spelling, and no sound-alike of an unflattering English word (Moran / moron) |
 | One clear spelling | A single accepted Hebrew spelling, no ו/י ambiguity |
-| Clear Hebrew meaning | The name is a Hebrew word or root with a known meaning |
+| Clear Hebrew meaning | The name comes from Hebrew or Aramaic (דניאל, עילאי), or is itself a Hebrew word (לילך), and its meaning is known. A foreign form of a Hebrew name (סמואל), a foreign name (קים) or a new name with an unclear meaning (סיאל) does not count |
 | Not in the top 20 of the last 2 years | Excludes names in the top 20 in either of the 2 latest years of CBS data (2023 and 2024 today) |
 | Fits our siblings' names | Matches the style and sound of existing children's names |
 | Flows with our surname | Avoids rhyme, repeated sounds, and awkward initials with the surname |
