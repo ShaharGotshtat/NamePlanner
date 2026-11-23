@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { Messages } from "@anthropic-ai/sdk/resources/messages";
 import { MODEL_CANDIDATES, rankCandidates, roundSizeFor } from "../src/lib/engine/round";
 import { parsePreferences, pickWithModel } from "../src/lib/server/ai";
 import type { NameEntry, NameNote, ParsedProfile, Rating, RoundRequest, Verdict } from "../src/lib/types";
@@ -10,6 +11,15 @@ import type { NameEntry, NameNote, ParsedProfile, Rating, RoundRequest, Verdict 
  * npx tsx --env-file=.env.local scripts/bench-round-wait.ts [runs]
  */
 const runs = Number(process.argv[2] ?? 2);
+// "disabled" turns thinking off on every call, to compare. Each answer's blocks are logged either way.
+const thinking = process.env.BENCH_THINKING;
+const create = Messages.prototype.create;
+Messages.prototype.create = async function (this: Messages, params: Parameters<typeof create>[0], options?: Parameters<typeof create>[1]) {
+  const response = (await create.call(this, thinking ? { ...params, thinking: { type: thinking } } as never : params, options)) as Awaited<ReturnType<Messages["create"]>> & { content: { type: string; text?: string; thinking?: string }[] };
+  const blocks = response.content.map((b) => `${b.type}:${(b.text ?? b.thinking ?? "").length} chars`).join(", ");
+  console.log(`    blocks: ${blocks}`);
+  return response;
+} as typeof create;
 const names: NameEntry[] = JSON.parse(readFileSync("data/names.json", "utf8"));
 const FREE_TEXT = "מעדיפה שם קצר, בלי שמות תנכיים";
 const NOTES: [Verdict, string][][] = [
