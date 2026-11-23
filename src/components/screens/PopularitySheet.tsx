@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { chartGeometry, HIDDEN_BELOW, historyLine, nameHistory, type SexShare } from "@/lib/names/history";
+import { nameSex } from "@/lib/names/catalog";
+import { chartGeometry, chartSeries, HIDDEN_BELOW, historyLine, nameHistory, type SeriesId, type SexShare } from "@/lib/names/history";
 import type { NameEntry } from "@/lib/types";
 import { Mascot } from "../Mascot";
 
@@ -12,6 +13,12 @@ const CHART_H = 124;
 type Range = "all" | "recent";
 
 const fmt = (n: number) => n.toLocaleString("he-IL");
+
+const SERIES: Record<SeriesId, { label: string; color: string }> = {
+  girls: { label: "בנות", color: "var(--color-rose-dark)" },
+  boys: { label: "בנים", color: "var(--color-lavender-dark)" },
+  all: { label: "תינוקות", color: "var(--color-lavender-dark)" },
+};
 
 /** A bottom sheet with a name's yearly counts, its peak and the boys/girls split. */
 export function PopularitySheet({ entry, onClose }: { entry: NameEntry; onClose: () => void }) {
@@ -56,9 +63,17 @@ interface DetailsProps {
 export function PopularityDetails({ entry, range, setRange, titleId, onClose }: DetailsProps) {
   const h = nameHistory(entry);
   const stats = range === "all" ? entry.stats : entry.stats.slice(-RECENT_YEARS);
-  const chart = chartGeometry(stats, CHART_W, CHART_H);
+  const series = chartSeries(stats);
+  const chart = chartGeometry(
+    stats.map((s) => s.year),
+    series,
+    CHART_W,
+    CHART_H,
+  );
   const firstYear = entry.stats[0].year;
-  const chartLabel = `מספר התינוקות בשם ${entry.nameHe} בכל שנה מ-${stats[0].year} עד ${h.latest.year}. השיא: ${fmt(chart.peak.stat.count)} ב-${chart.peak.stat.year}.`;
+  const peakLabel = `${fmt(chart.peak.count)} ${chart.peak.id === "all" ? "" : `${SERIES[chart.peak.id].label} `}ב-${chart.peak.year}`;
+  const chartLabel = `מספר ה${series.map((s) => SERIES[s.id].label).join(" וה")} בשם ${entry.nameHe} בכל שנה מ-${stats[0].year} עד ${h.latest.year}. השיא: ${peakLabel}.`;
+  const rankList = entry.sexRatio >= 0.5 ? "בבנים" : "בבנות";
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,7 +95,7 @@ export function PopularityDetails({ entry, range, setRange, titleId, onClose }: 
 
       <dl className="grid grid-cols-3 gap-2 text-center">
         <Tile value={h.counted ? fmt(h.latest.count) : `פחות מ-${HIDDEN_BELOW}`} label={`תינוקות ב-${h.latest.year}`} />
-        <Tile value={h.counted ? String(h.latest.rank) : "—"} label={h.counted ? "מקום ברשימה" : "לא ברשימה"} />
+        <Tile value={h.counted ? String(h.latest.rank) : "—"} label={h.counted ? `מקום ${rankList}` : "לא ברשימה"} />
         <Tile value={String(h.peak.year)} label="שנת השיא" accent />
       </dl>
 
@@ -106,6 +121,16 @@ export function PopularityDetails({ entry, range, setRange, titleId, onClose }: 
             ))}
           </div>
         </div>
+        {series.length > 1 && (
+          <ul aria-hidden className="flex gap-3.5 text-xs text-ink-soft">
+            {series.map((s) => (
+              <li key={s.id} className="flex items-center gap-1.5">
+                <span className="h-[3px] w-4 rounded-full" style={{ background: SERIES[s.id].color }} />
+                {SERIES[s.id].label}
+              </li>
+            ))}
+          </ul>
+        )}
         <svg style={{ direction: "ltr" }} viewBox={`-34 -20 ${CHART_W + 40} ${CHART_H + 40}`} className="w-full" role="img" aria-label={chartLabel}>
           <g stroke="var(--color-line)" strokeWidth="1">
             {chart.ticks.map((t) => (
@@ -119,21 +144,24 @@ export function PopularityDetails({ entry, range, setRange, titleId, onClose }: 
               </text>
             ))}
           </g>
-          <path d={chart.area} fill="var(--color-lavender-soft)" />
-          <path d={chart.line} fill="none" stroke="var(--color-lavender-dark)" strokeWidth="2.2" strokeLinejoin="round" />
-          <circle cx={chart.peak.x} cy={chart.peak.y} r="4" fill="var(--color-rose-dark)" />
+          {chart.lines.map((line) => (
+            <g key={line.id} fill={SERIES[line.id].color}>
+              <path d={line.path} fill="none" stroke={SERIES[line.id].color} strokeWidth="2.2" strokeLinejoin="round" />
+              <circle cx={line.last.x} cy={line.last.y} r="3.5" />
+            </g>
+          ))}
+          <circle cx={chart.peak.x} cy={chart.peak.y} r="4" fill={SERIES[chart.peak.id].color} />
           <text
             x={chart.peak.x > CHART_W / 2 ? chart.peak.x - 7 : chart.peak.x + 7}
             y={Math.max(Math.round(chart.peak.y - 7), -8)}
             direction="rtl"
             fontSize="11"
             fontWeight="600"
-            fill="var(--color-rose-dark)"
+            fill={SERIES[chart.peak.id].color}
             textAnchor={chart.peak.x > CHART_W / 2 ? "start" : "end"}
           >
-            {fmt(chart.peak.stat.count)} ב-{chart.peak.stat.year}
+            {peakLabel}
           </text>
-          <circle cx={chart.last.x} cy={chart.last.y} r="4" fill="var(--color-lavender-dark)" />
           <g fontSize="10" fill="var(--color-ink-soft)" textAnchor="middle">
             {chart.years.map((y) => (
               <text key={y.year} x={Math.min(Math.max(y.x, 12), CHART_W - 12)} y={CHART_H + 16}>
@@ -147,9 +175,14 @@ export function PopularityDetails({ entry, range, setRange, titleId, onClose }: 
 
       {h.allTimeShare && (
         <section className="flex flex-col gap-2">
-          <h3 className="text-[15px] font-semibold">בנים או בנות?</h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-[15px] font-semibold">בנים או בנות?</h3>
+            {nameSex(entry) === "unisex" && <span className="rounded-full bg-lavender-soft px-2.5 py-0.5 text-xs font-semibold text-lavender-dark">יוניסקס</span>}
+          </div>
           <div className="grid grid-cols-[4rem_1fr] items-center gap-x-2.5 gap-y-1.5 text-xs">
-            {h.counted && h.latestShare && <ShareRow label={`ב-${h.latest.year}`} share={h.latestShare} />}
+            {h.counted && h.latestShare && (
+              <ShareRow label={`ב-${h.latest.year}`} share={h.latestShare} counts={{ boys: h.latest.boys!, girls: h.latest.count - h.latest.boys! }} />
+            )}
             <ShareRow label={`מאז ${firstYear}`} share={h.allTimeShare} />
           </div>
         </section>
@@ -172,7 +205,7 @@ function Tile({ value, label, accent }: { value: string; label: string; accent?:
   );
 }
 
-function ShareRow({ label, share }: { label: string; share: SexShare }) {
+function ShareRow({ label, share, counts }: { label: string; share: SexShare; counts?: { boys: number; girls: number } }) {
   return (
     <>
       <span className="text-ink-soft">{label}</span>
@@ -182,8 +215,12 @@ function ShareRow({ label, share }: { label: string; share: SexShare }) {
           <span className="bg-rose" style={{ width: `${share.girlsPct}%` }} />
         </div>
         <div className="flex justify-between text-ink-soft" aria-hidden>
-          <span>בנים {share.boysPct}%</span>
-          <span>בנות {share.girlsPct}%</span>
+          <span>
+            בנים {share.boysPct}%{counts && ` (${fmt(counts.boys)})`}
+          </span>
+          <span>
+            בנות {share.girlsPct}%{counts && ` (${fmt(counts.girls)})`}
+          </span>
         </div>
       </div>
     </>

@@ -1,4 +1,5 @@
 import type { NameEntry, YearStat } from "@/lib/types";
+import { nameSex } from "./catalog";
 import { commonness, type Commonness } from "./commonness";
 
 /** The CBS hides any count under 5, so 0 means "fewer than 5", not "nobody". */
@@ -59,20 +60,41 @@ const DECADE_WORDS = { up: "ויותר מאשר לפני עשור", down: "אב�
 
 /** One plain sentence about the name's popularity, said by the sun. */
 export function historyLine(entry: NameEntry, h: NameHistory = nameHistory(entry)): string {
+  if (h.counted && h.latestShare && nameSex(entry) === "unisex") {
+    const { boysPct, girlsPct } = h.latestShare;
+    const most = boysPct >= girlsPct ? `${boysPct}% מהתינוקות שקיבלו אותו היו בנים` : `${girlsPct}% מהתינוקות שקיבלו אותו היו בנות`;
+    return `השם ${entry.nameHe} ניתן לבנים ולבנות. ב-${h.latest.year}, ${most}.`;
+  }
   if (!h.counted) return `השם ${entry.nameHe} כמעט לא ניתן היום. השיא שלו היה ב-${h.peak.year}.`;
   if (h.peak.year >= h.latest.year - 1) return `השם ${entry.nameHe} ${LEVEL_WORDS[h.level]} היום, והוא בשיא שלו.`;
   return `השם ${entry.nameHe} ${LEVEL_WORDS[h.level]} היום, ${DECADE_WORDS[h.decade]}.`;
 }
 
-export interface ChartGeometry {
-  line: string;
-  area: string;
-  peak: { x: number; y: number; stat: YearStat };
+export type SeriesId = "girls" | "boys" | "all";
+
+export interface ChartLine {
+  id: SeriesId;
+  path: string;
   last: { x: number; y: number };
+}
+
+export interface ChartGeometry {
+  lines: ChartLine[];
+  /** The highest point of all lines. */
+  peak: { x: number; y: number; id: SeriesId; year: number; count: number };
   /** Gridline values in babies, with their y. */
   ticks: { value: number; y: number }[];
   /** Year labels with their x. */
   years: { year: number; x: number }[];
+}
+
+/** The yearly counts to draw: girls and boys apart, or all together for rows saved before boys were counted. */
+export function chartSeries(stats: YearStat[]): { id: SeriesId; counts: number[] }[] {
+  if (stats.some((s) => s.boys === undefined)) return [{ id: "all", counts: stats.map((s) => s.count) }];
+  return [
+    { id: "girls", counts: stats.map((s) => s.count - s.boys!) },
+    { id: "boys", counts: stats.map((s) => s.boys!) },
+  ];
 }
 
 /** The smallest of 1, 2, 5 × 10^n that splits `max` into at most three steps. */
@@ -82,32 +104,31 @@ function tickStep(max: number): number {
   return [1, 2, 5, 10].map((m) => m * power).find((s) => s >= rough)!;
 }
 
-/** SVG paths for the yearly counts, drawn left to right in a width × height box. */
-export function chartGeometry(stats: YearStat[], width: number, height: number): ChartGeometry {
-  const step = tickStep(Math.max(...stats.map((s) => s.count), 1));
-  const top = Math.max(step * Math.ceil(Math.max(...stats.map((s) => s.count)) / step), step);
-  const x = (i: number) => (stats.length === 1 ? width : (i / (stats.length - 1)) * width);
-  const y = (count: number) => height - (count / top) * height;
+/** SVG lines for each series of yearly counts, drawn left to right in a width × height box. */
+export function chartGeometry(years: number[], series: { id: SeriesId; counts: number[] }[], width: number, height: number): ChartGeometry {
+  const max = Math.max(1, ...series.flatMap((s) => s.counts));
+  const step = tickStep(max);
+  const top = step * Math.ceil(max / step);
   const r = (n: number) => Math.round(n * 10) / 10;
-  const points = stats.map((s, i) => `${r(x(i))} ${r(y(s.count))}`);
-  const line = `M${points.join(" L")}`;
-  const peakIndex = stats.reduce((best, s, i) => (s.count > stats[best].count ? i : best), 0);
-  const first = stats[0].year;
-  const last = stats.at(-1)!.year;
+  const x = (i: number) => r(years.length === 1 ? width : (i / (years.length - 1)) * width);
+  const y = (count: number) => r(height - (count / top) * height);
+
+  let peak: ChartGeometry["peak"] = { x: x(0), y: y(0), id: series[0].id, year: years[0], count: -1 };
+  const lines = series.map(({ id, counts }) => {
+    counts.forEach((count, i) => {
+      if (count > peak.count) peak = { x: x(i), y: y(count), id, year: years[i], count };
+    });
+    return { id, path: `M${counts.map((c, i) => `${x(i)} ${y(c)}`).join(" L")}`, last: { x: width, y: y(counts.at(-1)!) } };
+  });
+
+  const first = years[0];
+  const last = years.at(-1)!;
   const yearStep = last - first > 30 ? 20 : last - first > 12 ? 5 : 2;
-  const years: { year: number; x: number }[] = [];
-  for (let year = Math.ceil(first / yearStep) * yearStep; year < last - yearStep / 2; year += yearStep) {
-    years.push({ year, x: r(x(year - first)) });
-  }
-  years.push({ year: last, x: width });
+  const labels: { year: number; x: number }[] = [];
+  for (let year = Math.ceil(first / yearStep) * yearStep; year < last - yearStep / 2; year += yearStep) labels.push({ year, x: x(year - first) });
+  labels.push({ year: last, x: width });
+
   const ticks: { value: number; y: number }[] = [];
-  for (let value = 0; value <= top; value += step) ticks.push({ value, y: r(y(value)) });
-  return {
-    line,
-    area: `${line} L${width} ${height} L0 ${height} Z`,
-    peak: { x: r(x(peakIndex)), y: r(y(stats[peakIndex].count)), stat: stats[peakIndex] },
-    last: { x: width, y: r(y(stats.at(-1)!.count)) },
-    ticks,
-    years,
-  };
+  for (let value = 0; value <= top; value += step) ticks.push({ value, y: y(value) });
+  return { lines, peak, ticks, years: labels };
 }

@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import all from "../data/names.json";
 import { PopularityDetails } from "@/components/screens/PopularitySheet";
-import { chartGeometry, historyLine, nameHistory } from "@/lib/names/history";
+import { chartGeometry, chartSeries, historyLine, nameHistory } from "@/lib/names/history";
 import type { NameEntry } from "@/lib/types";
 
 const names = all as NameEntry[];
@@ -50,15 +50,34 @@ describe("nameHistory", () => {
 });
 
 describe("chartGeometry", () => {
-  it("spans the box and marks the peak", () => {
-    const stats = [10, 40, 20].map((count, i) => ({ year: 2000 + i, count, rank: 1 }));
-    const c = chartGeometry(stats, 300, 100);
-    expect(c.line.startsWith("M0 ")).toBe(true);
-    expect(c.last.x).toBe(300);
-    expect(c.peak).toMatchObject({ x: 150, stat: { year: 2001 } });
+  it("draws each series across the box and marks the highest point", () => {
+    const c = chartGeometry(
+      [2000, 2001, 2002],
+      [
+        { id: "girls", counts: [10, 40, 20] },
+        { id: "boys", counts: [5, 5, 30] },
+      ],
+      300,
+      100,
+    );
+    expect(c.lines.map((l) => l.id)).toEqual(["girls", "boys"]);
+    expect(c.lines[0].path.startsWith("M0 ")).toBe(true);
+    expect(c.lines[1].last.x).toBe(300);
+    expect(c.peak).toMatchObject({ x: 150, id: "girls", year: 2001, count: 40 });
     expect(c.ticks[0]).toEqual({ value: 0, y: 100 });
     expect(c.ticks.at(-1)!.value).toBeGreaterThanOrEqual(40);
     expect(c.years.at(-1)).toEqual({ year: 2002, x: 300 });
+  });
+});
+
+describe("chartSeries", () => {
+  it("splits girls and boys, or keeps one line for rows without boys", () => {
+    const stats = [{ year: 2024, count: 215, rank: 111, boys: 79 }];
+    expect(chartSeries(stats)).toEqual([
+      { id: "girls", counts: [136] },
+      { id: "boys", counts: [79] },
+    ]);
+    expect(chartSeries([{ year: 2024, count: 215, rank: 111 }])).toEqual([{ id: "all", counts: [215] }]);
   });
 });
 
@@ -76,6 +95,25 @@ describe("PopularityDetails", () => {
     const html = render(named("יניב"));
     expect(html).toContain("פחות מ-5");
     expect(html).not.toContain("9999");
+  });
+
+  it("draws a girls line and a boys line for every name", () => {
+    const html = render(named("יניב"));
+    expect(html).toContain('stroke="var(--color-rose-dark)"');
+    expect(html).toContain('stroke="var(--color-lavender-dark)"');
+  });
+
+  it("tags a unisex name and gives its counts and rank list", () => {
+    const html = render(named("כרמל"));
+    expect(html).toContain("יוניסקס");
+    expect(html).toContain("בנות 63% (136)");
+    expect(html).toContain("מקום בבנות");
+    expect(html).toContain("226 בנות ב-2018");
+    expect(historyLine(named("כרמל"))).toContain("ניתן לבנים ולבנות");
+  });
+
+  it("does not tag a name given almost only to one sex", () => {
+    expect(render(named("יניב"))).not.toContain("יוניסקס");
   });
 
   it("draws only the last ten years when asked", () => {
