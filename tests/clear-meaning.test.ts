@@ -8,7 +8,7 @@ const byName = (he: string) => names.find((n) => n.nameHe === he)!;
 
 describe("the clear Hebrew meaning chip", () => {
   it("counts names from Hebrew or Aramaic, their feminine forms, and Hebrew words of foreign origin", () => {
-    expect(["דניאל", "שמואל", "נועה", "טל", "עילאי", "לילך", "מיכאלה", "גבריאלה"].filter((n) => !hasClearHebrewMeaning(byName(n)))).toEqual([]);
+    expect(["דניאל", "שמואל", "נועה", "טל", "עילאי", "לילך", "דפנה", "יסמין", "מיכאלה", "גבריאלה"].filter((n) => !hasClearHebrewMeaning(byName(n)))).toEqual([]);
   });
 
   it("leaves out a Hebrew name whose meaning is unclear", () => {
