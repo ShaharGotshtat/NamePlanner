@@ -59,6 +59,7 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
       return reportFailure(call.model, { kind: "budget spent", detail: "The daily model budget is spent." });
     }
     try {
+      const started = Date.now();
       const response = await anthropic.messages.create({
         model: call.model,
         max_tokens: maxTokens,
@@ -70,6 +71,8 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
       await recordSpend((response.usage.input_tokens * price.input + response.usage.output_tokens * price.output) / 1e6);
       const text = response.content.flatMap((block) => (block.type === "text" ? [block.text] : [])).join("");
       const usage = `stop_reason ${response.stop_reason}, ${response.usage.output_tokens} of ${maxTokens} output tokens`;
+      // How long each call takes, so a slow wait between rounds can be traced to its call.
+      log.info(`${call.model} ${Date.now() - started}ms, ${response.usage.input_tokens} in, ${response.usage.output_tokens} out (attempt ${attempt})`);
 
       if (response.stop_reason === "end_turn") {
         const parsed = parseJson(call.schema, text);
