@@ -23,6 +23,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - The build gives the form the original's tags, verse and holiday links, on top of its own, so סמואל is תנ״כי like שמואל. The card shows "צורה של שמואל".
 - The original does not have to be in the list (ליזה → אלישבע is, קרולינה → קרל is not). Only an original in the list passes on its tags.
 - Leave it empty when the name's own meaning comes first and it is only also short for another name (נרי, אילי).
+- Leave it empty for a feminine name made from a man's name (דניאלה, מיכאלה, גבריאלה). It is a name of its own, so it does not get the man's verse; tag it from its own meaning.
 
 ## Tags
 
