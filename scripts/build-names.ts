@@ -164,7 +164,7 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const stats: YearStat[] = [];
   for (let year = firstYear; year <= lastYear; year++) {
     const cell = m.get(year) ?? { F: 0, M: 0 };
-    stats.push({ year, count: cell.F + cell.M, rank: ranks.get(`${year}|${mainSex}|${name}`) ?? NOT_RANKED });
+    stats.push({ year, count: cell.F + cell.M, rank: ranks.get(`${year}|${mainSex}|${name}`) ?? NOT_RANKED, boys: cell.M });
   }
   const unknownTags = list(c.tags).filter((t) => !CATEGORIES[t]);
   if (unknownTags.length) throw new Error(`${name}: unknown tags ${unknownTags.join(", ")}`);

@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { displayMeaning, popularity } from "@/lib/names/catalog";
+import { COMMONNESS_LABELS } from "@/lib/names/commonness";
+import { HIDDEN_BELOW, nameHistory } from "@/lib/names/history";
 import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
 import { MascotSays, type MascotMood } from "../Mascot";
 import { Card, inputClass } from "../ui";
+import { PopularitySheet } from "./PopularitySheet";
 
 const VERDICTS: { id: Exclude<Verdict, "taken">; label: string; selected: string }[] = [
   { id: "no", label: "לא", selected: "border-ink bg-ink text-white" },
@@ -21,7 +24,7 @@ const FIT_CHIPS: Record<Fit, { icon: string; label: string; className: string }>
 };
 
 const SEX_LABELS = { boy: "לבן", girl: "לבת", unisex: "יוניסקס" };
-const TREND_LABELS = { rising: "במגמת עלייה", falling: "במגמת ירידה", steady: "יציב" };
+const TREND_LABELS = { rising: "↗ בעלייה", falling: "↘ בירידה", steady: "יציב" };
 
 const ORIGIN_LABELS: Record<Origin, string> = {
   hebrew: "עברי",
@@ -65,7 +68,10 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
   const [whyOpen, setWhyOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(!!rating?.note);
   const { name, sex, reason, explanation } = suggestion;
-  const { latest, trend } = popularity(name);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const historyButton = useRef<HTMLButtonElement>(null);
+  const { trend } = popularity(name);
+  const history = nameHistory(name);
   const meaning = displayMeaning(name);
 
   if (rating?.verdict === "taken") {
@@ -116,13 +122,31 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
                 {name.biblicalRef && ` · ${name.biblicalRefOf ? `השם ${name.biblicalRefOf} ` : ""}מופיע בתנ״ך (${name.biblicalRef})`}
               </dd>
             </div>
-            <div>
-              <dt className="inline font-medium">כמה נפוץ: </dt>
-              <dd className="inline">
-                {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <dt className="font-medium">כמה נפוץ:</dt>
+              <dd className="flex flex-wrap items-center gap-x-1.5">
+                <span className="rounded-full bg-lavender-dark px-2.5 py-0.5 text-xs font-semibold text-white">{COMMONNESS_LABELS[history.level]}</span>
+                {history.counted ? (
+                  <>
+                    <span>מקום {history.latest.rank}</span>
+                    <span aria-hidden className="text-ink-soft">·</span>
+                    <span>{TREND_LABELS[trend]}</span>
+                  </>
+                ) : (
+                  <span>פחות מ-{HIDDEN_BELOW} תינוקות ב-{history.latest.year}</span>
+                )}
               </dd>
             </div>
           </dl>
+          <button
+            ref={historyButton}
+            aria-haspopup="dialog"
+            className="flex min-h-11 items-center gap-2 rounded-xl bg-white px-3 text-sm font-medium text-lavender-dark ring-1 ring-line hover:ring-lavender-dark/50"
+            onClick={() => setHistoryOpen(true)}
+          >
+            גרף ונתונים
+            <span aria-hidden>‹</span>
+          </button>
           {explanation.length > 0 && (
             <ul className="flex flex-wrap gap-1.5" aria-label="מול הבקשות">
               {explanation.map((line) => {
@@ -168,6 +192,16 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
           placeholder="למשל: דומה מדי לבת הדודה"
           aria-label={`הערה על ${name.nameHe}`}
           onChange={(e) => onNote(e.target.value)}
+        />
+      )}
+
+      {historyOpen && (
+        <PopularitySheet
+          entry={name}
+          onClose={() => {
+            setHistoryOpen(false);
+            historyButton.current?.focus();
+          }}
         />
       )}
 

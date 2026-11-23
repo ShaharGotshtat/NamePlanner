@@ -45,8 +45,11 @@ export interface StyleAxes {
 
 export interface YearStat {
   year: number;
+  /** Boys and girls together. */
   count: number;
   rank: number;
+  /** Boys among `count`. Missing in rows saved before it was added. */
+  boys?: number;
 }
 
 export interface NameEntry {
