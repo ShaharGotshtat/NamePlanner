@@ -1,5 +1,6 @@
 import type { NameEntry } from "@/lib/types";
 import { featuresOf } from "@/lib/names/catalog";
+import { commonness, COMMONNESS_LABELS, type Commonness } from "@/lib/names/commonness";
 
 /** Below this many No votes there is too little to tell a pattern from chance. */
 export const MIN_NO_VOTES = 3;
@@ -17,10 +18,6 @@ export interface NoPattern {
 }
 
 const lengthBand = (letters: number) => (letters <= 3 ? "short" : letters >= 5 ? "long" : "medium");
-const popularityBand = (entry: NameEntry) => {
-  const rank = entry.stats.at(-1)?.rank ?? Infinity;
-  return rank <= 20 ? "top20" : rank <= 100 ? "common" : "rare";
-};
 
 const LABELS: Record<PatternTrait, (value: string) => string> = {
   ending: (v) => `מסתיים ב-${v}`,
@@ -29,7 +26,7 @@ const LABELS: Record<PatternTrait, (value: string) => string> = {
   origin: (v) => `מקור: ${v}`,
   style: (v) => `סגנון: ${v}`,
   theme: (v) => `נושא: ${v}`,
-  popularity: (v) => ({ top20: "בטופ 20", common: "שם נפוץ", rare: "שם נדיר" })[v] ?? v,
+  popularity: (v) => (v in COMMONNESS_LABELS ? `שם ${COMMONNESS_LABELS[v as Commonness]}` : v),
 };
 
 /** Every trait value a name has. A name can have several themes. */
@@ -41,7 +38,7 @@ function traitsOf(entry: NameEntry): [PatternTrait, string][] {
     ["length", lengthBand(f.letters)],
     ["origin", entry.origin],
     ["style", entry.tags.style],
-    ["popularity", popularityBand(entry)],
+    ["popularity", commonness(entry)],
     ...entry.tags.meaningCategories.map((c): [PatternTrait, string] => ["theme", c]),
   ];
 }

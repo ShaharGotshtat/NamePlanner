@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { MEDIAN_RANK } from "@/lib/engine/requirements";
+import { MEDIAN_RANK } from "@/lib/names/commonness";
 
 /** Rank at which half of that year's babies of that sex are covered. */
 function medianRank(year: number, sex: "F" | "M"): number {

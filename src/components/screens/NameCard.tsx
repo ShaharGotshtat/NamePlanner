@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { displayMeaning, popularity } from "@/lib/names/catalog";
+import { commonness, COMMONNESS_LABELS } from "@/lib/names/commonness";
 import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
 import { MascotSays, type MascotMood } from "../Mascot";
@@ -47,14 +48,6 @@ const reactionFor = (verdict: Verdict, id: number) => {
   const r = REACTIONS[verdict];
   return { mood: r.mood, line: r.lines[id % r.lines.length] };
 };
-
-/** Plain-language band for the latest CBS rank. */
-function commonness(rank: number): string {
-  if (rank <= 20) return "נפוץ מאוד";
-  if (rank <= 100) return "נפוץ";
-  if (rank <= 500) return "מוכר אבל לא נפוץ";
-  return "נדיר";
-}
 
 interface Props {
   suggestion: Suggestion;
@@ -127,7 +120,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             <div>
               <dt className="inline font-medium">כמה נפוץ: </dt>
               <dd className="inline">
-                {commonness(latest.rank)}. {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
+                {COMMONNESS_LABELS[commonness(name)]}. {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
               </dd>
             </div>
           </dl>

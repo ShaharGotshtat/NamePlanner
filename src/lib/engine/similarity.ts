@@ -1,5 +1,6 @@
 import type { NameEntry, StyleAxes } from "@/lib/types";
 import { featuresOf } from "@/lib/names/catalog";
+import { commonness } from "@/lib/names/commonness";
 import { computeFeatures, type NameFeatures } from "@/lib/names/features";
 
 /** What we know about a name for comparing styles. Names outside the database only have features. */
@@ -12,10 +13,6 @@ export interface NameProfile {
 export const profileOf = (entry: NameEntry): NameProfile => ({ name: entry.nameHe, features: featuresOf(entry), entry });
 export const profileOfText = (name: string): NameProfile => ({ name, features: computeFeatures(name) });
 
-const popularityBand = (entry: NameEntry) => {
-  const rank = entry.stats.at(-1)?.rank ?? Infinity;
-  return rank <= 10 ? 0 : rank <= 50 ? 1 : 2;
-};
 
 /** Two 1-5 scores: 1 when equal, 0.5 when one step apart, 0 when further apart. */
 const closeness = (a: number, b: number) => Math.max(0, 1 - Math.abs(a - b) / 2);
@@ -40,7 +37,7 @@ export function similarity(a: NameProfile, b: NameProfile): number {
     scores.push(
       a.entry.origin === b.entry.origin ? 1 : 0,
       sharedMeaning ? 1 : 0,
-      popularityBand(a.entry) === popularityBand(b.entry) ? 1 : 0,
+      commonness(a.entry) === commonness(b.entry) ? 1 : 0,
     );
     const axesA = a.entry.styleAxes;
     const axesB = b.entry.styleAxes;
