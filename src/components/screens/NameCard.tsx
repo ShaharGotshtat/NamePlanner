@@ -113,7 +113,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
               <dt className="inline font-medium">מקור: </dt>
               <dd className="inline">
                 {name.originHe ?? ORIGIN_LABELS[name.origin]}
-                {name.biblicalRef && ` · מופיע בתנ״ך (${name.biblicalRef})`}
+                {name.biblicalRef && ` · ${name.biblicalRefOf ? `השם ${name.biblicalRefOf} ` : ""}מופיע בתנ״ך (${name.biblicalRef})`}
               </dd>
             </div>
             <div>

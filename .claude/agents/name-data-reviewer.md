@@ -11,6 +11,7 @@ You review changes to the Hebrew baby name data of this app. You do not edit fil
 3. For every changed row, check:
    - Latin: each spelling is one Israelis really use, the most common one is first, nothing is missing that is common (for example Eyal for אייל), ח has both Ch and H, and the Latin agrees with the niqqud.
    - `reading_of`: the two spellings are the same name, pronounced the same. Flag any merge of two different names, or of a spelling that has a common reading of its own.
+   - `form_of`: the name really is a form of that name (a nickname, or a Yiddish or foreign form), and it names the original, not another form. Check the tags the form gets from its original in `data/names.json`.
    - Variants, tags, biblical reference and meaning follow the rules. A verse you cite must really contain the name: say so when you are not sure instead of guessing.
 4. Run `npm run data:build` and `npx vitest run tests/name-data.test.ts tests/meaning.test.ts`, and report any failure.
 

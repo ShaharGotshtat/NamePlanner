@@ -11,7 +11,9 @@ create table if not exists names (
   origin        text not null,
   origin_he     text,
   biblical_ref  text,
+  biblical_ref_of text,
   variants      text[] not null default '{}',
+  form_of       text[] not null default '{}',
   tags          jsonb not null,
   features      jsonb not null default '{}'::jsonb,
   stats         jsonb not null -- [{year, count, rank}] from CBS
@@ -20,6 +22,8 @@ create table if not exists names (
 -- Columns added after the first release, for databases created before them.
 alter table names add column if not exists origin_he text;
 alter table names add column if not exists variants text[] not null default '{}';
+alter table names add column if not exists form_of text[] not null default '{}';
+alter table names add column if not exists biblical_ref_of text;
 -- Style scores (era, reach, religious; 1 to 5), from data/name-style.tsv. Null until loaded.
 alter table names add column if not exists style_axes jsonb;
 
