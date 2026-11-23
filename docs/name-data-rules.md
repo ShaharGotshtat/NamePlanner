@@ -44,4 +44,4 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - Look the meaning up. Behind the Name is the most reliable source for international and Yiddish names. Israeli name sites often contradict themselves, so do not copy them without checking.
 - When sources give several readings, write the most common one, or two at most (מירה: שלום, עולם; ים).
 - A new Hebrew name may be read from the Hebrew words it is made of (לינס: לי נס, הנס שלי), with confidence L.
-- Write "פירוש השם לא ודאי" only when no source explains the name. Never invent an etymology.
+- Write "פירוש השם לא ודאי" only when no source explains the name. Never invent an etymology. A name with this text does not count for the "משמעות עברית ברורה" chip.

@@ -47,6 +47,9 @@ const fit = (ok: boolean, yes: string, no: string): Check => (ok ? { fit: "met",
  */
 export const hasHebrewSource = (entry: NameEntry) => entry.tags.hebrewWord || entry.origin === "hebrew" || entry.origin === "aramaic";
 
+/** The chip also needs a known meaning: the data writes "פירוש השם לא ודאי" when no source explains a name (סיאל). */
+export const hasClearHebrewMeaning = (entry: NameEntry) => hasHebrewSource(entry) && !entry.meaningHe.includes("לא ודאי");
+
 function surnameClashes(entry: NameEntry, surname: string): string[] {
   const name = normalizeHebrew(entry.nameHe);
   const clashes: string[] = [];
@@ -97,7 +100,7 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
     case "oneSpelling":
       return fit(entry.tags.singleSpelling, "נכתב רק בדרך אחת", "יש לו יותר מכתיב מקובל אחד");
     case "clearMeaning":
-      return fit(hasHebrewSource(entry), `משמעות: ${entry.meaningHe}`, "המקור שלו אינו עברי");
+      return fit(hasClearHebrewMeaning(entry), `משמעות: ${entry.meaningHe}`, hasHebrewSource(entry) ? "פירוש השם לא ודאי" : "המקור שלו אינו עברי");
     case "notTop20": {
       const latest = entry.stats.at(-1)!;
       return fit(!wasInTop(entry, 20, 2), `מקום ${latest.rank} ב-${latest.year}`, `היה בטופ 20 בשנתיים האחרונות`);
