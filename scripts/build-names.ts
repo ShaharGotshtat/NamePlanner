@@ -169,8 +169,8 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const variants = [...new Set([...list(c.variants), ...(spellingsOf.get(name) ?? [])])];
   const formOf = list(c.form_of ?? "");
   const tagLabels = [...new Set([...list(c.tags), ...originals.flatMap((o) => list(o.tags))])];
-  const biblicalRef =
-    c.biblical_ref || (tagLabels.includes("תנ״כי") ? originals.find((o) => list(o.tags).includes("תנ״כי"))?.biblical_ref : "") || null;
+  const verseFrom = !c.biblical_ref && tagLabels.includes("תנ״כי") ? originals.find((o) => list(o.tags).includes("תנ״כי")) : undefined;
+  const biblicalRef = c.biblical_ref || verseFrom?.biblical_ref || null;
   return {
     id: i + 1,
     nameHe: name,
@@ -181,6 +181,7 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
     origin: primaryOrigin(c.origin),
     originHe: c.origin,
     biblicalRef,
+    ...(verseFrom ? { biblicalRefOf: verseFrom.name } : {}),
     variants,
     ...(formOf.length ? { formOf } : {}),
     tags: {

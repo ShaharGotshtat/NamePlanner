@@ -57,6 +57,8 @@ export interface NameEntry {
   /** The full origin as shown on the card, for example "תנ״ך; טבע (צמח)". */
   originHe?: string;
   biblicalRef: string | null;
+  /** The original name the verse is about, when the verse came from it and not from this form (סמואל: שמואל). */
+  biblicalRefOf?: string;
   /** Other Hebrew spellings parents use. */
   variants?: string[];
   /** The name this is a form of: a nickname, or a Yiddish or foreign form (דני is a form of דניאל). */

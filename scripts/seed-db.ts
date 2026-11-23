@@ -24,6 +24,7 @@ await sql.begin(async (tx) => {
     origin: n.origin,
     origin_he: n.originHe ?? null,
     biblical_ref: n.biblicalRef,
+    biblical_ref_of: n.biblicalRefOf ?? null,
     variants: n.variants ?? [],
     form_of: n.formOf ?? [],
     tags: tx.json(n.tags),
