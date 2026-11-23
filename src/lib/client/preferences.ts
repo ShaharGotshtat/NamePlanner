@@ -5,14 +5,15 @@ export function preferenceInput(s: AppState): PreferencesInput {
   return {
     chips: s.chips,
     texts: [s.freeText, ...s.notes].map((t) => t.trim()).filter(Boolean),
+    nameNotes: s.nameNotes,
     namesWeLike: s.namesWeLike,
     family: s.family,
   };
 }
 
 export const inputKey = (s: AppState) => {
-  const { texts, namesWeLike, family } = preferenceInput(s);
-  return JSON.stringify({ texts, namesWeLike, family });
+  const { texts, nameNotes, namesWeLike, family } = preferenceInput(s);
+  return JSON.stringify({ texts, ...(nameNotes.length ? { nameNotes } : {}), namesWeLike, family });
 };
 
 export const needsCheck = (s: AppState) => inputKey(s) !== s.checkedInput;
@@ -23,13 +24,13 @@ export interface CheckResult {
   ok: boolean;
 }
 
-const DROP_FREE_TEXT = { freeText: "", notes: [] };
+const DROP_FREE_TEXT = { freeText: "", notes: [], nameNotes: [] };
 
 /** Sends the free text, names and family list for the input check and parsing. */
 export async function runCheck(s: AppState): Promise<CheckResult> {
   const input = preferenceInput(s);
   const { status, profile, errorId, token } = await checkPreferences(input, s.token);
-  const hasText = input.texts.length > 0 || input.namesWeLike.length > 0;
+  const hasText = input.texts.length > 0 || input.nameNotes.length > 0 || input.namesWeLike.length > 0;
   const checked = { token, checkedInput: inputKey(s) };
 
   switch (status) {

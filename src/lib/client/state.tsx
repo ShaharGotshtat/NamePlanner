@@ -6,6 +6,7 @@ import type {
   ChipSelection,
   DueDerived,
   FamilyName,
+  NameNote,
   ParsedProfile,
   Rating,
   RoundRequest,
@@ -40,7 +41,10 @@ export interface AppState {
   family: FamilyName[];
   chips: ChipSelection;
   freeText: string;
+  /** Notes on a whole round ("על הסבב: ..."), and name notes saved before votes were sent with them. */
   notes: string[];
+  /** Notes on names, with the vote, from finished rounds. */
+  nameNotes: NameNote[];
   namesWeLike: string[];
   /** Names voted "no" in earlier searches. They survive a restart so they are not suggested again. */
   declined: string[];
@@ -67,6 +71,7 @@ export const initialState: AppState = {
   chips: {},
   freeText: "",
   notes: [],
+  nameNotes: [],
   namesWeLike: [],
   declined: [],
   profile: null,

@@ -26,11 +26,13 @@ const textRequirement = z.object({
   facet: z.enum(FACETS),
   values: z.array(z.string().max(20)).max(12),
   level: z.enum(["must", "want"]).optional(),
+  fromNotes: z.array(shortText).max(8).optional(),
 });
 
 const profile = z.object({
   summary: z.string().max(300),
   requirements: z.array(textRequirement).max(20),
+  notesSummary: z.string().max(300).optional(),
   sig: z.string().max(100).optional(),
 });
 
@@ -66,6 +68,16 @@ export const roundRequestSchema = z.object({
 export const preferencesRequestSchema = z.object({
   chips,
   texts: z.array(z.string().trim().max(500)).max(30),
+  nameNotes: z
+    .array(
+      z.object({
+        nameId: z.number().int(),
+        verdict: z.enum(["no", "unsure", "interesting"]),
+        note: z.string().trim().min(1).max(300),
+      }),
+    )
+    .max(60)
+    .default([]),
   namesWeLike: z.array(shortText).max(20),
   family: z.array(familyName).max(40),
 });

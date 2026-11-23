@@ -115,16 +115,27 @@ export interface TextRequirement {
   values: string[];
   /** "must" when the wording is strict ("only", "רק"): names that miss it are dropped. Missing means "want". */
   level?: "must" | "want";
+  /** The names whose vote notes this requirement came from. Missing when it came from the free text. */
+  fromNotes?: string[];
 }
 
 export interface ParsedProfile {
   summary: string;
   requirements: TextRequirement[];
+  /** One line on how the notes on voted names were understood, shown on the rounds after them. */
+  notesSummary?: string;
   /** Server signature: a profile the client changed or made up is ignored. */
   sig?: string;
 }
 
 export type Verdict = "no" | "unsure" | "interesting" | "taken";
+
+/** A note the parent wrote on a name, sent with the vote so both are read together. */
+export interface NameNote {
+  nameId: number;
+  verdict: Exclude<Verdict, "taken">;
+  note: string;
+}
 
 export interface Rating {
   nameId: number;

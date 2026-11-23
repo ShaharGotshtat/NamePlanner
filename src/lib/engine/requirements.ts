@@ -220,6 +220,42 @@ export function checkText(req: TextRequirement, entry: NameEntry, spelling = ent
   return { fit: ok ? "met" : "not_met", detail: ok ? "מתאים" : "לא מתאים לבקשה הזו" };
 }
 
+const LEADING_NEGATION = /^(?:בלי|ללא|לא|אין)\s+/;
+
+/**
+ * How a free-text or note requirement reads on the card. An avoid says so in code ("בלי שמות נדירים מאוד"),
+ * so it never reads as a wish whatever the model wrote, and a requirement from notes names the notes it came from.
+ */
+export function requirementLabel(req: TextRequirement): string {
+  const base = req.kind === "avoid" ? `בלי ${req.label.replace(LEADING_NEGATION, "")}` : req.label;
+  const names = req.fromNotes ?? [];
+  const source = names.length === 0 ? "" : names.length === 1 ? ` (מההערה על ${names[0]})` : ` (מההערות על ${names.slice(0, 2).join(", ")}${names.length > 2 ? " ועוד" : ""})`;
+  return `${base}${source}${req.level === "must" ? " (חובה)" : ""}`;
+}
+
+/**
+ * One requirement per kind, facet and values: two notes that say the same thing become one line.
+ * The merged one is a must if any of them was, and keeps every name it came from.
+ */
+export function mergeRequirements<T extends Omit<TextRequirement, "id">>(reqs: T[]): T[] {
+  const byKey = new Map<string, T>();
+  for (const r of reqs) {
+    const key = JSON.stringify([r.kind, r.facet, [...r.values].sort()]);
+    const seen = byKey.get(key);
+    if (!seen) {
+      byKey.set(key, r);
+      continue;
+    }
+    const level = seen.level === "must" || r.level === "must" ? "must" : (seen.level ?? r.level);
+    // A line the free text asked for stays a free-text line: the notes only repeat it.
+    const direct = !seen.fromNotes ? seen : !r.fromNotes ? r : null;
+    const { fromNotes: _, ...base } = direct ?? seen;
+    const fromNotes = direct ? undefined : [...new Set([...seen.fromNotes!, ...r.fromNotes!])];
+    byKey.set(key, { ...base, ...(level ? { level } : {}), ...(fromNotes ? { fromNotes } : {}) } as T);
+  }
+  return [...byKey.values()];
+}
+
 export interface Evaluation {
   lines: ExplanationLine[];
   mustsMet: boolean;
@@ -256,13 +292,12 @@ export function evaluate(entry: NameEntry, req: Pick<RoundRequest, "chips" | "pr
   const spelling = spellingFor(entry, texts);
   for (const text of texts) {
     const check = checkText(text, entry, spelling);
+    lines.push({ requirement: requirementLabel(text), ...check });
     if (text.level === "must") {
       // Too few names that pass means shorter rounds, never a name that misses the wish.
       mustsMet &&= check.fit === "met";
-      lines.push({ requirement: `${text.label} (חובה)`, ...check });
       continue;
     }
-    lines.push({ requirement: text.label, ...check });
     wantsTotal++;
     if (check.fit === "met") wantsMet++;
   }
