@@ -47,7 +47,11 @@ export function decodeToken(token: string | null, now = Date.now()): SessionClai
 
 /** Field by field, so the signature does not depend on key order after a JSON round trip. */
 const canonicalProfile = (p: ParsedProfile) =>
-  JSON.stringify([p.summary, p.requirements.map((r) => [r.id, r.label, r.kind, r.facet, r.values, ...(r.level ? [r.level] : [])])]);
+  JSON.stringify([
+    p.summary,
+    p.requirements.map((r) => [r.id, r.label, r.kind, r.facet, r.values, ...(r.level ? [r.level] : []), ...(r.fromNotes ? [r.fromNotes] : [])]),
+    ...(p.notesSummary ? [p.notesSummary] : []),
+  ]);
 
 export const signProfile = (profile: ParsedProfile): ParsedProfile => ({
   ...profile,

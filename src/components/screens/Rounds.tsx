@@ -6,7 +6,7 @@ import { Prefetch } from "@/lib/client/prefetch";
 import { inputKey, runCheck } from "@/lib/client/preferences";
 import { roundRequest, unseenNames, useApp, type AppState } from "@/lib/client/state";
 import { ROUNDS_PER_PASS } from "@/lib/constants";
-import type { Verdict } from "@/lib/types";
+import type { NameNote, Verdict } from "@/lib/types";
 import { Mascot, ThinkingMascot, type MascotMood } from "../Mascot";
 import { Button, inputClass } from "../ui";
 import { FinishCheck } from "./FinishCheck";
@@ -142,23 +142,26 @@ export function Rounds() {
 
   const next = async () => {
     if (!round) return;
-    const cardNotes = round.suggestions
-      .map((x) => ({ name: x.name.nameHe, note: state.ratings[x.name.id]?.note?.trim() }))
-      .filter((x) => x.note)
-      .map((x) => `על השם ${x.name}: ${x.note}`);
-    const newNotes = [
-      ...cardNotes,
-      ...(roundNote.trim() ? [`על הסבב: ${roundNote.trim()}`] : []),
-    ];
+    // Each note goes with its vote, so a note on a No is read as something to avoid.
+    const cardNotes = round.suggestions.flatMap((x): NameNote[] => {
+      const { verdict, note } = state.ratings[x.name.id] ?? {};
+      const text = note?.trim();
+      return text && verdict && verdict !== "taken" ? [{ nameId: x.name.id, verdict, note: text }] : [];
+    });
+    const newNotes = roundNote.trim() ? [`על הסבב: ${roundNote.trim()}`] : [];
 
     const finishedPass = roundNumber >= ROUNDS_PER_PASS;
     const completed = { rounds: state.rounds.map((r) => (r === round ? { ...r, completed: true } : r)) };
     let patch: Partial<AppState> = { ...completed, ...(finishedPass ? { step: "summary" as const } : {}) };
 
-    if (newNotes.length && allowNotes) {
-      // A round reopened with the back button sends its notes again, so drop repeats.
-      const withNotes = { ...state, notes: [...new Set([...state.notes, ...newNotes])] };
-      patch = { ...patch, notes: withNotes.notes };
+    // A round reopened with the back button sends its notes again: a name keeps only its latest note and vote.
+    const roundIds = new Set(round.suggestions.map((x) => x.name.id));
+    // The server takes up to 60, so the oldest drop off first.
+    const nameNotes = [...state.nameNotes.filter((n) => !roundIds.has(n.nameId)), ...cardNotes].slice(-60);
+    const notesChanged = newNotes.length > 0 || JSON.stringify(nameNotes) !== JSON.stringify(state.nameNotes);
+    if (notesChanged && allowNotes) {
+      const withNotes = { ...state, notes: [...new Set([...state.notes, ...newNotes])], nameNotes };
+      patch = { ...patch, notes: withNotes.notes, nameNotes };
       if (!finishedPass) {
         checkNotesInBackground(withNotes);
       } else {
@@ -268,6 +271,9 @@ export function Rounds() {
       <p className="mb-4 text-xs text-ink-soft">ההצעות נוצרות בבינה מלאכותית. כדאי לבדוק כל שם לפני הרישום.</p>
       {roundNumber === 1 && state.profile?.summary && (
         <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{state.profile.summary}</p>
+      )}
+      {roundNumber > 1 && state.profile?.notesSummary && (
+        <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{state.profile.notesSummary}</p>
       )}
       {roundNumber === 1 && round.notice && <p className="mb-4 rounded-xl bg-lavender-soft px-3 py-2 text-xs">{round.notice}</p>}
 

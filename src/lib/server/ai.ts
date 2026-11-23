@@ -1,7 +1,7 @@
 import { z } from "zod";
-import type { BabySex, ChipId, FamilyName, NameEntry, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
+import type { BabySex, ChipId, FamilyName, NameEntry, NameNote, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
 import { chipLabel } from "@/lib/engine/chips";
-import { isLetterFacet, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
+import { checkText, isLetterFacet, mergeRequirements, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
 import { noPatternsFor, ROUND_SIZE, shortReason, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
@@ -25,12 +25,15 @@ const requirementOutput = z.object({
   facet: z.enum(FACETS),
   values: z.array(z.string()),
   level: z.enum(["must", "want"]),
+  /** The names whose notes the requirement came from; empty when it came from the free text. */
+  fromNotes: z.array(z.string()).default([]),
 });
 
 /** The format the model is asked for. */
 const preferencesOutput = z.object({
   flagged: z.boolean(),
   summary: z.string(),
+  notesSummary: z.string().default(""),
   requirements: z.array(requirementOutput),
 });
 
@@ -50,17 +53,48 @@ export const preferencesAnswer = preferencesOutput.extend({
 
 export interface PreferencesInput {
   texts: string[];
+  /** Notes on voted names, with the vote. Read together with the name's facts and with each other. */
+  nameNotes?: NameNote[];
   namesWeLike: string[];
   family: FamilyName[];
 }
 
 export type PreferencesResult = { flagged: true } | { flagged: false; profile: ParsedProfile };
 
+const VERDICT_WORDS: Record<NameNote["verdict"], string> = { no: "No", unsure: "Not sure", interesting: "Interesting" };
+/** The facet values a note can lead to, checked on the noted name, so the model maps a note only to facts the name has. */
+const NOTE_FACETS = ["meaningCategory", "origin", "style", "length", "popularity"] as const;
+
+function facetsOf(entry: NameEntry): string {
+  return NOTE_FACETS.map((facet) => {
+    const values = (ALLOWED_VALUES[facet] ?? []).filter(
+      (value) => checkText({ id: "", label: "", kind: "want", facet, values: [value] }, entry).fit === "met",
+    );
+    return `${facet}=${values.join("/") || "none"}`;
+  }).join(", ");
+}
+
+function describeNote(n: NameNote, entry: NameEntry): string {
+  const latest = entry.stats.at(-1);
+  const count = latest ? `${latest.count} babies in ${latest.year}, rank ${latest.rank}` : "no birth data";
+  return `- ${asData(entry.nameHe, 30)} | vote: ${VERDICT_WORDS[n.verdict]} | note: ${asData(n.note, 300)} | meaning: ${asData(entry.meaningHe ?? "", 80)} | ${count} | ${facetsOf(entry)}`;
+}
+
 /** Checks the free text and family names, then parses the wishes. Flagged input goes no further. */
-export async function parsePreferences(input: PreferencesInput): Promise<PreferencesResult | null> {
+export async function parsePreferences(input: PreferencesInput, names: NameEntry[] = []): Promise<PreferencesResult | null> {
+  const byId = new Map(names.map((n) => [n.id, n]));
+  const notes = (input.nameNotes ?? []).flatMap((n) => {
+    const entry = byId.get(n.nameId);
+    return entry ? [{ note: n, entry }] : [];
+  });
+  const notedNames = new Set(notes.map(({ entry }) => entry.nameHe));
+
   const prompt = `<parent_input>
 Wishes and notes:
 ${input.texts.map((t) => `- ${asData(t)}`).join("\n") || "(none)"}
+
+Notes on voted names (name | vote | note | facts about the name):
+${notes.map(({ note, entry }) => describeNote(note, entry)).join("\n") || "(none)"}
 
 Names we like (style references):
 ${input.namesWeLike.map((n) => asData(n, 60)).join(", ") || "(none)"}
@@ -80,19 +114,25 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
   if (!output) return null;
   if (output.flagged) return { flagged: true };
 
-  const requirements = output.requirements
-    .map(normalizeThemeRequirement)
-    .map((r, i) => {
-      const allowed = ALLOWED_VALUES[r.facet];
-      const kept = isLetterFacet(r.facet)
-        ? [...new Set(r.values.map(normalizeLetters).filter(Boolean))]
-        : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
-      return { ...r, id: `text-${i}`, label: asOutput(r.label, 120), values: kept.slice(0, 12) };
-    })
-    .filter((r) => r.values.length > 0)
-    .slice(0, 20);
+  const cleaned = output.requirements.map(normalizeThemeRequirement).flatMap((r) => {
+    const { fromNotes: given, ...rest } = r;
+    const allowed = ALLOWED_VALUES[r.facet];
+    const values = isLetterFacet(r.facet)
+      ? [...new Set(r.values.map(normalizeLetters).filter(Boolean))]
+      : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
+    const fromNotes = [...new Set((given ?? []).map((n) => n.trim()).filter((n) => notedNames.has(n)))];
+    if (!values.length) return [];
+    return [{ ...rest, label: asOutput(r.label, 120), values: values.slice(0, 12), ...(fromNotes.length ? { fromNotes: fromNotes.slice(0, 8) } : {}) }];
+  });
+  const requirements = mergeRequirements(cleaned)
+    .slice(0, 20)
+    .map((r, i) => ({ ...r, id: `text-${i}` }));
 
-  return { flagged: false, profile: { summary: asOutput(output.summary, 300), requirements } };
+  const notesSummary = notes.length ? asOutput(output.notesSummary, 300) : "";
+  return {
+    flagged: false,
+    profile: { summary: asOutput(output.summary, 300), requirements, ...(notesSummary ? { notesSummary } : {}) },
+  };
 }
 
 const roundOutput = z.object({

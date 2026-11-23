@@ -1,6 +1,6 @@
 import { APP_VERSION } from "@/lib/constants";
 import { reportError, track } from "./journey";
-import type { ParsedProfile, RoundRequest, Suggestion } from "@/lib/types";
+import type { NameNote, ParsedProfile, RoundRequest, Suggestion } from "@/lib/types";
 
 export class ApiError extends Error {
   constructor(
@@ -79,6 +79,7 @@ export type PreferencesStatus = "ok" | "flagged" | "disabled" | "unavailable";
 export interface PreferencesInput {
   chips: RoundRequest["chips"];
   texts: string[];
+  nameNotes: NameNote[];
   namesWeLike: string[];
   family: RoundRequest["family"];
 }
