@@ -1,15 +1,46 @@
 import postgres from "postgres";
 import type { EventName, StoredEvent } from "@/lib/analytics/events";
-import names from "../../../../data/names.json";
-import type { NameEntry } from "@/lib/types";
+import type { NameEntry, Origin, StyleAxes, YearStat } from "@/lib/types";
 import type { Report, ReportContext, ReportType, Store } from "./types";
+
+interface NameRow {
+  id: number;
+  name_he: string;
+  niqqud: string;
+  translit: string[];
+  sex_ratio: number;
+  meaning_he: string;
+  origin: Origin;
+  origin_he: string | null;
+  biblical_ref: string | null;
+  variants: string[];
+  tags: NameEntry["tags"];
+  stats: YearStat[];
+  /** Undefined before the column exists, null for a name without scores. */
+  style_axes?: StyleAxes | null;
+}
+
+const toEntry = (r: NameRow): NameEntry => ({
+  id: r.id,
+  nameHe: r.name_he,
+  niqqud: r.niqqud,
+  translit: r.translit,
+  sexRatio: r.sex_ratio,
+  meaningHe: r.meaning_he,
+  origin: r.origin,
+  originHe: r.origin_he ?? undefined,
+  biblicalRef: r.biblical_ref,
+  variants: r.variants,
+  tags: r.tags,
+  stats: r.stats,
+  styleAxes: r.style_axes ?? undefined,
+});
 
 export function postgresStore(url: string): Store {
   const sql = postgres(url, { max: 3, prepare: false });
 
   return {
-    // The list ships with each deploy, so a merged data change goes live without a seed step.
-    loadNames: async () => names as NameEntry[],
+    loadNames: async () => (await sql<NameRow[]>`select * from names order by id`).map(toEntry),
 
     getSetting: async (key) => {
       const [row] = await sql<{ value: string }[]>`select value from app_settings where key = ${key}`;
