@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { displayMeaning, popularity } from "@/lib/names/catalog";
-import { commonness, COMMONNESS_LABELS } from "@/lib/names/commonness";
 import type { Fit, Origin, Rating, Suggestion, Verdict } from "@/lib/types";
 import { useFeedback } from "../Feedback";
 import { MascotSays, type MascotMood } from "../Mascot";
@@ -120,7 +119,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             <div>
               <dt className="inline font-medium">כמה נפוץ: </dt>
               <dd className="inline">
-                {COMMONNESS_LABELS[commonness(name)]}. {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
+                {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
               </dd>
             </div>
           </dl>

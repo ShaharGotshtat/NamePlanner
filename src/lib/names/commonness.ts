@@ -1,7 +1,7 @@
 import type { NameEntry } from "@/lib/types";
 
 /**
- * The one definition of how common a name is, used everywhere: the card label, popularity wishes,
+ * The one definition of how common a name is, used everywhere: popularity wishes,
  * No-vote patterns, similarity and the facts given to the model.
  *
  * The median rank in the latest CBS year (2024): half of the babies of that sex got a name ranked
@@ -14,7 +14,7 @@ export const VERY_RARE_RANK = 150;
 
 export type Commonness = "common" | "rare" | "veryRare";
 
-/** Card wording, so "בלי שמות נפוצים" removes exactly the names whose card says נפוץ. */
+/** Hebrew wording for each level, for No-pattern labels. The card shows only numbers, not a level. */
 export const COMMONNESS_LABELS: Record<Commonness, string> = {
   common: "נפוץ",
   rare: "פחות נפוץ",
