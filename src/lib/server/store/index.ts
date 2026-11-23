@@ -7,7 +7,7 @@ import type { Store } from "./types";
 const holder = globalThis as { nameplannerStore?: Store };
 
 export function getStore(): Store {
-  holder.nameplannerStore ??= process.env.DATABASE_URL ? postgresStore(process.env.DATABASE_URL) : memoryStore();
+  holder.nameplannerStore ??= process.env.POSTGRES_URL ? postgresStore(process.env.POSTGRES_URL) : memoryStore();
   return holder.nameplannerStore;
 }
 

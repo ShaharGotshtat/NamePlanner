@@ -7,8 +7,8 @@ import type { NameEntry } from "../src/lib/types";
  * joined by npm run data:build) into the names already in the database, matched by Hebrew name.
  * Nothing else in the table changes, and rows are not deleted or added.
  */
-const url = process.env.DATABASE_URL;
-if (!url) throw new Error("Set DATABASE_URL to the database connection string first.");
+const url = process.env.POSTGRES_URL;
+if (!url) throw new Error("Set POSTGRES_URL to the database connection string first.");
 
 const names: NameEntry[] = JSON.parse(readFileSync("data/names.json", "utf8"));
 const styles = new Map(names.filter((n) => n.styleAxes).map((n) => [n.nameHe, n.styleAxes!]));
