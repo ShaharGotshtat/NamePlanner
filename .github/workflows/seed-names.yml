@@ -1,0 +1,33 @@
+# Copies data/names.json into the production database after every merge that changes it.
+# Needs the repository secret DATABASE_URL (Supabase Transaction pooler, port 6543).
+name: Seed names
+
+on:
+  push:
+    branches: [claude/project-thread-bpamjz]
+    paths: [data/names.json, db/schema.sql, scripts/seed-db.ts]
+  workflow_dispatch:
+
+concurrency:
+  group: seed-names
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Load names into the database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Add DATABASE_URL under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          npm run db:seed
