@@ -30,6 +30,10 @@ export function popularity(entry: NameEntry): Popularity {
   return { latest, trend };
 }
 
+export function wasInTop(entry: NameEntry, top: number, lastYears: number): boolean {
+  return entry.stats.slice(-lastYears).some((s) => s.rank <= top);
+}
+
 const featureCache = new Map<number, NameFeatures>();
 
 export function featuresOf(entry: NameEntry): NameFeatures {

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { chooseOurPick, pickDiverse, rankCandidates } from "@/lib/engine/round";
 import { nameSex } from "@/lib/names/catalog";
 import { findNoPatterns } from "@/lib/engine/no-patterns";
-import { checkChip, checkText, matchContext } from "@/lib/engine/requirements";
+import { checkText } from "@/lib/engine/requirements";
 import { commonness, COMMONNESS_LABELS, MEDIAN_RANK, VERY_RARE_RANK } from "@/lib/names/commonness";
 import { normalizeHebrew } from "@/lib/names/features";
 import { byName, names, request } from "./fixtures";
@@ -37,13 +37,11 @@ describe("rankCandidates", () => {
   });
 
   it("drops every name that misses a Must chip", () => {
-    // The sample names are all common, so two are moved below the median.
-    const rarer = names.map((n) => (["שקד", "לביאה"].includes(n.nameHe) ? { ...n, stats: n.stats.map((s) => ({ ...s, rank: 60 })) } : n));
-    const ranked = rankCandidates(rarer, request({ chips: { notTop20: "must", englishFriendly: "must" } }));
+    const ranked = rankCandidates(names, request({ chips: { notTop20: "must", englishFriendly: "must" } }));
     expect(ranked.length).toBeGreaterThan(0);
     for (const c of ranked) {
       expect(c.entry.tags.englishFriendly).toBe(true);
-      expect(commonness(c.entry)).not.toBe("common");
+      expect(c.entry.stats.slice(-2).every((s) => s.rank > 20)).toBe(true);
     }
   });
 
@@ -192,10 +190,6 @@ describe("popularity", () => {
       expect(checkText(noCommon, entry).fit).toBe(cardSaysCommon ? "not_met" : "met");
     }
     expect(commonness(atRank(47))).toBe("rare");
-    for (const rank of [MEDIAN_RANK.boy, MEDIAN_RANK.boy + 1]) {
-      const entry = atRank(rank);
-      expect(checkChip("notTop20", entry, matchContext({ family: [], surname: "", dueDerived: null }))!.fit).toBe(commonness(entry) === "common" ? "not_met" : "met");
-    }
   });
 
 });
