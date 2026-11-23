@@ -33,7 +33,7 @@ With no environment variables the app runs on a 56-name sample (`data/names.samp
 
 ## Database
 
-`npm run db:seed` creates the tables from `db/schema.sql` and loads `data/names.json`, replacing any names already there. The GitHub Action `.github/workflows/seed-names.yml` runs it after every merge that changes `data/names.json`, using the repository secret `DATABASE_URL`; it can also be run by hand from the Actions tab. With Supabase, use the Transaction pooler connection string (port 6543):
+`npm run db:seed` creates the tables from `db/schema.sql` and loads `data/names.json`, replacing any names already there. The GitHub Action `.github/workflows/seed-names.yml` runs it after every merge that changes `data/names.json`, using the repository secret `DATABASE_URL` (or `POSTGRES_URL`); it can also be run by hand from the Actions tab. With Supabase, use the Transaction pooler connection string (port 6543):
 
 ```bash
 DATABASE_URL="postgres://...pooler.supabase.com:6543/postgres" npm run db:seed
