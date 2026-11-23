@@ -12,6 +12,13 @@ export const MODELS = {
 
 type Model = (typeof MODELS)[keyof typeof MODELS];
 
+/**
+ * Haiku sometimes thinks before a structured answer, unseen, and that thinking was most of the wait
+ * before a round with notes (up to ~900 extra tokens, several seconds). These calls are short and
+ * well specified, so it is turned off. Sonnet did not think on these calls in the bench.
+ */
+const THINKING_OFF: Partial<Record<Model, { type: "disabled" }>> = { "claude-haiku-5-5": { type: "disabled" } };
+
 const USD_PER_MTOK: Record<Model, { input: number; output: number }> = {
   "claude-sonnet-5-5": { input: 2, output: 10 },
   "claude-haiku-5-5": { input: 0.1, output: 0.5 },
@@ -66,6 +73,7 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
         system: call.system,
         messages: [{ role: "user", content: call.prompt }],
         output_config: { format: zodOutputFormat(call.format ?? call.schema), effort: "low" },
+        ...(THINKING_OFF[call.model] ? { thinking: THINKING_OFF[call.model] } : {}),
       });
       const price = USD_PER_MTOK[call.model];
       await recordSpend((response.usage.input_tokens * price.input + response.usage.output_tokens * price.output) / 1e6);
