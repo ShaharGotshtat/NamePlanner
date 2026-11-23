@@ -59,6 +59,8 @@ export interface NameEntry {
   biblicalRef: string | null;
   /** Other Hebrew spellings parents use. */
   variants?: string[];
+  /** The name this is a form of: a nickname, or a Yiddish or foreign form (דני is a form of דניאל). */
+  formOf?: string[];
   tags: {
     meaningCategories: MeaningCategory[];
     hebrewWord: boolean;

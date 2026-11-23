@@ -43,6 +43,25 @@ describe("name data rules (docs/name-data-rules.md)", () => {
     expect(noVerse.map((n) => n.nameHe)).toEqual([]);
   });
 
+  it("a form of another name points to the original, never to itself or to another form", () => {
+    const rowOf = new Map(content.map((c) => [c.name, c]));
+    const bad = content.flatMap((c) =>
+      (c.form_of ?? "").split(",").map((o) => o.trim()).filter(Boolean)
+        .filter((o) => o === c.name || rowOf.get(o)?.form_of)
+        .map((o) => `${c.name}→${o}`),
+    );
+    expect(bad).toEqual([]);
+  });
+
+  it("a form has every tag of its original", () => {
+    const missing = names.flatMap((n) =>
+      (n.formOf ?? []).flatMap((o) =>
+        (byName.get(o)?.tags.meaningCategories ?? []).filter((t) => !n.tags.meaningCategories.includes(t)).map((t) => `${n.nameHe}: ${t} from ${o}`),
+      ),
+    );
+    expect(missing).toEqual([]);
+  });
+
   it("halves of double names are not in the list", () => {
     expect(["בת", "שבע", "היא", "שר"].filter((f) => byName.has(f))).toEqual([]);
   });

@@ -16,6 +16,14 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - A spelling that has a common reading of its own stays a separate name and says both in its meaning (אילת: the city, and כתיב חסר of איילת).
 - `variants` needs only one side; the build makes every link two-way.
 
+## Forms of another name (`form_of`)
+
+- A nickname, or a Yiddish or foreign form, names its original in `form_of`: דני → דניאל, מריה → מרים, אליזבט → אלישבע, סמואל → שמואל. Two originals are separated by a comma (מיקה → מיכאל, מיכל).
+- `form_of` names the original itself, never another form: מייקי → מיכאל, not מייקל.
+- The build gives the form the original's tags, verse and holiday links, on top of its own, so סמואל is תנ״כי like שמואל. The card shows "צורה של שמואל".
+- The original does not have to be in the list (ליזה → אלישבע is, קרולינה → קרל is not). Only an original in the list passes on its tags.
+- Leave it empty when the name's own meaning comes first and it is only also short for another name (נרי, אילי).
+
 ## Tags
 
 - תנ״כי only for a person or place in the Bible, and always with `biblical_ref`. A Hebrew word that appears in a verse (שירה, עמית) keeps the verse but not the tag.
@@ -28,4 +36,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 ## Meanings
 
 - Short, and never only the name itself.
-- No guessed etymology: say "שם מהתלמוד" or "פירוש השם לא ודאי" instead.
+- Look the meaning up. Behind the Name is the most reliable source for international and Yiddish names. Israeli name sites often contradict themselves, so do not copy them without checking.
+- When sources give several readings, write the most common one, or two at most (מירה: שלום, עולם; ים).
+- A new Hebrew name may be read from the Hebrew words it is made of (לינס: לי נס, הנס שלי), with confidence L.
+- Write "פירוש השם לא ודאי" only when no source explains the name. Never invent an etymology.

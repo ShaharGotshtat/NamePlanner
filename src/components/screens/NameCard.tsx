@@ -97,6 +97,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
           <p className="text-sm text-ink-soft" dir="ltr">
             {name.translit.join(" / ")}
           </p>
+          {!!name.formOf?.length && <p className="text-xs text-ink-soft">צורה של {name.formOf.join(" או ")}</p>}
           {!!name.variants?.length && <p className="text-xs text-ink-soft">נכתב גם: {name.variants.join(", ")}</p>}
         </div>
         {showSex && <span className="rounded-full bg-cream px-3 py-1 text-xs">{SEX_LABELS[sex]}</span>}

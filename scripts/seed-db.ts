@@ -25,6 +25,7 @@ await sql.begin(async (tx) => {
     origin_he: n.originHe ?? null,
     biblical_ref: n.biblicalRef,
     variants: n.variants ?? [],
+    form_of: n.formOf ?? [],
     tags: tx.json(n.tags),
     features: tx.json(computeFeatures(n.nameHe, n.translit[0])),
     stats: tx.json(n.stats),

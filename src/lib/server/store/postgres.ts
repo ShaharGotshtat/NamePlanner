@@ -14,6 +14,8 @@ interface NameRow {
   origin_he: string | null;
   biblical_ref: string | null;
   variants: string[];
+  /** Undefined before the column exists. */
+  form_of?: string[];
   tags: NameEntry["tags"];
   stats: YearStat[];
   /** Undefined before the column exists, null for a name without scores. */
@@ -31,6 +33,7 @@ const toEntry = (r: NameRow): NameEntry => ({
   originHe: r.origin_he ?? undefined,
   biblicalRef: r.biblical_ref,
   variants: r.variants,
+  formOf: r.form_of?.length ? r.form_of : undefined,
   tags: r.tags,
   stats: r.stats,
   styleAxes: r.style_axes ?? undefined,

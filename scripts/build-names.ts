@@ -139,8 +139,23 @@ for (const [spelling, c] of content) {
   }
 }
 
+// A form of another name (דני of דניאל, סמואל of שמואל) gets that name's themes, verse and holiday links,
+// on top of its own. form_of always names the original, never another form, so one step is enough.
+for (const [spelling, c] of content) {
+  for (const original of list(c.form_of ?? "")) {
+    if (original === spelling) throw new Error(`${spelling}: form_of points to itself`);
+    if (content.get(original)?.form_of) throw new Error(`${spelling}: form_of ${original} is itself a form; point to the original name`);
+  }
+}
+const originalsOf = (c: Record<string, string>) =>
+  list(c.form_of ?? "").flatMap((o) => {
+    const row = content.get(o);
+    return row ? [row.reading_of ? content.get(row.reading_of) ?? row : row] : [];
+  });
+
 const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const c = content.get(name)!;
+  const originals = originalsOf(c);
   const sexRatio = boys / (girls + boys);
   const mainSex = sexRatio >= 0.5 ? "M" : "F";
   const firstYear = Math.min(...[...m.keys()]);
@@ -152,6 +167,10 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
   const unknownTags = list(c.tags).filter((t) => !CATEGORIES[t]);
   if (unknownTags.length) throw new Error(`${name}: unknown tags ${unknownTags.join(", ")}`);
   const variants = [...new Set([...list(c.variants), ...(spellingsOf.get(name) ?? [])])];
+  const formOf = list(c.form_of ?? "");
+  const tagLabels = [...new Set([...list(c.tags), ...originals.flatMap((o) => list(o.tags))])];
+  const biblicalRef =
+    c.biblical_ref || (tagLabels.includes("תנ״כי") ? originals.find((o) => list(o.tags).includes("תנ״כי"))?.biblical_ref : "") || null;
   return {
     id: i + 1,
     nameHe: name,
@@ -161,15 +180,16 @@ const names: NameEntry[] = chosen.map(({ name, m, girls, boys }, i) => {
     meaningHe: c.meaning,
     origin: primaryOrigin(c.origin),
     originHe: c.origin,
-    biblicalRef: c.biblical_ref || null,
+    biblicalRef,
     variants,
+    ...(formOf.length ? { formOf } : {}),
     tags: {
-      meaningCategories: list(c.tags).map((t) => CATEGORIES[t]),
+      meaningCategories: tagLabels.map((t) => CATEGORIES[t]),
       hebrewWord: c.hebrew_word === "1",
       style: c.style as Style,
       englishFriendly: c.english_friendly === "1",
       singleSpelling: variants.length === 0,
-      links: links(c.links),
+      links: links([c.links, ...originals.map((o) => o.links)].join(",")),
     },
     stats,
     ...(styles.has(name) ? { styleAxes: { era: eraOfYear(averageBirthYear(stats, birthsByYear)), ...styles.get(name)! } } : {}),
