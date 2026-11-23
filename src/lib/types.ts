@@ -126,6 +126,8 @@ export interface ParsedProfile {
   notesSummary?: string;
   /** Keys of the vote notes this profile read, so the next check keeps their reading. */
   notesRead?: string[];
+  /** Key of the wishes, liked names and family this profile read, so a check that only adds notes keeps that reading. */
+  wishesRead?: string;
   /** Server signature: a profile the client changed or made up is ignored. */
   sig?: string;
 }

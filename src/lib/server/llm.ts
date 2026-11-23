@@ -12,6 +12,13 @@ export const MODELS = {
 
 type Model = (typeof MODELS)[keyof typeof MODELS];
 
+/**
+ * Haiku sometimes thinks before a structured answer, unseen, and that thinking was most of the wait
+ * before a round with notes (up to ~900 extra tokens, several seconds). These calls are short and
+ * well specified, so it is turned off. Sonnet did not think on these calls in the bench.
+ */
+const THINKING_OFF: Partial<Record<Model, { type: "disabled" }>> = { "claude-haiku-5-5": { type: "disabled" } };
+
 const USD_PER_MTOK: Record<Model, { input: number; output: number }> = {
   "claude-sonnet-5-5": { input: 2, output: 10 },
   "claude-haiku-5-5": { input: 0.1, output: 0.5 },
@@ -59,17 +66,21 @@ export async function structuredCall<T extends z.ZodType>(call: StructuredCall<T
       return reportFailure(call.model, { kind: "budget spent", detail: "The daily model budget is spent." });
     }
     try {
+      const started = Date.now();
       const response = await anthropic.messages.create({
         model: call.model,
         max_tokens: maxTokens,
         system: call.system,
         messages: [{ role: "user", content: call.prompt }],
         output_config: { format: zodOutputFormat(call.format ?? call.schema), effort: "low" },
+        ...(THINKING_OFF[call.model] ? { thinking: THINKING_OFF[call.model] } : {}),
       });
       const price = USD_PER_MTOK[call.model];
       await recordSpend((response.usage.input_tokens * price.input + response.usage.output_tokens * price.output) / 1e6);
       const text = response.content.flatMap((block) => (block.type === "text" ? [block.text] : [])).join("");
       const usage = `stop_reason ${response.stop_reason}, ${response.usage.output_tokens} of ${maxTokens} output tokens`;
+      // How long each call takes, so a slow wait between rounds can be traced to its call.
+      log.info(`${call.model} ${Date.now() - started}ms, ${response.usage.input_tokens} in, ${response.usage.output_tokens} out (attempt ${attempt})`);
 
       if (response.stop_reason === "end_turn") {
         const parsed = parseJson(call.schema, text);

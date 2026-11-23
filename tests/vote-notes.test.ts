@@ -6,7 +6,7 @@ import { byName, names, request } from "./fixtures";
 
 vi.mock("@/lib/server/llm", () => ({ MODELS: { parse: "m", pick: "m" }, structuredCall: vi.fn() }));
 const { structuredCall } = await import("@/lib/server/llm");
-const { noteKey, parsePreferences } = await import("@/lib/server/ai");
+const { noteKey, parsePreferences, wishesKey } = await import("@/lib/server/ai");
 
 /** A name almost nobody got, like לירם with no babies in 2024. */
 const rare: NameEntry = {
@@ -71,6 +71,7 @@ describe("notes on voted names", () => {
         summary: "הבנו: מעט",
         notesSummary: "מההערות הבנו: בלי שמות נדירים מאוד (לירם, דגן).",
         notesRead: [expect.any(String), expect.any(String)],
+        wishesRead: expect.any(String),
         requirements: [
           { id: "text-0", label: "שם שנשמע מומצא", kind: "avoid", facet: "popularity", values: ["veryRare"], level: "want", fromNotes: ["לירם", "דגן"] },
         ],
@@ -115,6 +116,64 @@ describe("notes read in an earlier check", () => {
     const result = await withPrevious([{ ...rareNote, note: "לא אוהבת את הצליל" }]);
     expect(vi.mocked(structuredCall).mock.calls.at(-1)![0].prompt).not.toContain("already read");
     expect((result as { profile: ParsedProfile }).profile.requirements.map((r) => r.values[0])).toEqual(["modern"]);
+  });
+});
+
+describe("a check that only adds notes", () => {
+  const rareNote: NameNote = { nameId: rare.id, verdict: "no", note: "זה שם מומצא" };
+  const commonNote: NameNote = { nameId: common.id, verdict: "no", note: "פופולרי מדי" };
+  const texts = ["מעדיפה שם קצר"];
+  const shortWish: TextRequirement = { id: "text-0", label: "שם קצר", kind: "want", facet: "length", values: ["short"], level: "want" };
+  const base = { texts, namesWeLike: [], family: [] };
+  const previous: ParsedProfile = {
+    summary: "הבנו: שם קצר",
+    notesSummary: "מההערות הבנו: בלי שמות נדירים מאוד (לירם).",
+    notesRead: [noteKey(rareNote)],
+    wishesRead: wishesKey(base),
+    requirements: [
+      shortWish,
+      { id: "text-1", label: "שמות נדירים מאוד", kind: "avoid", facet: "popularity", values: ["veryRare"], level: "want", fromNotes: ["לירם"] },
+    ],
+  };
+  const check = (input: Partial<Parameters<typeof parsePreferences>[0]> = {}) =>
+    parsePreferences({ ...base, nameNotes: [rareNote, commonNote], previous, ...input }, catalog);
+
+  it("keeps the reading of the wishes and asks only for the new notes", async () => {
+    vi.mocked(structuredCall).mockResolvedValueOnce({
+      flagged: false,
+      summary: "",
+      notesSummary: "בלי שמות נפוצים (נועה).",
+      requirements: [
+        // A wish read again, without a note: the earlier reading stands.
+        { label: "שם ארוך", kind: "want", facet: "length", values: ["long"], level: "want", fromNotes: [] },
+        { label: "שמות נפוצים", kind: "avoid", facet: "popularity", values: ["common"], level: "want", fromNotes: ["נועה"] },
+      ],
+    });
+    const result = await check();
+    expect(vi.mocked(structuredCall).mock.calls.at(-1)![0].prompt).toContain("Read only the new notes");
+    const profile = (result as { profile: ParsedProfile }).profile;
+    expect(profile.summary).toBe("הבנו: שם קצר");
+    expect(profile.requirements.map((r) => r.values[0])).toEqual(["short", "veryRare", "common"]);
+    expect(profile.notesSummary).toBe("מההערות הבנו: בלי שמות נדירים מאוד (לירם). בלי שמות נפוצים (נועה).");
+    expect(profile.wishesRead).toBe(previous.wishesRead);
+  });
+
+  it("reads everything again when the wishes changed", async () => {
+    vi.mocked(structuredCall).mockResolvedValueOnce(answer([]));
+    await check({ texts: [...texts, "על הסבב: יותר שמות עבריים"] });
+    expect(vi.mocked(structuredCall).mock.calls.at(-1)![0].prompt).not.toContain("Read only the new notes");
+  });
+
+  it("is not thrown off by a name marked taken in the family", async () => {
+    vi.mocked(structuredCall).mockResolvedValueOnce(answer([]));
+    await check({ family: [{ name: "נועה", relation: "other" }] });
+    expect(vi.mocked(structuredCall).mock.calls.at(-1)![0].prompt).toContain("Read only the new notes");
+  });
+
+  it("drops the earliest sentences when the notes line gets too long", async () => {
+    vi.mocked(structuredCall).mockResolvedValueOnce({ flagged: false, summary: "", notesSummary: `מההערות הבנו: ${"א".repeat(280)}.`, requirements: [] });
+    const profile = ((await check()) as { profile: ParsedProfile }).profile;
+    expect(profile.notesSummary).toBe(`מההערות הבנו: ${"א".repeat(280)}.`);
   });
 });
 

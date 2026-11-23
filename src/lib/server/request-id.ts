@@ -21,6 +21,7 @@ const prefix = () => {
 
 /** Server log lines carry the request ID, so an ID shown to a user can be found in the logs. */
 export const log = {
+  info: (message: string, ...details: unknown[]) => console.info(prefix(), message, ...details),
   warn: (message: string, ...details: unknown[]) => console.warn(prefix(), message, ...details),
   error: (message: string, ...details: unknown[]) => console.error(prefix(), message, ...details),
 };

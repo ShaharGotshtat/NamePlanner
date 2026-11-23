@@ -84,11 +84,32 @@ function describeNote(n: NameNote, entry: NameEntry): string {
   return `- ${asData(entry.nameHe, 30)} | vote: ${VERDICT_WORDS[n.verdict]} | note: ${asData(n.note, 300)} | meaning: ${asData(entry.meaningHe ?? "", 80)} | ${count} | ${facetsOf(entry)}`;
 }
 
-/** Checks the free text and family names, then parses the wishes. Flagged input goes no further. */
 /** A short id for a note as it was read: the same name, vote and text give the same key. */
 export const noteKey = (n: NameNote) => createHash("sha256").update(`${n.nameId}|${n.verdict}|${n.note}`).digest("base64url").slice(0, 12);
 
 type NoteOnName = { note: NameNote; entry: NameEntry; key: string };
+
+/**
+ * A short id for the wishes, liked names and family as read. A name added from "Taken in our family"
+ * (relation "other") is left out: it comes from the name list, so there is nothing new to read in it.
+ */
+export const wishesKey = (input: PreferencesInput) =>
+  createHash("sha256")
+    .update(JSON.stringify([input.texts, input.namesWeLike, input.family.filter((f) => f.relation !== "other").map((f) => [f.name, f.relation])]))
+    .digest("base64url")
+    .slice(0, 12);
+
+const NOTES_OPENING = "מההערות הבנו:";
+
+/** The earlier notes line with the new part added; when too long, the earliest sentences give way. */
+function joinNotesSummary(earlier: string, added: string): string {
+  const part = asOutput(added.replace(NOTES_OPENING, ""), 300);
+  if (!part) return earlier;
+  let sentences = earlier.replace(NOTES_OPENING, "").split(/(?<=\.)\s+/).map((x) => x.trim()).filter(Boolean);
+  const line = () => [NOTES_OPENING, ...sentences, part].join(" ");
+  while (sentences.length && line().length > 300) sentences = sentences.slice(1);
+  return asOutput(line(), 300);
+}
 
 /**
  * Notes the previous profile already read keep their reading, so a check after the next round does not
@@ -115,6 +136,11 @@ export async function parsePreferences(input: PreferencesInput, names: NameEntry
   });
   const notedNames = new Set(notes.map(({ entry }) => entry.nameHe));
   const earlier = earlierReading(notes, input.previous);
+  const wishes = wishesKey(input);
+  // Only notes were added since the last check: its reading of the wishes is kept, and the model
+  // reads just the new notes. A shorter answer is a shorter wait before the next round.
+  const notesOnly =
+    !!input.previous && input.previous.wishesRead === wishes && notes.length > 0 && (!!earlier || !input.previous.notesRead?.length);
   const isOld = (n: NoteOnName) => !!earlier?.oldNames.has(n.entry.nameHe);
   const list = (items: NoteOnName[]) => items.map(({ note, entry }) => describeNote(note, entry)).join("\n") || "(none)";
 
@@ -129,7 +155,13 @@ ${list(notes.filter((n) => !isOld(n)))}`
     : `Notes on voted names (name | vote | note | facts about the name):
 ${list(notes)}`;
 
-  const prompt = `<parent_input>
+  const onlyNewNotes = notesOnly
+    ? `
+The wishes, names and family below were already read, and their requirements are kept: they are context only. Read only the new notes on voted names: return requirements only for them, each with fromNotes. Leave summary empty. In notesSummary write only what the new notes led to, without the opening words "${NOTES_OPENING}": it is added to the earlier reading.
+`
+    : "";
+
+  const prompt = `${onlyNewNotes}<parent_input>
 Wishes and notes:
 ${input.texts.map((t) => `- ${asData(t)}`).join("\n") || "(none)"}
 
@@ -165,20 +197,28 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
     if (earlier && fromNotes.length && fromNotes.every((n) => earlier.oldNames.has(n))) return [];
     return [{ ...rest, label: asOutput(r.label, 120), values: values.slice(0, 12), ...(fromNotes.length ? { fromNotes: fromNotes.slice(0, 8) } : {}) }];
   });
+  const fromWishes = notesOnly
+    ? input.previous!.requirements.filter((r) => !r.fromNotes?.length).map(({ id: _, ...r }) => r)
+    : cleaned.filter((r) => !r.fromNotes);
   const kept = (earlier?.requirements ?? []).map(({ id: _, ...r }) => r);
-  const requirements = mergeRequirements([...cleaned.filter((r) => !r.fromNotes), ...kept, ...cleaned.filter((r) => r.fromNotes)])
+  const requirements = mergeRequirements([...fromWishes, ...kept, ...cleaned.filter((r) => r.fromNotes)])
     .slice(0, 20)
     .map((r, i) => ({ ...r, id: `text-${i}` }));
 
-  const notesSummary = notes.length ? asOutput(output.notesSummary, 300) : "";
+  const notesSummary = !notes.length
+    ? ""
+    : notesOnly
+      ? joinNotesSummary(earlier?.summary ?? "", output.notesSummary)
+      : asOutput(output.notesSummary, 300);
   const notesRead = notes.map((n) => n.key).slice(-60);
   return {
     flagged: false,
     profile: {
-      summary: asOutput(output.summary, 300),
+      summary: notesOnly ? input.previous!.summary : asOutput(output.summary, 300),
       requirements,
       ...(notesSummary ? { notesSummary } : {}),
       ...(notesRead.length ? { notesRead } : {}),
+      wishesRead: wishes,
     },
   };
 }
