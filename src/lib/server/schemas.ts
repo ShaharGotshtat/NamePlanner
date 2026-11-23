@@ -33,6 +33,7 @@ const profile = z.object({
   summary: z.string().max(300),
   requirements: z.array(textRequirement).max(20),
   notesSummary: z.string().max(300).optional(),
+  notesRead: z.array(z.string().max(20)).max(60).optional(),
   sig: z.string().max(100).optional(),
 });
 
@@ -78,6 +79,7 @@ export const preferencesRequestSchema = z.object({
     )
     .max(60)
     .default([]),
+  previous: profile.nullable().default(null),
   namesWeLike: z.array(shortText).max(20),
   family: z.array(familyName).max(40),
 });

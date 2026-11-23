@@ -6,6 +6,7 @@ export function preferenceInput(s: AppState): PreferencesInput {
     chips: s.chips,
     texts: [s.freeText, ...s.notes].map((t) => t.trim()).filter(Boolean),
     nameNotes: s.nameNotes,
+    previous: s.profile,
     namesWeLike: s.namesWeLike,
     family: s.family,
   };

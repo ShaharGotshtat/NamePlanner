@@ -163,7 +163,9 @@ export function Rounds() {
       const withNotes = { ...state, notes: [...new Set([...state.notes, ...newNotes])], nameNotes };
       patch = { ...patch, notes: withNotes.notes, nameNotes };
       if (!finishedPass) {
-        checkNotesInBackground(withNotes);
+        // A round loaded ahead was picked before these notes: drop it, so the next round follows them.
+        prefetch.current.cancel();
+        checkNotesBeforeNextRound(withNotes);
       } else {
         // The summary's pick uses the preferences, so the last round's notes are checked before it opens.
         setLoading(true);
@@ -183,16 +185,20 @@ export function Rounds() {
   };
 
   /**
-   * The next round does not wait for the notes: they shape the round after it. The result is applied
-   * only if the parent's input is still what was sent (not restarted with other input, edited or deleted).
+   * The next round waits for the notes, so it already follows them. The result is applied only if the
+   * parent's input is still what was sent (not restarted with other input, edited or deleted). The wait
+   * ends in the same update as the new profile, so the round is never fetched with the old one.
    */
-  const checkNotesInBackground = (withNotes: AppState) => {
+  const checkNotesBeforeNextRound = (withNotes: AppState) => {
     const key = inputKey(withNotes);
     setNotesPending(true);
-    runCheck(withNotes)
-      .then(({ patch }) => update((s) => (inputKey(s) === key ? patch : {})))
-      .catch(() => {})
-      .finally(() => setNotesPending(false));
+    runCheck(withNotes).then(
+      ({ patch }) => {
+        update((s) => (inputKey(s) === key ? patch : {}));
+        setNotesPending(false);
+      },
+      () => setNotesPending(false),
+    );
   };
 
   if (error) {

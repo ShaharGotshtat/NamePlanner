@@ -124,6 +124,8 @@ export interface ParsedProfile {
   requirements: TextRequirement[];
   /** One line on how the notes on voted names were understood, shown on the rounds after them. */
   notesSummary?: string;
+  /** Keys of the vote notes this profile read, so the next check keeps their reading. */
+  notesRead?: string[];
   /** Server signature: a profile the client changed or made up is ignored. */
   sig?: string;
 }
