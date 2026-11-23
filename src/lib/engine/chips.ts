@@ -11,7 +11,8 @@ export const CHIPS: ChipDefinition[] = [
   { id: "englishFriendly", label: "קל באנגלית" },
   { id: "oneSpelling", label: "כתיב אחד ברור" },
   { id: "clearMeaning", label: "משמעות עברית ברורה" },
-  { id: "notTop20", label: "לא בטופ 20 בשנתיים האחרונות" },
+  // The id predates the median rule; kept so saved sessions and analytics still read.
+  { id: "notTop20", label: "שם לא נפוץ" },
   { id: "fitsSiblings", label: "מתאים לשמות האחים והאחיות" },
   { id: "flowsWithSurname", label: "זורם עם שם המשפחה" },
   { id: "grandparentFriendly", label: "יתקבל יפה אצל סבא וסבתא" },

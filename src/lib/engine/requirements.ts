@@ -1,7 +1,7 @@
 import type { ChipId, ChipLevel, ExplanationLine, Fit, NameEntry, RoundRequest, TextRequirement } from "@/lib/types";
-import { featuresOf, findByName, nameSex, wasInTop } from "@/lib/names/catalog";
+import { featuresOf, findByName, nameSex } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
-import { commonness } from "@/lib/names/commonness";
+import { commonness, COMMONNESS_LABELS } from "@/lib/names/commonness";
 import { dueChipLabel, dueHeadline, linkCodes, linkLabel, type LinkCode } from "@/lib/links";
 import { chipLabel, isFilterChip } from "./chips";
 import { closest, profileOf, profileOfText, type NameProfile } from "./similarity";
@@ -82,7 +82,7 @@ export function dueDateNotice(names: NameEntry[], req: Pick<RoundRequest, "babyS
 const NO_PARTIAL_CREDIT: ChipId[] = ["dueDateLink"];
 
 /** Returns null when the parent gave no data to check the chip against. */
-function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | null {
+export function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | null {
   switch (id) {
     case "noUnisex":
       return fit(nameSex(entry) !== "unisex", "ניתן בעיקר למין אחד", "ניתן גם לבנים וגם לבנות");
@@ -94,7 +94,8 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
       return fit(entry.tags.hebrewWord, `משמעות: ${entry.meaningHe}`, "המקור שלו אינו עברי");
     case "notTop20": {
       const latest = entry.stats.at(-1)!;
-      return fit(!wasInTop(entry, 20, 2), `מקום ${latest.rank} ב-${latest.year}`, `היה בטופ 20 בשנתיים האחרונות`);
+      const where = `מקום ${latest.rank} ב-${latest.year}`;
+      return fit(commonness(entry) !== "common", `${COMMONNESS_LABELS[commonness(entry)]}, ${where}`, `נפוץ, ${where}`);
     }
     case "grandparentFriendly":
       return fit(entry.tags.style !== "modern", "שם מוכר שעובר בין הדורות", "שם מודרני יחסית");
