@@ -24,6 +24,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 - The original does not have to be in the list (ליזה → אלישבע is, קרולינה → קרל is not). Only an original in the list passes on its tags.
 - Leave it empty when the name's own meaning comes first and it is only also short for another name (נרי, אילי).
 - Leave it empty for a feminine name made from a man's name (דניאלה, מיכאלה, גבריאלה). It is a name of its own, so it does not get the man's verse; tag it from its own meaning.
+- The first language in `origin` decides the "משמעות עברית ברורה" chip. A foreign form starts with its own language (סמואל: בינלאומי; תנ״ך, תומאס: אנגלית; ארמית), so the chip leaves it out. A feminine name made from a Hebrew man's name starts with עברית (מיכאלה: עברית; בינלאומי), so the chip counts it.
 
 ## Tags
 
