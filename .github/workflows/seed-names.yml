@@ -1,5 +1,5 @@
 # Copies data/names.json into the production database after every merge that changes it.
-# Needs the repository secret DATABASE_URL or POSTGRES_URL (Supabase Transaction pooler, port 6543).
+# Needs the repository secret POSTGRES_URL (Supabase Transaction pooler, port 6543).
 name: Seed names
 
 on:
@@ -24,10 +24,10 @@ jobs:
       - run: npm ci
       - name: Load names into the database
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL || secrets.POSTGRES_URL }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: |
-          if [ -z "$DATABASE_URL" ]; then
-            echo "::error::Add DATABASE_URL or POSTGRES_URL under Settings → Secrets and variables → Actions."
+          if [ -z "$POSTGRES_URL" ]; then
+            echo "::error::Add POSTGRES_URL under Settings → Secrets and variables → Actions."
             exit 1
           fi
           npm run db:seed

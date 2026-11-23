@@ -3,8 +3,8 @@ import postgres from "postgres";
 import type { NameEntry } from "../src/lib/types";
 import { computeFeatures } from "../src/lib/names/features";
 
-const url = process.env.DATABASE_URL;
-if (!url) throw new Error("Set DATABASE_URL to the database connection string first.");
+const url = process.env.POSTGRES_URL;
+if (!url) throw new Error("Set POSTGRES_URL to the database connection string first.");
 
 const names: NameEntry[] = JSON.parse(readFileSync("data/names.json", "utf8"));
 const sql = postgres(url, { max: 1, prepare: false, onnotice: () => {} });
