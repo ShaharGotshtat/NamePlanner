@@ -4,7 +4,7 @@ import { handler, readBody, readSession } from "@/lib/server/http";
 import { currentRequestId, log } from "@/lib/server/request-id";
 import { getNames } from "@/lib/server/names";
 import { preferencesRequestSchema } from "@/lib/server/schemas";
-import { canCallModel, freeTextAllowed, signProfile } from "@/lib/server/token";
+import { canCallModel, freeTextAllowed, signProfile, verifiedProfile } from "@/lib/server/token";
 
 export const POST = handler(async (request) => {
   const session = readSession(request);
@@ -27,7 +27,8 @@ export const POST = handler(async (request) => {
   }
 
   session.calls++;
-  const result = await parsePreferences({ ...input, texts }, input.nameNotes.length ? await getNames() : []);
+  const previous = verifiedProfile(input.previous);
+  const result = await parsePreferences({ ...input, texts, previous }, input.nameNotes.length ? await getNames() : []);
   if (!result) return unavailable;
   if (result.flagged) {
     session.flags++;

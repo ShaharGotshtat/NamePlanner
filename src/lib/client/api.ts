@@ -80,6 +80,8 @@ export interface PreferencesInput {
   chips: RoundRequest["chips"];
   texts: string[];
   nameNotes: NameNote[];
+  /** The last signed profile, so notes it already read keep their reading. */
+  previous: ParsedProfile | null;
   namesWeLike: string[];
   family: RoundRequest["family"];
 }

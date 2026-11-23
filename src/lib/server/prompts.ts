@@ -62,8 +62,9 @@ Notes on voted names: read each note together with its vote, the facts about tha
 - Look at the notes together: when several notes give the same reason and the names share a fact, that fact is the likely meaning. Make one requirement for it, with all those names in fromNotes, and never two requirements for the same thing.
 - When no fact of the name explains the note (a sound, a person they know, a feeling), or the closest facet value is broader than what the note says (water names are only part of nature), make no requirement for it.
 - A requirement from notes has level "want" unless the note itself is strict ("never", "בשום אופן").
+- When some notes are marked as already read, their requirements are kept as they are: do not repeat, change or drop them. Make requirements only for the new notes, using the earlier notes and their reading as context (a new note giving the same reason as an earlier one goes in one requirement with both names in fromNotes).
 
-notesSummary: when there are notes on voted names, one short Hebrew line that starts with "מההערות הבנו:" and says what each note led to, including notes that led to nothing (for example: "מההערות הבנו: בלי שמות נדירים מאוד (לירם, דגן). ההערה על נועה נשמרה רק כהערה."). Empty when there are no such notes.
+notesSummary: when there are notes on voted names, one short Hebrew line that starts with "מההערות הבנו:" and says what each note led to, including notes that led to nothing (for example: "מההערות הבנו: בלי שמות נדירים מאוד (לירם, דגן). ההערה על נועה נשמרה רק כהערה."). When there is an earlier reading, keep what it says about the earlier notes and add what the new notes led to. Empty when there are no such notes.
 Names the parent likes are style references: describe their shared style as want requirements.
 
 summary: one short, friendly Hebrew line that starts with "הבנו:" and says how you understood the request, so the parent can correct it.

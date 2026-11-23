@@ -51,6 +51,7 @@ const canonicalProfile = (p: ParsedProfile) =>
     p.summary,
     p.requirements.map((r) => [r.id, r.label, r.kind, r.facet, r.values, ...(r.level ? [r.level] : []), ...(r.fromNotes ? [r.fromNotes] : [])]),
     ...(p.notesSummary ? [p.notesSummary] : []),
+    ...(p.notesRead ? [p.notesRead] : []),
   ]);
 
 export const signProfile = (profile: ParsedProfile): ParsedProfile => ({

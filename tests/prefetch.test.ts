@@ -82,7 +82,7 @@ describe("session token requests", () => {
   afterEach(() => vi.restoreAllMocks());
 
   const request = { shownIds: [], ratings: [] } as unknown as RoundRequest;
-  const preferences = { chips: {}, texts: ["note"], nameNotes: [], namesWeLike: [], family: [] };
+  const preferences = { chips: {}, texts: ["note"], nameNotes: [], previous: null, namesWeLike: [], family: [] };
 
   it("run one at a time, each with the token the one before returned", async () => {
     const sent: { path: string; token: string | null }[] = [];

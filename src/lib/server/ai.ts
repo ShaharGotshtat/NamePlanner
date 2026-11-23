@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { z } from "zod";
 import type { BabySex, ChipId, FamilyName, NameEntry, NameNote, ParsedProfile, RoundRequest, TextRequirement } from "@/lib/types";
 import { chipLabel } from "@/lib/engine/chips";
@@ -57,6 +58,8 @@ export interface PreferencesInput {
   nameNotes?: NameNote[];
   namesWeLike: string[];
   family: FamilyName[];
+  /** The profile from the last check, already verified. Its reading of earlier notes is kept as it was. */
+  previous?: ParsedProfile | null;
 }
 
 export type PreferencesResult = { flagged: true } | { flagged: false; profile: ParsedProfile };
@@ -81,20 +84,55 @@ function describeNote(n: NameNote, entry: NameEntry): string {
 }
 
 /** Checks the free text and family names, then parses the wishes. Flagged input goes no further. */
+/** A short id for a note as it was read: the same name, vote and text give the same key. */
+export const noteKey = (n: NameNote) => createHash("sha256").update(`${n.nameId}|${n.verdict}|${n.note}`).digest("base64url").slice(0, 12);
+
+type NoteOnName = { note: NameNote; entry: NameEntry; key: string };
+
+/**
+ * Notes the previous profile already read keep their reading, so a check after the next round does not
+ * read the same note differently. Only when every note it read is still there unchanged: after a note was
+ * edited or removed, everything is read again.
+ */
+function earlierReading(notes: NoteOnName[], previous: ParsedProfile | null | undefined) {
+  const read = new Set(previous?.notesRead ?? []);
+  const keys = new Set(notes.map((n) => n.key));
+  if (!previous || !read.size || ![...read].every((k) => keys.has(k))) return null;
+  return {
+    oldNames: new Set(notes.filter((n) => read.has(n.key)).map((n) => n.entry.nameHe)),
+    requirements: previous.requirements.filter((r) => r.fromNotes?.length),
+    summary: previous.notesSummary ?? "",
+  };
+}
+
+/** Checks the free text and family names, then parses the wishes. Flagged input goes no further. */
 export async function parsePreferences(input: PreferencesInput, names: NameEntry[] = []): Promise<PreferencesResult | null> {
   const byId = new Map(names.map((n) => [n.id, n]));
-  const notes = (input.nameNotes ?? []).flatMap((n) => {
+  const notes: NoteOnName[] = (input.nameNotes ?? []).flatMap((n) => {
     const entry = byId.get(n.nameId);
-    return entry ? [{ note: n, entry }] : [];
+    return entry ? [{ note: n, entry, key: noteKey(n) }] : [];
   });
   const notedNames = new Set(notes.map(({ entry }) => entry.nameHe));
+  const earlier = earlierReading(notes, input.previous);
+  const isOld = (n: NoteOnName) => !!earlier?.oldNames.has(n.entry.nameHe);
+  const list = (items: NoteOnName[]) => items.map(({ note, entry }) => describeNote(note, entry)).join("\n") || "(none)";
+
+  const notesSection = earlier
+    ? `Notes on voted names already read (context only, their requirements are kept as they are):
+${list(notes.filter(isOld))}
+
+Earlier reading of those notes: ${asData(earlier.summary, 300) || "(none)"}
+
+New notes on voted names (name | vote | note | facts about the name):
+${list(notes.filter((n) => !isOld(n)))}`
+    : `Notes on voted names (name | vote | note | facts about the name):
+${list(notes)}`;
 
   const prompt = `<parent_input>
 Wishes and notes:
 ${input.texts.map((t) => `- ${asData(t)}`).join("\n") || "(none)"}
 
-Notes on voted names (name | vote | note | facts about the name):
-${notes.map(({ note, entry }) => describeNote(note, entry)).join("\n") || "(none)"}
+${notesSection}
 
 Names we like (style references):
 ${input.namesWeLike.map((n) => asData(n, 60)).join(", ") || "(none)"}
@@ -122,16 +160,25 @@ ${input.family.map((f) => asData(f.name, 60)).join(", ") || "(none)"}
       : r.values.filter((v) => !allowed || allowed.includes(v)).map((v) => asData(v, 20));
     const fromNotes = [...new Set((given ?? []).map((n) => n.trim()).filter((n) => notedNames.has(n)))];
     if (!values.length) return [];
+    // A reading of only earlier notes is not taken again: their earlier requirements stand.
+    if (earlier && fromNotes.length && fromNotes.every((n) => earlier.oldNames.has(n))) return [];
     return [{ ...rest, label: asOutput(r.label, 120), values: values.slice(0, 12), ...(fromNotes.length ? { fromNotes: fromNotes.slice(0, 8) } : {}) }];
   });
-  const requirements = mergeRequirements(cleaned)
+  const kept = (earlier?.requirements ?? []).map(({ id: _, ...r }) => r);
+  const requirements = mergeRequirements([...cleaned.filter((r) => !r.fromNotes), ...kept, ...cleaned.filter((r) => r.fromNotes)])
     .slice(0, 20)
     .map((r, i) => ({ ...r, id: `text-${i}` }));
 
   const notesSummary = notes.length ? asOutput(output.notesSummary, 300) : "";
+  const notesRead = notes.map((n) => n.key).slice(-60);
   return {
     flagged: false,
-    profile: { summary: asOutput(output.summary, 300), requirements, ...(notesSummary ? { notesSummary } : {}) },
+    profile: {
+      summary: asOutput(output.summary, 300),
+      requirements,
+      ...(notesSummary ? { notesSummary } : {}),
+      ...(notesRead.length ? { notesRead } : {}),
+    },
   };
 }
 
