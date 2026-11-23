@@ -20,7 +20,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 
 - A nickname, or a Yiddish or foreign form, names its original in `form_of`: דני → דניאל, מריה → מרים, אליזבט → אלישבע, סמואל → שמואל. Two originals are separated by a comma (מיקה → מיכאל, מיכל).
 - `form_of` names the original itself, never another form: מייקי → מיכאל, not מייקל.
-- The build gives the form the original's tags, verse and holiday links, on top of its own, so סמואל is תנ״כי like שמואל. The card shows "צורה של שמואל".
+- The build gives the form the original's tags, verse and holiday links, on top of its own, so סמואל is תנ״כי like שמואל. The card says "השם שמואל מופיע בתנ״ך", because the verse has the original, not the form.
 - The original does not have to be in the list (ליזה → אלישבע is, קרולינה → קרל is not). Only an original in the list passes on its tags.
 - Leave it empty when the name's own meaning comes first and it is only also short for another name (נרי, אילי).
 - Leave it empty for a feminine name made from a man's name (דניאלה, מיכאלה, גבריאלה). It is a name of its own, so it does not get the man's verse; tag it from its own meaning.
@@ -37,6 +37,7 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 ## Meanings
 
 - Short, and never only the name itself.
+- The meaning comes first. A form of another name ends with what it is a form of: "שאלתיו מאל. הצורה הבינלאומית של שמואל", "האל הוא שופטי. הצורה הנקבית של דניאל". When the original's meaning is a person, say whose name it is: "על שם מרים הנביאה. צורת חיבה של מרים".
 - Look the meaning up. Behind the Name is the most reliable source for international and Yiddish names. Israeli name sites often contradict themselves, so do not copy them without checking.
 - When sources give several readings, write the most common one, or two at most (מירה: שלום, עולם; ים).
 - A new Hebrew name may be read from the Hebrew words it is made of (לינס: לי נס, הנס שלי), with confidence L.

@@ -62,6 +62,13 @@ describe("name data rules (docs/name-data-rules.md)", () => {
     expect(missing).toEqual([]);
   });
 
+  it("a form's meaning comes first and ends with what it is a form of", () => {
+    // The original may be written in a more common spelling (פייגא for פיגא).
+    const spellings = (o: string) => [o, ...(byName.get(o)?.variants ?? [])];
+    const bad = names.filter((n) => n.formOf?.length && !n.formOf.flatMap(spellings).some((o) => n.meaningHe.split(". ").at(-1)?.includes(o)));
+    expect(bad.map((n) => `${n.nameHe}: ${n.meaningHe}`)).toEqual([]);
+  });
+
   it("halves of double names are not in the list", () => {
     expect(["בת", "שבע", "היא", "שר"].filter((f) => byName.has(f))).toEqual([]);
   });
