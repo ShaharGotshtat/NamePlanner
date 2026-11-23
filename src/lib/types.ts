@@ -14,7 +14,7 @@ export type MeaningCategory =
   | "gift"
   | "royalty"
   | "life"
-  /** The meaning is about family: a father, a son, a generation or an inheritance (ליאב, לידור, נחלה). */
+  /** The meaning is about family: a father, a mother, a son, a generation or an inheritance (ליאב, לידור, נחלה). */
   | "family"
   /** The meaning is about the people of Israel, Zion or the nation (עמי, ישראל, ציון). */
   | "nation"

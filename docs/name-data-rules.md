@@ -29,8 +29,8 @@ The content of every name lives in `data/name-content.tsv`. `npm run data:build`
 
 - תנ״כי only for a person or place in the Bible, and always with `biblical_ref`. A Hebrew word that appears in a verse (שירה, עמית) keeps the verse but not the tag.
 - אמונה only for a name with אל or יה, or a clearly religious meaning.
-- משפחה when the meaning itself is about family: a father, a mother, a son, a generation or an inheritance (ליאב, אבי, בן, לידור, נחלה, חוה: אם כל חי). Not for a biblical person's relatives ("בן יעקב"), and not when the father or son is God (אביאל, בתיה, and the אבי־ names such as אביגיל and אביטל, which stay with their other themes).
-- לאום when the meaning is about the people of Israel, Zion or the nation (עמי, ליעם, ישראל, יהודית, ציון, נילי). Not for "העם" in another language's meaning (ניקולס), and not for a place in the land (כרמל, כנרת), which stays טבע.
+- משפחה when the meaning itself is about family: a father, a mother, a son, a generation or an inheritance (ליאב, אבי, בן, ראובן, לידור, נחלה, חוה: אם כל חי). Not for a biblical person's relatives ("בן יעקב"), and not when the father, son or generation is God's (אביאל, בתיה, דוריה, and the אבי־ names such as אביגיל and אביטל, which stay with their other themes).
+- לאום when the meaning is about the people of Israel, Zion and Jerusalem, or the nation (עמי, ליעם, ישראל, יהודית, ציון, אריאל, נילי, שבות). Not for "העם" in another language's meaning (ניקולס), and not for a place in the land (כרמל, כנרת), which stays טבע.
 
 ## Names that are not names
 
