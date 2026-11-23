@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { chooseOurPick, pickDiverse, rankCandidates } from "@/lib/engine/round";
 import { nameSex } from "@/lib/names/catalog";
 import { findNoPatterns } from "@/lib/engine/no-patterns";
-import { checkText, MEDIAN_RANK, VERY_RARE_RANK } from "@/lib/engine/requirements";
+import { checkText } from "@/lib/engine/requirements";
+import { commonness, COMMONNESS_LABELS, MEDIAN_RANK, VERY_RARE_RANK } from "@/lib/names/commonness";
 import { normalizeHebrew } from "@/lib/names/features";
 import { byName, names, request } from "./fixtures";
 
@@ -177,6 +178,18 @@ describe("popularity", () => {
     expect(checkText({ ...req, values: ["common"] }, atRank(MEDIAN_RANK.girl)).fit).toBe("met");
     expect(checkText({ ...req, values: ["veryRare"] }, atRank(VERY_RARE_RANK)).fit).toBe("not_met");
     expect(checkText({ ...req, values: ["veryRare"] }, atRank(VERY_RARE_RANK + 1)).fit).toBe("met");
+  });
+
+  it("\"no common names\" removes exactly the names labeled common", () => {
+    const boy = byName("נבו") ?? names.find((n) => n.sexRatio > 0.9)!;
+    const atRank = (rank: number) => ({ ...boy, sexRatio: 1, stats: [...boy.stats.slice(0, -1), { ...boy.stats.at(-1)!, rank }] });
+    const noCommon = { id: "t2", label: "שמות נפוצים", kind: "avoid" as const, facet: "popularity" as const, values: ["common"] };
+    for (const rank of [1, MEDIAN_RANK.boy, MEDIAN_RANK.boy + 1, 47, VERY_RARE_RANK, VERY_RARE_RANK + 1, 900]) {
+      const entry = atRank(rank);
+      const labeledCommon = COMMONNESS_LABELS[commonness(entry)] === "נפוץ";
+      expect(checkText(noCommon, entry).fit).toBe(labeledCommon ? "not_met" : "met");
+    }
+    expect(commonness(atRank(47))).toBe("rare");
   });
 
 });

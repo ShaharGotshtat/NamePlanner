@@ -1,6 +1,7 @@
 import type { ChipId, ChipLevel, ExplanationLine, Fit, NameEntry, RoundRequest, TextRequirement } from "@/lib/types";
 import { featuresOf, findByName, nameSex, wasInTop } from "@/lib/names/catalog";
 import { normalizeHebrew } from "@/lib/names/features";
+import { commonness } from "@/lib/names/commonness";
 import { dueChipLabel, dueHeadline, linkCodes, linkLabel, type LinkCode } from "@/lib/links";
 import { chipLabel, isFilterChip } from "./chips";
 import { closest, profileOf, profileOfText, type NameProfile } from "./similarity";
@@ -115,23 +116,12 @@ function checkChip(id: ChipId, entry: NameEntry, ctx: MatchContext): Check | nul
   }
 }
 
-/**
- * The median rank in the latest CBS year (2024): half of the babies of that sex got a name ranked
- * at or above it. Common is at or above the median, rare is below it. tests/popularity.test.ts checks
- * these against data/cbs, so update them when the data gets a new year.
- */
-export const MEDIAN_RANK = { girl: 47, boy: 38 } as const;
-/** "Very rare" or "special" names: below this rank. */
-export const VERY_RARE_RANK = 150;
-
-/** A name is ranked in the list of its main sex, so a unisex name uses that sex's median. */
-const medianFor = (entry: NameEntry) => (entry.sexRatio >= 0.5 ? MEDIAN_RANK.boy : MEDIAN_RANK.girl);
-
+/** A "rare" wish ("not too common") also takes very rare names. */
 function matchesPopularity(value: string, entry: NameEntry): boolean {
-  const rank = entry.stats.at(-1)?.rank ?? Infinity;
-  if (value === "common") return rank <= medianFor(entry);
-  if (value === "rare") return rank > medianFor(entry);
-  return rank > VERY_RARE_RANK;
+  const level = commonness(entry);
+  if (value === "common") return level === "common";
+  if (value === "rare") return level !== "common";
+  return level === "veryRare";
 }
 
 const BIBLICAL_WORDS = /תנ["״׳']?[כך]|מקרא|biblical|bible/i;

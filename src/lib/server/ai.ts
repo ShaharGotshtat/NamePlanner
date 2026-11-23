@@ -4,6 +4,7 @@ import type { BabySex, ChipId, FamilyName, NameEntry, NameNote, ParsedProfile, R
 import { chipLabel } from "@/lib/engine/chips";
 import { checkText, isLetterFacet, mergeRequirements, normalizeLetters, normalizeThemeRequirement } from "@/lib/engine/requirements";
 import { popularity } from "@/lib/names/catalog";
+import { commonness } from "@/lib/names/commonness";
 import { noPatternsFor, ROUND_SIZE, shortReason, type Candidate } from "@/lib/engine/round";
 import { MODELS, structuredCall } from "./llm";
 import { log } from "./request-id";
@@ -189,7 +190,7 @@ const roundOutput = z.object({
 function describeCandidate(c: Candidate): string {
   const { latest, trend } = popularity(c.entry);
   const fits = c.evaluation.lines.map((l) => `${asData(l.requirement, 120)}: ${l.fit}`).join("; ");
-  return `id=${c.entry.id} | ${c.evaluation.spelling} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | rank ${latest.rank} in ${latest.year}, ${trend} | ${fits || "no requirements"}`;
+  return `id=${c.entry.id} | ${c.evaluation.spelling} | ${c.sex} | meaning: ${c.entry.meaningHe} | origin: ${c.entry.origin} | themes: ${c.entry.tags.meaningCategories.join(", ") || "none"} | style: ${c.entry.tags.style} | popularity: ${commonness(c.entry)} (rank ${latest.rank} in ${latest.year}, ${trend}) | ${fits || "no requirements"}`;
 }
 
 function sexInstruction(babySex: BabySex, noUnisex: boolean): string {

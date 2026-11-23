@@ -48,14 +48,6 @@ const reactionFor = (verdict: Verdict, id: number) => {
   return { mood: r.mood, line: r.lines[id % r.lines.length] };
 };
 
-/** Plain-language band for the latest CBS rank. */
-function commonness(rank: number): string {
-  if (rank <= 20) return "נפוץ מאוד";
-  if (rank <= 100) return "נפוץ";
-  if (rank <= 500) return "מוכר אבל לא נפוץ";
-  return "נדיר";
-}
-
 interface Props {
   suggestion: Suggestion;
   rating: Rating | undefined;
@@ -127,7 +119,7 @@ export function NameCard({ suggestion, rating, showSex, allowNotes, onRate, onNo
             <div>
               <dt className="inline font-medium">כמה נפוץ: </dt>
               <dd className="inline">
-                {commonness(latest.rank)}. {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
+                {latest.count.toLocaleString("he-IL")} תינוקות ב-{latest.year}, מקום {latest.rank}, {TREND_LABELS[trend]}
               </dd>
             </div>
           </dl>

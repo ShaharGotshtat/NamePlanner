@@ -11,10 +11,14 @@ export function asData(text: string, max = 500): string {
     .slice(0, max);
 }
 
+/** The app has one definition of "common"; the model must not judge it from the rank. */
+const POPULARITY_RULE = `Say how common a name is only by its popularity value: common = נפוץ, rare = פחות נפוץ, veryRare = נדיר. Never call a name common or rare from its rank or baby count alone.`;
+
 /**
  * A family name that reaches the round model. The preferences check screens family names, but the round request
  * comes from the browser, so a name there could be anything: only up to three words of letters pass.
  */
+
 export const looksLikeName = (text: string) => /^[\p{L}\p{M}'"׳״-]{1,15}( [\p{L}\p{M}'"׳״-]{1,15}){0,2}$/u.test(text.trim());
 
 /** Model text shown to the parent: plain, one paragraph, capped. */
@@ -81,6 +85,7 @@ Rules:
 - The reason is one short Hebrew line of at most 40 characters, shown under the name. For example: מארבעת המינים, קצר ונעים.
 - ${NEUTRAL_HEBREW_RULE}
 - Use only the facts given for each candidate (meaning, origin, themes, popularity, how it meets the requirements). Do not add facts.
+- ${POPULARITY_RULE}
 - ${THEME_RULE}`;
 
 export const OUR_PICK_SYSTEM = `You explain to Israeli parents why one name, which they saw but did not mark, could still suit them.
@@ -89,5 +94,6 @@ ${RESPECT_RULES}
 
 Write two or three short Hebrew sentences: which of their preferences the name meets, its meaning, and how common it is.
 Use only the facts given. Do not add facts.
+${POPULARITY_RULE}
 ${NEUTRAL_HEBREW_RULE}
 ${THEME_RULE}`;
