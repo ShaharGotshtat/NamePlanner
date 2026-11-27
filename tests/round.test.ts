@@ -91,7 +91,19 @@ describe("pickDiverse", () => {
 });
 
 describe("chooseOurPick", () => {
-  it("prefers a Not sure name and never picks a name marked No", () => {
+  it("prefers a name without a vote over a Not sure name", () => {
+    const [a, b, c] = ["תמר", "נועה", "שירה"].map(byName);
+    const req = request({
+      shownIds: [a.id, b.id, c.id],
+      ratings: [
+        { nameId: a.id, verdict: "no" },
+        { nameId: b.id, verdict: "unsure" },
+      ],
+    });
+    expect(chooseOurPick(names, req)?.entry.nameHe).toBe("שירה");
+  });
+
+  it("falls back to a Not sure name and never picks a name marked No", () => {
     const [a, b, c] = ["תמר", "נועה", "שירה"].map(byName);
     const req = request({
       shownIds: [a.id, b.id, c.id],

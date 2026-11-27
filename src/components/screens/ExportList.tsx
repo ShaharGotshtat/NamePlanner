@@ -7,27 +7,33 @@ import { displayMeaning } from "@/lib/names/catalog";
 import type { Suggestion } from "@/lib/types";
 import { Button } from "../ui";
 
-function buildMessage(names: Suggestion[], favorite: Suggestion | null, unsure: Suggestion[]): string {
+/** The first choice leads, then the liked names, then the "Not sure" names, which are part of the list too. */
+export function buildMessage(liked: Suggestion[], maybe: Suggestion[], favorite: Suggestion | null, origin: string): string {
   const line = (s: Suggestion) => {
     const meaning = displayMeaning(s.name);
     return meaning ? `${s.name.nameHe} (${meaning})` : s.name.nameHe;
   };
-  const others = names.filter((s) => s !== favorite);
-  const heading = favorite
-    ? [`הבחירה הראשונה שלנו: ${line(favorite)}`, ...(others.length ? ["עוד שמות שאהבנו:"] : [])]
-    : ["השמות שאהבנו:"];
-  const maybe = unsure.length ? ["", "ואולי גם:", ...unsure.map((s) => `• ${line(s)}`)] : [];
-  return [...heading, ...others.map((s) => `• ${line(s)}`), ...maybe, "", `מצאנו אותם ב-${APP_NAME}: ${location.origin}`].join("\n");
+  const bullets = (list: Suggestion[]) => list.filter((s) => s !== favorite).map((s) => `• ${line(s)}`);
+  const likedLines = bullets(liked);
+  const maybeLines = bullets(maybe);
+  const parts: string[] = favorite ? [`הבחירה הראשונה שלנו: ${line(favorite)}`] : [];
+  if (likedLines.length) parts.push(favorite ? "עוד שמות שאהבנו:" : "השמות שאהבנו:", ...likedLines);
+  if (maybeLines.length) {
+    if (parts.length) parts.push("");
+    parts.push(liked.length ? "ואולי גם:" : "שמות שאנחנו שוקלים:", ...maybeLines);
+  }
+  return [...parts, "", `מצאנו אותם ב-${APP_NAME}: ${origin}`].join("\n");
 }
 
-export function ExportList({ names, favorite, unsure }: { names: Suggestion[]; favorite: Suggestion | null; unsure: Suggestion[] }) {
+export function ExportList({ liked, maybe, favorite }: { liked: Suggestion[]; maybe: Suggestion[]; favorite: Suggestion | null }) {
+  const message = () => buildMessage(liked, maybe, favorite, location.origin);
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
   useEffect(() => setCanShare(typeof navigator.share === "function"), []);
 
   const share = async () => {
     try {
-      await navigator.share({ text: buildMessage(names, favorite, unsure) });
+      await navigator.share({ text: message() });
       trackEvent({ name: "share", props: { channel: "share" } });
     } catch {
       // Cancelled or blocked: the other options are right there.
@@ -35,7 +41,7 @@ export function ExportList({ names, favorite, unsure }: { names: Suggestion[]; f
   };
 
   const copy = async () => {
-    await navigator.clipboard.writeText(buildMessage(names, favorite, unsure));
+    await navigator.clipboard.writeText(message());
     setCopied(true);
     trackEvent({ name: "share", props: { channel: "copy" } });
   };
@@ -46,7 +52,7 @@ export function ExportList({ names, favorite, unsure }: { names: Suggestion[]; f
       <div className="flex gap-2">
         <a
           className="flex min-h-13 flex-2 items-center justify-center gap-2 rounded-2xl bg-whatsapp font-medium text-white hover:brightness-95"
-          href={`https://wa.me/?text=${encodeURIComponent(buildMessage(names, favorite, unsure))}`}
+          href={`https://wa.me/?text=${encodeURIComponent(message())}`}
           target="_blank"
           rel="noreferrer"
           onClick={() => trackEvent({ name: "share", props: { channel: "whatsapp" } })}
