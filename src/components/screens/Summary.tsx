@@ -18,7 +18,9 @@ export function Summary() {
 
   const interesting = shown.filter((s) => verdictOf(s) === "interesting");
   const unsure = shown.filter((s) => verdictOf(s) === "unsure");
-  const favorite = interesting.find((s) => s.name.id === state.favoriteId) ?? (interesting.length === 1 ? interesting[0] : null);
+  // "Not sure" names are real candidates too: they sit on the same list and can be the first choice.
+  const candidates = [...interesting, ...unsure];
+  const favorite = candidates.find((s) => s.name.id === state.favoriteId) ?? (interesting.length === 1 ? interesting[0] : null);
   const unseen = unseenNames(state);
 
   const goAgain = () => {
@@ -28,29 +30,29 @@ export function Summary() {
 
   return (
     <div>
-      {interesting.length > 0 ? (
+      {candidates.length > 0 ? (
         <>
-          <ScreenTitle mood={favorite ? "cheer" : "happy"} subtitle="איזה הכי? אפשר לשנות בכל רגע.">
-            {interesting.length === 1 ? "שם אחד שאהבתם" : `${interesting.length} שמות שאהבתם`}
+          <ScreenTitle mood={favorite ? "cheer" : interesting.length ? "happy" : "idea"} subtitle="איזה הכי? אפשר לשנות בכל רגע.">
+            {summaryTitle(interesting.length, unsure.length)}
           </ScreenTitle>
           <FavoritePicker
-            names={interesting}
+            liked={interesting}
+            maybe={unsure}
             favorite={favorite}
             surname={state.surname.trim()}
             onPick={(id) => update({ favoriteId: id })}
           />
           <div className="mt-4 space-y-1.5 text-sm">
-            <MaybeNames unsure={unsure} />
             <UnseenNames unseen={unseen} />
           </div>
-          <ExportList names={interesting} favorite={favorite} unsure={unsure} />
+          <ExportList liked={interesting} maybe={unsure} favorite={favorite} />
           <button className="mx-auto mt-2 block min-h-11 text-sm underline" onClick={goAgain}>
             עוד סבב של שמות חדשים
           </button>
         </>
       ) : (
         <>
-          <NoMatch unsure={unsure} unseen={unseen} />
+          <NoMatch unseen={unseen} />
           <Button variant="secondary" className="mt-8 w-full" onClick={goAgain}>
             עוד סבב של שמות חדשים
           </Button>
@@ -60,48 +62,57 @@ export function Summary() {
   );
 }
 
+const countNames = (n: number) => (n === 1 ? "שם אחד" : `${n} שמות`);
+
+/** Liked names lead; "Not sure" names are counted as names still in the running, not as a miss. */
+export function summaryTitle(liked: number, maybe: number): string {
+  if (liked && maybe) return `${countNames(liked)} שאהבתם, ועוד ${maybe === 1 ? "אחד" : maybe} לשקול`;
+  if (liked) return liked === 1 ? "שם אחד שאהבתם" : `${liked} שמות שאהבתם`;
+  return maybe === 1 ? "יש שם אחד לשקול" : `יש ${maybe} שמות לשקול`;
+}
+
 /** The favourite is a choice on the list itself, so it can be changed at any time. */
 function FavoritePicker({
-  names,
+  liked,
+  maybe,
   favorite,
   surname,
   onPick,
 }: {
-  names: Suggestion[];
+  liked: Suggestion[];
+  maybe: Suggestion[];
   favorite: Suggestion | null;
   surname: string;
   onPick: (id: number) => void;
 }) {
+  const option = (s: Suggestion, isMaybe: boolean) => {
+    const on = s === favorite;
+    return (
+      <label
+        key={s.name.id}
+        className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 bg-white px-4 py-2.5 ${on ? "border-rose-dark" : "border-line hover:border-rose"}`}
+      >
+        <input type="radio" name="favorite" checked={on} onChange={() => onPick(s.name.id)} className="size-5 shrink-0 accent-rose-dark" />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="font-display text-2xl leading-tight font-semibold">{s.name.niqqud}</span>
+          {displayMeaning(s.name) && <span className="text-sm text-ink-soft">{displayMeaning(s.name)}</span>}
+          {on && surname && <span className="text-sm font-medium text-rose-deep">{`${s.name.niqqud} ${surname}`}</span>}
+        </span>
+        {on ? (
+          <span className="shrink-0 rounded-full bg-rose-dark px-2.5 py-1 text-xs font-medium text-white">הבחירה הראשונה</span>
+        ) : (
+          isMaybe && <span className="shrink-0 rounded-full bg-lavender-dark/10 px-2.5 py-1 text-xs font-medium text-lavender-dark">אולי</span>
+        )}
+      </label>
+    );
+  };
   return (
     <fieldset className="space-y-2">
       <legend className="sr-only">הבחירה הראשונה</legend>
-      {names.map((s) => {
-        const on = s === favorite;
-        return (
-          <label
-            key={s.name.id}
-            className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 bg-white px-4 py-2.5 ${on ? "border-rose-dark" : "border-line hover:border-rose"}`}
-          >
-            <input type="radio" name="favorite" checked={on} onChange={() => onPick(s.name.id)} className="size-5 shrink-0 accent-rose-dark" />
-            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="font-display text-2xl leading-tight font-semibold">{s.name.niqqud}</span>
-              {displayMeaning(s.name) && <span className="text-sm text-ink-soft">{displayMeaning(s.name)}</span>}
-              {on && surname && <span className="text-sm font-medium text-rose-deep">{`${s.name.niqqud} ${surname}`}</span>}
-            </span>
-            {on && <span className="shrink-0 rounded-full bg-rose-dark px-2.5 py-1 text-xs font-medium text-white">הבחירה הראשונה</span>}
-          </label>
-        );
-      })}
+      {liked.map((s) => option(s, false))}
+      {maybe.length > 0 && liked.length > 0 && <p className="pt-3 text-sm font-medium text-lavender-dark">עוד שמות לשקול</p>}
+      {maybe.map((s) => option(s, true))}
     </fieldset>
-  );
-}
-
-function MaybeNames({ unsure }: { unsure: Suggestion[] }) {
-  if (unsure.length === 0) return null;
-  return (
-    <p>
-      <b className="font-semibold">אולי:</b> {unsure.map((s) => s.name.nameHe).join(", ")}
-    </p>
   );
 }
 
@@ -120,7 +131,7 @@ function UnseenNames({ unseen }: { unseen: ReturnType<typeof unseenNames> }) {
   );
 }
 
-function NoMatch({ unsure, unseen }: { unsure: Suggestion[]; unseen: ReturnType<typeof unseenNames> }) {
+function NoMatch({ unseen }: { unseen: ReturnType<typeof unseenNames> }) {
   const { state, update } = useApp();
   const [loading, setLoading] = useState(false);
   const requested = useRef(false);
@@ -145,7 +156,6 @@ function NoMatch({ unsure, unseen }: { unsure: Suggestion[]; unseen: ReturnType<
     <>
       <ScreenTitle mood="hopeful">עוד לא מצאנו את השם המושלם, אפשר להמשיך לחפש!</ScreenTitle>
       <div className="space-y-1.5 text-sm">
-        <MaybeNames unsure={unsure} />
         <UnseenNames unseen={unseen} />
       </div>
 
@@ -163,7 +173,9 @@ function NoMatch({ unsure, unseen }: { unsure: Suggestion[]; unseen: ReturnType<
       {loading && <ThinkingMascotSays className="mt-6">עוד רגע נבחר שם...</ThinkingMascotSays>}
       {pick?.suggestion && !pick.dismissed && (
         <Card className="mt-6">
-          <p className="text-xs font-medium text-lavender-dark">הבחירה שלנו, מתוך השמות שלא סומנו</p>
+          <p className="text-xs font-medium text-lavender-dark">
+            {state.ratings[pick.suggestion.name.id]?.verdict === "unsure" ? "הבחירה שלנו, מתוך השמות שסימנתם \"אולי\"" : "הבחירה שלנו, מתוך השמות שעוד לא סימנתם"}
+          </p>
           <h2 className="mt-1 font-display text-3xl font-semibold">{pick.suggestion.name.niqqud}</h2>
           <p className="mt-2 text-sm">{pick.suggestion.reason}</p>
           <div className="mt-4 flex gap-2">

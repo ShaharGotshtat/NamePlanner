@@ -192,7 +192,8 @@ export function toSuggestion(c: Candidate, reason: string): Suggestion {
 
 /**
  * Our pick: one name already shown, never one marked No or taken.
- * A Not sure name comes first; otherwise the shown name that fits the preferences best.
+ * A shown name without a vote comes first (a round left early); only when there is none, a Not sure name.
+ * Within each group, the name that fits the preferences best. The client labels a Not sure pick as one.
  */
 export function chooseOurPick(names: NameEntry[], req: RoundRequest): Candidate | null {
   const verdicts = new Map(req.ratings.map((r) => [r.nameId, r.verdict]));
@@ -204,5 +205,5 @@ export function chooseOurPick(names: NameEntry[], req: RoundRequest): Candidate 
     .map((n) => score(n, req, signals))
     .filter((c): c is Candidate => c !== null)
     .sort(byScore);
-  return shown.find((c) => verdicts.get(c.entry.id) === "unsure") ?? shown[0] ?? null;
+  return shown.find((c) => !verdicts.has(c.entry.id)) ?? shown.find((c) => verdicts.get(c.entry.id) === "unsure") ?? null;
 }
